@@ -71,6 +71,14 @@
       { "title": "Urbano",       "type": "STREET", "year": "2023", "client": "NOS", "artist": "Rúben Rodrigues" }
     ]
   },
+  "cta": {
+    "heading": "Pronto para criar\nalgo permanente?",
+    "sub": "Fala connosco. Sem compromisso, sem formulários complicados.",
+    "ctaPrimary": "Iniciar projecto",
+    "ctaPrimaryLink": "/contacto",
+    "ctaSecondary": "Ver o nosso trabalho",
+    "ctaSecondaryLink": "/trabalho"
+  },
   "contact": {
     "label": "Contacto",
     "heading": "Queres uma obra?",

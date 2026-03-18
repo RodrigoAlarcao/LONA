@@ -4,6 +4,8 @@ import Manifesto from '@/components/sections/Manifesto'
 import Formats from '@/components/sections/Formats'
 import Artists from '@/components/sections/Artists'
 import Work from '@/components/sections/Work'
+import CTA from '@/components/sections/CTA'
+import Footer from '@/components/layout/Footer'
 import SmoothScroll from '@/components/SmoothScroll'
 
 export default function HomePage() {
@@ -16,8 +18,9 @@ export default function HomePage() {
         <Formats />
         <Artists />
         <Work />
-        {/* Secções seguintes: CTA, Footer */}
+        <CTA />
       </main>
+      <Footer />
     </SmoothScroll>
   )
 }

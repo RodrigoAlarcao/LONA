@@ -71,6 +71,14 @@
     ],
     "ctaLink": "/en/work"
   },
+  "cta": {
+    "heading": "Ready to create\nsomething permanent?",
+    "sub": "Talk to us. No commitment, no complicated forms.",
+    "ctaPrimary": "Start a project",
+    "ctaPrimaryLink": "/en/contact",
+    "ctaSecondary": "See our work",
+    "ctaSecondaryLink": "/en/work"
+  },
   "contact": {
     "label": "Contact",
     "heading": "Want a work?",
