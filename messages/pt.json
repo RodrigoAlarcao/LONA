@@ -19,12 +19,13 @@
   },
   "manifesto": {
     "label": "Manifesto",
-    "excerpt": [
-      "Não fazemos campanhas. Fazemos obras.",
-      "Não vendemos impressões. Criamos momentos.",
-      "Não deixamos paredes danificadas. Deixamos legado."
+    "lines": [
+      "Há uma mentira que o marketing repete há décadas.",
+      "A mentira de que atenção se compra.",
+      "Acreditamos que as pessoas se lembram do que as move.",
+      "Arte e marketing não são opostos. São aliados naturais."
     ],
-    "cta": "Ler o manifesto",
+    "cta": "Ler manifesto completo",
     "ctaLink": "/sobre"
   },
   "formats": {

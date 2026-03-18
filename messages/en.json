@@ -19,12 +19,13 @@
   },
   "manifesto": {
     "label": "Manifesto",
-    "excerpt": [
-      "We don't make campaigns. We make works.",
-      "We don't sell impressions. We create moments.",
-      "We don't leave damaged walls. We leave legacies."
+    "lines": [
+      "There is a lie that marketing has repeated for decades.",
+      "The lie that attention can be bought.",
+      "We believe people remember what moves them.",
+      "Art and marketing are not opposites. They are natural allies."
     ],
-    "cta": "Read the manifesto",
+    "cta": "Read the full manifesto",
     "ctaLink": "/en/about"
   },
   "formats": {
