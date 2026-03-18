@@ -33,13 +33,17 @@
     "heading": "Two formats.\nOne principle.",
     "street": {
       "label": "LONA Street",
+      "index": "001",
       "title": "The city as canvas",
-      "description": "A large-format work, created live over days. The process is public. People stop, film, share. In the end, the brand has a campaign no billboard can replicate — and a signed work with market value."
+      "description": "A large-format work, created live over days. The process is public. People stop, film, share. The brand ends up with a campaign no billboard can replicate — and a signed work with lasting value.",
+      "detail": "Public process · Days of execution · Permanent work"
     },
     "install": {
       "label": "LONA Install",
+      "index": "002",
       "title": "The space as identity",
-      "description": "A work created specifically for a space — a headquarters, a hotel, a restaurant. The artist absorbs what the brand is and creates something that could only exist there. The making-of is documented. The work stays forever."
+      "description": "A work created specifically for a space — a headquarters, a hotel, a restaurant. The artist absorbs what the brand is and creates something that could only exist there. The making-of is documented. The work stays forever.",
+      "detail": "Dedicated space · Documented making-of · Site-specific work"
     }
   },
   "artists": {

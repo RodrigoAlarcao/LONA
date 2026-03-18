@@ -33,13 +33,17 @@
     "heading": "Dois formatos.\nUm princípio.",
     "street": {
       "label": "LONA Street",
+      "index": "001",
       "title": "A cidade como tela",
-      "description": "Uma obra de grande formato, criada ao vivo durante dias. O processo é público. As pessoas param, filmam, partilham. No final, a marca tem uma campanha que nenhum outdoor consegue replicar — e uma obra assinada com valor de mercado."
+      "description": "Uma obra de grande formato, criada ao vivo durante dias. O processo é público. As pessoas param, filmam, partilham. A marca fica com uma campanha que nenhum outdoor consegue replicar — e uma obra assinada com valor permanente.",
+      "detail": "Processo público · Dias de execução · Obra permanente"
     },
     "install": {
       "label": "LONA Install",
+      "index": "002",
       "title": "O espaço como identidade",
-      "description": "Uma obra criada especificamente para um espaço — uma sede, um hotel, um restaurante. O artista absorve o que a marca é e cria algo que só ali poderia existir. O making-of é documentado. A obra fica para sempre."
+      "description": "Uma obra criada especificamente para um espaço — uma sede, um hotel, um restaurante. O artista absorve o que a marca é e cria algo que só ali poderia existir. O making-of é documentado. A obra fica para sempre.",
+      "detail": "Espaço dedicado · Making-of documentado · Obra site-specific"
     }
   },
   "artists": {

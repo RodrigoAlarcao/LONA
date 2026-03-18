@@ -1,6 +1,7 @@
 import Nav from '@/components/layout/Nav'
 import Hero from '@/components/sections/Hero'
 import Manifesto from '@/components/sections/Manifesto'
+import Formats from '@/components/sections/Formats'
 import SmoothScroll from '@/components/SmoothScroll'
 
 export default function HomePage() {
@@ -10,7 +11,8 @@ export default function HomePage() {
       <main>
         <Hero />
         <Manifesto />
-        {/* Secções seguintes: Formatos, Artistas, Portfolio, CTA, Footer */}
+        <Formats />
+        {/* Secções seguintes: Artistas, Portfolio, CTA, Footer */}
       </main>
     </SmoothScroll>
   )
