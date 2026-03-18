@@ -1,0 +1,38 @@
+{
+  "name": "lona-site",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@fontsource/cormorant-garamond": "^5.2.11",
+    "@fontsource/dm-sans": "^5.2.8",
+    "@fontsource/ibm-plex-mono": "^5.2.7",
+    "@hookform/resolvers": "^5.2.2",
+    "@studio-freight/lenis": "^1.0.42",
+    "framer-motion": "^12.38.0",
+    "gsap": "^3.14.2",
+    "lucide-react": "^0.577.0",
+    "next": "14.2.35",
+    "next-intl": "^4.8.3",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7.71.2",
+    "resend": "^6.9.4",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.35",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}

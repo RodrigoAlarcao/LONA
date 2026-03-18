@@ -1,0 +1,141 @@
+{
+  "meta": {
+    "title": "LONA — Arte que faz marcas",
+    "description": "Conectamos marcas a artistas para criar obras permanentes. LONA Street e LONA Install — duas formas de deixar legado.",
+    "ogImage": "/og-image.png"
+  },
+  "nav": {
+    "sobre": "Sobre",
+    "trabalho": "Trabalho",
+    "artistas": "Artistas",
+    "cta": "Iniciar projecto",
+    "lang": "EN"
+  },
+  "hero": {
+    "tagline": "Arte que torna marcas inesquecíveis",
+    "sub": "Conectamos marcas a artistas para criar obras permanentes.",
+    "ctaBrands": "Para marcas",
+    "ctaArtists": "Para artistas"
+  },
+  "manifesto": {
+    "label": "Manifesto",
+    "excerpt": [
+      "Não fazemos campanhas. Fazemos obras.",
+      "Não vendemos impressões. Criamos momentos.",
+      "Não deixamos paredes danificadas. Deixamos legado."
+    ],
+    "cta": "Ler o manifesto",
+    "ctaLink": "/sobre"
+  },
+  "formats": {
+    "label": "O que fazemos",
+    "heading": "Dois formatos.\nUm princípio.",
+    "street": {
+      "label": "LONA Street",
+      "title": "A cidade como tela",
+      "description": "Uma obra de grande formato, criada ao vivo durante dias. O processo é público. As pessoas param, filmam, partilham. No final, a marca tem uma campanha que nenhum outdoor consegue replicar — e uma obra assinada com valor de mercado."
+    },
+    "install": {
+      "label": "LONA Install",
+      "title": "O espaço como identidade",
+      "description": "Uma obra criada especificamente para um espaço — uma sede, um hotel, um restaurante. O artista absorve o que a marca é e cria algo que só ali poderia existir. O making-of é documentado. A obra fica para sempre."
+    }
+  },
+  "artists": {
+    "label": "Roster",
+    "heading": "Não é um catálogo.\nÉ uma relação.",
+    "sub": "Um grupo pequeno e intencional de artistas cujo trabalho defendemos.",
+    "cta": "Ver todos os artistas",
+    "ctaLink": "/artistas"
+  },
+  "work": {
+    "label": "Trabalho",
+    "heading": "Obras que ficam",
+    "cta": "Ver todo o trabalho",
+    "ctaLink": "/trabalho"
+  },
+  "contact": {
+    "label": "Contacto",
+    "heading": "Queres uma obra?",
+    "sub": "Fala connosco. Sem pressão — só uma conversa.",
+    "cta": "Iniciar conversa",
+    "ctaLink": "/contacto"
+  },
+  "footer": {
+    "tagline": "Arte que faz marcas.",
+    "location": "Lisboa, Portugal",
+    "copyright": "© 2026 LONA. Todos os direitos reservados.",
+    "links": {
+      "sobre": "Sobre",
+      "trabalho": "Trabalho",
+      "artistas": "Artistas",
+      "contacto": "Contacto"
+    }
+  },
+  "about": {
+    "label": "Sobre",
+    "heading": "A convicção que nos define",
+    "manifesto": {
+      "label": "Manifesto"
+    },
+    "vision": {
+      "label": "A Visão",
+      "heading": "Um mercado diferente"
+    },
+    "values": {
+      "label": "O que nos define"
+    }
+  },
+  "workPage": {
+    "label": "Trabalho",
+    "heading": "Obras que ficam",
+    "all": "Todos",
+    "street": "LONA Street",
+    "install": "LONA Install",
+    "noProjects": "Em breve — projetos a caminho."
+  },
+  "artistsPage": {
+    "label": "Roster",
+    "heading": "Os artistas",
+    "sub": "Um grupo pequeno e intencional.",
+    "noArtists": "Em breve."
+  },
+  "contactPage": {
+    "label": "Contacto",
+    "heading": "Vamos criar algo",
+    "sub": "Conta-nos o teu projecto. Ou só o teu espaço e o que queres que ele diga.",
+    "form": {
+      "name": "Nome",
+      "namePlaceholder": "O teu nome",
+      "email": "Email",
+      "emailPlaceholder": "o.teu@email.com",
+      "company": "Empresa",
+      "companyPlaceholder": "Empresa (opcional)",
+      "interest": "Tipo de interesse",
+      "interestBrand": "Sou uma marca",
+      "interestArtist": "Sou um artista",
+      "interestOther": "Outro",
+      "message": "Mensagem",
+      "messagePlaceholder": "Conta-nos o que tens em mente...",
+      "submit": "Enviar mensagem",
+      "sending": "A enviar...",
+      "success": "Mensagem enviada. Entramos em contacto em breve.",
+      "error": "Algo correu mal. Tenta novamente.",
+      "errors": {
+        "nameRequired": "O nome é obrigatório",
+        "emailRequired": "O email é obrigatório",
+        "emailInvalid": "Email inválido",
+        "interestRequired": "Seleciona um tipo de interesse",
+        "messageRequired": "A mensagem é obrigatória",
+        "messageMin": "A mensagem deve ter pelo menos 10 caracteres"
+      }
+    }
+  },
+  "notFound": {
+    "label": "404",
+    "heading": "Parede em branco",
+    "sub": "Esta página ainda não foi pintada.",
+    "cta": "Voltar ao início",
+    "ctaLink": "/"
+  }
+}

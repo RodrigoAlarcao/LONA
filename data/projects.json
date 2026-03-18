@@ -1,0 +1,50 @@
+[
+  {
+    "id": "proj-001",
+    "slug": "placeholder-street-01",
+    "title": "Projecto Street — Em Breve",
+    "titleEn": "Street Project — Coming Soon",
+    "client": "Marca Placeholder",
+    "artist": "artista-placeholder",
+    "type": "street",
+    "year": 2026,
+    "city": "Lisboa",
+    "description": "Descrição do projecto em breve. Este espaço será preenchido com a primeira obra LONA Street.",
+    "descriptionEn": "Project description coming soon. This space will be filled with the first LONA Street work.",
+    "images": ["/images/projects/placeholder-01.jpg"],
+    "cover": "/images/projects/placeholder-01.jpg",
+    "tags": ["mural", "urbano", "grande-formato"]
+  },
+  {
+    "id": "proj-002",
+    "slug": "placeholder-install-01",
+    "title": "Projecto Install — Em Breve",
+    "titleEn": "Install Project — Coming Soon",
+    "client": "Marca Placeholder",
+    "artist": "artista-placeholder",
+    "type": "install",
+    "year": 2026,
+    "city": "Porto",
+    "description": "Descrição do projecto em breve. Este espaço será preenchido com a primeira obra LONA Install.",
+    "descriptionEn": "Project description coming soon. This space will be filled with the first LONA Install work.",
+    "images": ["/images/projects/placeholder-02.jpg"],
+    "cover": "/images/projects/placeholder-02.jpg",
+    "tags": ["instalação", "interior", "site-specific"]
+  },
+  {
+    "id": "proj-003",
+    "slug": "placeholder-street-02",
+    "title": "Projecto Street II — Em Breve",
+    "titleEn": "Street Project II — Coming Soon",
+    "client": "Marca Placeholder",
+    "artist": "artista-placeholder",
+    "type": "street",
+    "year": 2026,
+    "city": "Lisboa",
+    "description": "Descrição do projecto em breve.",
+    "descriptionEn": "Project description coming soon.",
+    "images": ["/images/projects/placeholder-03.jpg"],
+    "cover": "/images/projects/placeholder-03.jpg",
+    "tags": ["mural", "urbano"]
+  }
+]
