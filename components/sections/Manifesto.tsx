@@ -75,7 +75,7 @@ export default function Manifesto() {
   return (
     <section
       ref={sectionRef}
-      className="px-6 py-40 md:px-10 md:py-64"
+      className="px-6 py-24 md:px-10 md:py-40"
     >
       {/* ── Label de secção ─────────────────────────────────────────── */}
       <div className="flex items-center gap-3 mb-16 md:mb-20">
