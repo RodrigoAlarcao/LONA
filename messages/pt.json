@@ -126,9 +126,10 @@
     "noArtists": "Em breve."
   },
   "contactPage": {
-    "label": "Contacto",
-    "heading": "Vamos criar algo",
-    "sub": "Conta-nos o teu projecto. Ou só o teu espaço e o que queres que ele diga.",
+    "sectionLabel": "006 — Contacto",
+    "heading": "Começa aqui.",
+    "sub": "Conta-nos o projecto. Respondemos em 48 horas.",
+    "email": "geral@lona.pt",
     "form": {
       "name": "Nome",
       "namePlaceholder": "O teu nome",
@@ -136,23 +137,24 @@
       "emailPlaceholder": "o.teu@email.com",
       "company": "Empresa",
       "companyPlaceholder": "Empresa (opcional)",
-      "interest": "Tipo de interesse",
-      "interestBrand": "Sou uma marca",
-      "interestArtist": "Sou um artista",
-      "interestOther": "Outro",
+      "typeLabel": "Tipo",
+      "typeBrand": "Marca",
+      "typeArtist": "Artista",
+      "typeOther": "Outro",
       "message": "Mensagem",
       "messagePlaceholder": "Conta-nos o que tens em mente...",
-      "submit": "Enviar mensagem",
+      "submit": "Enviar",
       "sending": "A enviar...",
-      "success": "Mensagem enviada. Entramos em contacto em breve.",
+      "successHeading": "Recebido.",
+      "successSub": "Respondemos em 48 horas. Obrigado por teres chegado até aqui.",
       "error": "Algo correu mal. Tenta novamente.",
       "errors": {
         "nameRequired": "O nome é obrigatório",
         "emailRequired": "O email é obrigatório",
         "emailInvalid": "Email inválido",
-        "interestRequired": "Seleciona um tipo de interesse",
+        "typeRequired": "Escolhe um tipo",
         "messageRequired": "A mensagem é obrigatória",
-        "messageMin": "A mensagem deve ter pelo menos 10 caracteres"
+        "messageMin": "Pelo menos 10 caracteres"
       }
     }
   },
