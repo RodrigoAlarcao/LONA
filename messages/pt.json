@@ -55,7 +55,9 @@
     "list": [
       { "name": "Vasco Mourão", "city": "Lisboa", "medium": "Muralismo" },
       { "name": "Ana Bê", "city": "Porto", "medium": "Instalação" },
-      { "name": "Rúben Rodrigues", "city": "Berlim", "medium": "Pintura urbana" }
+      { "name": "Rúben Rodrigues", "city": "Berlim", "medium": "Pintura urbana" },
+      { "name": "Marta Sousa", "city": "Lisboa", "medium": "Escultura" },
+      { "name": "João Ferreira", "city": "Braga", "medium": "Grafismo" }
     ]
   },
   "work": {

@@ -40,5 +40,33 @@
     "images": ["/images/artists/placeholder-03.jpg"],
     "cover": "/images/artists/placeholder-03.jpg",
     "projects": []
+  },
+  {
+    "id": "artist-004",
+    "slug": "marta-sousa",
+    "name": "Marta Sousa",
+    "nameEn": "Marta Sousa",
+    "bio": "Biografia em breve.",
+    "bioEn": "Biography coming soon.",
+    "medium": "Escultura",
+    "mediumEn": "Sculpture",
+    "location": "Lisboa",
+    "images": ["/images/artists/placeholder-04.jpg"],
+    "cover": "/images/artists/placeholder-04.jpg",
+    "projects": []
+  },
+  {
+    "id": "artist-005",
+    "slug": "joao-ferreira",
+    "name": "João Ferreira",
+    "nameEn": "João Ferreira",
+    "bio": "Biografia em breve.",
+    "bioEn": "Biography coming soon.",
+    "medium": "Grafismo",
+    "mediumEn": "Graphic art",
+    "location": "Braga",
+    "images": ["/images/artists/placeholder-05.jpg"],
+    "cover": "/images/artists/placeholder-05.jpg",
+    "projects": []
   }
 ]
