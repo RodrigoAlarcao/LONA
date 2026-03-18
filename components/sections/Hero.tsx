@@ -16,6 +16,7 @@ export default function Hero() {
   const subRef       = useRef<HTMLParagraphElement>(null)
   const ctaRef       = useRef<HTMLDivElement>(null)
   const bottomRef    = useRef<HTMLDivElement>(null)
+  const rightRef     = useRef<HTMLDivElement>(null)
 
   useIsomorphicLayoutEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -25,7 +26,7 @@ export default function Hero() {
       if (prefersReducedMotion) {
         gsap.set(
           [labelRef.current, titleRef.current, taglineRef.current,
-           subRef.current, bottomRef.current],
+           subRef.current, bottomRef.current, rightRef.current],
           { opacity: 1, y: 0, scale: 1, clipPath: 'none' }
         )
         if (ctaRef.current)
@@ -38,6 +39,7 @@ export default function Hero() {
       gsap.set(taglineRef.current,  { y: 50, opacity: 0 })
       gsap.set(subRef.current,      { y: 28, opacity: 0 })
       gsap.set(bottomRef.current,   { opacity: 0 })
+      gsap.set(rightRef.current,    { opacity: 0 })
       if (ctaRef.current)
         gsap.set(Array.from(ctaRef.current.children), { y: 18, opacity: 0 })
 
@@ -99,11 +101,16 @@ export default function Hero() {
         )
       }
 
-      // 6. Scroll indicator — muito subtil, o último
+      // 6. Scroll indicator + right anchor — muito subtis, os últimos
       tl.to(
         bottomRef.current,
         { opacity: 1, duration: 0.5, ease: 'none' },
         1.55
+      )
+      tl.to(
+        rightRef.current,
+        { opacity: 1, duration: 0.7, ease: 'power2.out' },
+        1.3
       )
     }, containerRef)
 
@@ -182,7 +189,7 @@ export default function Hero() {
         </h2>
 
         {/* Sub + CTAs — agrupados para alinhar com a tagline */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4">
           <p
             ref={subRef}
             className="font-body font-light leading-relaxed"
@@ -196,13 +203,19 @@ export default function Hero() {
             {t('sub')}
           </p>
 
-          {/* CTAs — IBM Plex Mono, energia de documento */}
-          <div ref={ctaRef} className="flex items-center gap-8">
+          {/* CTAs — IBM Plex Mono, maior presença */}
+          <div ref={ctaRef} className="flex items-center gap-6">
             {/* CTA Marcas — destaque em accent */}
             <Link
               href="/contact"
-              className="group flex items-center gap-2 text-label transition-opacity duration-300 hover:opacity-70"
-              style={{ color: 'var(--color-accent)' }}
+              className="group flex items-center gap-2.5 transition-opacity duration-300 hover:opacity-70"
+              style={{
+                color: 'var(--color-accent)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.8125rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.12em',
+              }}
             >
               <span>{t('ctaBrands')}</span>
               <span
@@ -213,11 +226,24 @@ export default function Hero() {
               </span>
             </Link>
 
+            {/* Separador */}
+            <span
+              className="inline-block w-px h-4"
+              style={{ backgroundColor: 'var(--color-dim)', opacity: 0.25 }}
+              aria-hidden
+            />
+
             {/* CTA Artistas — mais discreto */}
             <Link
               href="/artists"
-              className="group flex items-center gap-2 text-label transition-opacity duration-300 hover:opacity-70"
-              style={{ color: 'var(--color-dim)' }}
+              className="group flex items-center gap-2.5 transition-opacity duration-300 hover:opacity-70"
+              style={{
+                color: 'var(--color-dim)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.8125rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.12em',
+              }}
             >
               <span>{t('ctaArtists')}</span>
               <span
@@ -229,6 +255,33 @@ export default function Hero() {
             </Link>
           </div>
         </div>
+      </div>
+
+      {/* ── Direita: âncora de composição ────────────────────────────── */}
+      <div
+        ref={rightRef}
+        className="hidden md:flex flex-col items-center absolute right-10 top-1/2 -translate-y-1/2"
+        style={{ opacity: 0 }}
+        aria-hidden
+      >
+        <span
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.625rem',
+            textTransform: 'uppercase',
+            letterSpacing: '0.22em',
+            color: 'var(--color-dim)',
+            opacity: 0.35,
+            writingMode: 'vertical-rl',
+            transform: 'rotate(180deg)',
+          }}
+        >
+          Lisboa, Portugal
+        </span>
+        <span
+          className="mt-5 inline-block w-px"
+          style={{ height: '56px', backgroundColor: 'var(--color-accent)', opacity: 0.45 }}
+        />
       </div>
 
       {/* ── Bottom: scroll indicator ─────────────────────────────────── */}

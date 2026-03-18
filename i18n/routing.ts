@@ -5,4 +5,6 @@ export const routing = defineRouting({
   defaultLocale: 'pt',
   // PT sem prefixo, EN com prefixo /en
   localePrefix: 'as-needed',
+  // Ignora Accept-Language do browser — PT é sempre o default
+  localeDetection: false,
 })
