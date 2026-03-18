@@ -64,7 +64,12 @@
     "label": "Trabalho",
     "heading": "Obras que ficam",
     "cta": "Ver todo o trabalho",
-    "ctaLink": "/trabalho"
+    "ctaLink": "/trabalho",
+    "projects": [
+      { "title": "Memória Viva", "type": "STREET", "year": "2024", "client": "Sagres", "artist": "Vasco Mourão" },
+      { "title": "Raízes",       "type": "INSTALL", "year": "2024", "client": "Herdade do Esporão", "artist": "Marta Sousa" },
+      { "title": "Urbano",       "type": "STREET", "year": "2023", "client": "NOS", "artist": "Rúben Rodrigues" }
+    ]
   },
   "contact": {
     "label": "Contacto",
