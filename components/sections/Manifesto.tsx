@@ -111,21 +111,25 @@ export default function Manifesto() {
       </div>
 
       {/* ── CTA ──────────────────────────────────────────────────────── */}
-      <div ref={ctaRef} className="mt-14 md:mt-16">
+      <div ref={ctaRef} className="mt-20 md:mt-28">
         <Link
           href={t('ctaLink')}
-          className="group inline-flex items-center gap-2.5 transition-opacity duration-300 hover:opacity-70"
+          className="group inline-flex items-center gap-3"
           style={{
             fontFamily: 'var(--font-mono)',
             fontSize: '0.8125rem',
             textTransform: 'uppercase',
             letterSpacing: '0.12em',
             color: 'var(--color-dim)',
+            textDecoration: 'none',
+            transition: 'color 0.25s ease',
           }}
+          onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text)')}
+          onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-dim)')}
         >
           <span>{t('cta')}</span>
           <span
-            className="inline-block transition-transform duration-300 group-hover:translate-x-1"
+            className="inline-block transition-transform duration-300 group-hover:translate-x-1.5"
             aria-hidden
           >
             →
