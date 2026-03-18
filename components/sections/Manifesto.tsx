@@ -32,7 +32,6 @@ export default function Manifesto() {
 
       // Estado inicial — escondido
       gsap.set(allLines, { y: 40, opacity: 0 })
-      if (ctaRef.current) gsap.set(ctaRef.current, { y: 18, opacity: 0 })
 
       // Timeline única vinculada ao scroll (scrub:1 = suave, 1s de lag)
       const tl = gsap.timeline({
@@ -53,13 +52,21 @@ export default function Manifesto() {
         )
       })
 
-      // CTA entra depois de todas as linhas
+      // CTA — ScrollTrigger próprio, once:true, não acoplado ao scrub
+      // Garante visibilidade independentemente do progresso do scroll
       if (ctaRef.current) {
-        tl.to(
-          ctaRef.current,
-          { y: 0, opacity: 1, duration: 0.4, ease: 'power2.out' },
-          allLines.length * 0.12 + 0.1
-        )
+        gsap.set(ctaRef.current, { y: 16, opacity: 0 })
+        gsap.to(ctaRef.current, {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: ctaRef.current,
+            start: 'top 90%',
+            once: true,
+          },
+        })
       }
 
       // Reverter SplitText no cleanup
