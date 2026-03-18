@@ -51,7 +51,12 @@
     "heading": "Não é um catálogo.\nÉ uma relação.",
     "sub": "Um grupo pequeno e intencional de artistas cujo trabalho defendemos.",
     "cta": "Ver todos os artistas",
-    "ctaLink": "/artistas"
+    "ctaLink": "/artistas",
+    "list": [
+      { "name": "Vasco Mourão", "city": "Lisboa", "medium": "Muralismo" },
+      { "name": "Ana Bê", "city": "Porto", "medium": "Instalação" },
+      { "name": "Rúben Rodrigues", "city": "Berlim", "medium": "Pintura urbana" }
+    ]
   },
   "work": {
     "label": "Trabalho",

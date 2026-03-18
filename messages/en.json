@@ -51,7 +51,12 @@
     "heading": "Not a catalogue.\nA relationship.",
     "sub": "A small, intentional group of artists whose work we stand behind.",
     "cta": "See all artists",
-    "ctaLink": "/en/artists"
+    "ctaLink": "/en/artists",
+    "list": [
+      { "name": "Vasco Mourão", "city": "Lisbon", "medium": "Muralism" },
+      { "name": "Ana Bê", "city": "Porto", "medium": "Installation" },
+      { "name": "Rúben Rodrigues", "city": "Berlin", "medium": "Urban painting" }
+    ]
   },
   "work": {
     "label": "Work",
