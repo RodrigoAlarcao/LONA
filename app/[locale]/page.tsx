@@ -1,30 +1,15 @@
-import { useTranslations } from 'next-intl'
+import Nav from '@/components/layout/Nav'
+import Hero from '@/components/sections/Hero'
+import SmoothScroll from '@/components/SmoothScroll'
 
 export default function HomePage() {
-  const t = useTranslations('hero')
-
   return (
-    <main
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'var(--color-bg)',
-        color: 'var(--color-text)',
-      }}
-    >
-      <p
-        style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: '0.6875rem',
-          textTransform: 'uppercase',
-          letterSpacing: '0.14em',
-          color: 'var(--color-dim)',
-        }}
-      >
-        LONA — setup completo
-      </p>
-    </main>
+    <SmoothScroll>
+      <Nav />
+      <main>
+        <Hero />
+        {/* Secções seguintes: Manifesto, Formatos, Artistas, Portfolio, CTA, Footer */}
+      </main>
+    </SmoothScroll>
   )
 }
