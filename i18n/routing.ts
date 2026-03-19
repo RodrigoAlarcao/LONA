@@ -7,4 +7,27 @@ export const routing = defineRouting({
   localePrefix: 'as-needed',
   // Ignora Accept-Language do browser — PT é sempre o default
   localeDetection: false,
+  pathnames: {
+    '/': '/',
+    '/about': {
+      pt: '/sobre',
+      en: '/about',
+    },
+    '/work': {
+      pt: '/trabalho',
+      en: '/work',
+    },
+    '/work/[slug]': {
+      pt: '/trabalho/[slug]',
+      en: '/work/[slug]',
+    },
+    '/artists': {
+      pt: '/artistas',
+      en: '/artists',
+    },
+    '/contact': {
+      pt: '/contacto',
+      en: '/contact',
+    },
+  },
 })

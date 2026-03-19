@@ -87,7 +87,7 @@ export default function CTA() {
       >
         {/* CTA primário — accent */}
         <Link
-          href={t('ctaPrimaryLink')}
+          href={t('ctaPrimaryLink') as any}
           className="group inline-flex items-center gap-2"
           style={{
             fontFamily: 'var(--font-mono)',
@@ -125,7 +125,7 @@ export default function CTA() {
 
         {/* CTA secundário — dim */}
         <Link
-          href={t('ctaSecondaryLink')}
+          href={t('ctaSecondaryLink') as any}
           className="group inline-flex items-center gap-2"
           style={{
             fontFamily: 'var(--font-mono)',

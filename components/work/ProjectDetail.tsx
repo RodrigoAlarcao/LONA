@@ -321,7 +321,7 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
         >
           {prev ? (
             <Link
-              href={`/work/${prev.slug}`}
+              href={{ pathname: '/work/[slug]', params: { slug: prev.slug } }}
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.75rem',
@@ -346,7 +346,7 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
 
           {next ? (
             <Link
-              href={`/work/${next.slug}`}
+              href={{ pathname: '/work/[slug]', params: { slug: next.slug } }}
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.75rem',

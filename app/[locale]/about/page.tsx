@@ -47,7 +47,7 @@ export default async function AboutPage() {
           </h2>
 
           <Link
-            href={t('href')}
+            href={t('href') as any}
             className="group link-hover-text inline-flex items-center gap-2"
             style={{
               fontFamily: 'var(--font-mono)',

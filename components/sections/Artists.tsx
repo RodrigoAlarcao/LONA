@@ -136,7 +136,7 @@ export default function Artists() {
         style={{ padding: '4rem 2.5rem 5rem' }}
       >
         <Link
-          href={t('ctaLink')}
+          href={t('ctaLink') as any}
           className="group inline-flex items-center gap-3"
           style={{
             fontFamily: 'var(--font-mono)',

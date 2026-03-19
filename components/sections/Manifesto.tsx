@@ -114,7 +114,7 @@ export default function Manifesto() {
       {/* ── CTA ──────────────────────────────────────────────────────── */}
       <div ref={ctaRef} className="mt-20 md:mt-28">
         <Link
-          href={t('ctaLink')}
+          href={t('ctaLink') as any}
           className="group inline-flex items-center gap-3"
           style={{
             fontFamily: 'var(--font-mono)',

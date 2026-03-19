@@ -15,7 +15,8 @@ export default function Nav() {
 
   // Lang toggle — mantém o mesmo path, muda o locale
   const toggleLocale = () => {
-    router.replace(pathname, { locale: locale === 'pt' ? 'en' : 'pt' })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    router.replace(pathname as any, { locale: locale === 'pt' ? 'en' : 'pt' })
   }
 
   useIsomorphicLayoutEffect(() => {
