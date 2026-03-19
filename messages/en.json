@@ -1,0 +1,202 @@
+{
+  "meta": {
+    "title": "LONA — Art that makes brands",
+    "description": "We connect brands and artists to create permanent works. LONA Street and LONA Install — two ways to leave a legacy.",
+    "ogImage": "/og-image.png"
+  },
+  "nav": {
+    "sobre": "About",
+    "trabalho": "Work",
+    "artistas": "Artists",
+    "cta": "Start a project",
+    "lang": "PT"
+  },
+  "hero": {
+    "tagline": "Art that makes brands unforgettable",
+    "sub": "We connect brands and artists to create permanent works.",
+    "ctaBrands": "For brands",
+    "ctaArtists": "For artists"
+  },
+  "manifesto": {
+    "label": "Manifesto",
+    "lines": [
+      "There is a lie that marketing has repeated for decades.",
+      "The lie that attention can be bought.",
+      "We believe people remember what moves them.",
+      "Art and marketing are not opposites. They are natural allies."
+    ],
+    "cta": "Read manifesto",
+    "ctaLink": "/en/about"
+  },
+  "formats": {
+    "label": "What we do",
+    "heading": "Two formats.\nOne principle.",
+    "street": {
+      "label": "LONA Street",
+      "index": "001",
+      "title": "The city as canvas",
+      "description": "A large-format work, created live over days. The process is public. People stop, film, share. The brand ends up with a campaign no billboard can replicate — and a signed work with lasting value.",
+      "detail": "Public process · Days of execution · Permanent work"
+    },
+    "install": {
+      "label": "LONA Install",
+      "index": "002",
+      "title": "The space as identity",
+      "description": "A work created specifically for a space — a headquarters, a hotel, a restaurant. The artist absorbs what the brand is and creates something that could only exist there. The making-of is documented. The work stays forever.",
+      "detail": "Dedicated space · Documented making-of · Site-specific work"
+    }
+  },
+  "artists": {
+    "label": "Roster",
+    "heading": "Not a catalogue.\nA relationship.",
+    "sub": "A small, intentional group of artists whose work we stand behind.",
+    "cta": "See all artists",
+    "ctaLink": "/en/artists",
+    "list": [
+      { "name": "Vasco Mourão", "city": "Lisbon", "medium": "Muralism" },
+      { "name": "Ana Bê", "city": "Porto", "medium": "Installation" },
+      { "name": "Rúben Rodrigues", "city": "Berlin", "medium": "Urban painting" },
+      { "name": "Marta Sousa", "city": "Lisbon", "medium": "Sculpture" },
+      { "name": "João Ferreira", "city": "Braga", "medium": "Graphic art" }
+    ]
+  },
+  "work": {
+    "label": "Work",
+    "heading": "Works that last",
+    "cta": "See all work",
+    "projects": [
+      { "title": "Memória Viva", "type": "STREET", "year": "2024", "client": "Sagres", "artist": "Vasco Mourão" },
+      { "title": "Raízes",       "type": "INSTALL", "year": "2024", "client": "Herdade do Esporão", "artist": "Marta Sousa" },
+      { "title": "Urbano",       "type": "STREET", "year": "2023", "client": "NOS", "artist": "Rúben Rodrigues" }
+    ],
+    "ctaLink": "/en/work"
+  },
+  "cta": {
+    "heading": "Ready to create\nsomething permanent?",
+    "sub": "Talk to us. No commitment, no complicated forms.",
+    "ctaPrimary": "Start a project",
+    "ctaPrimaryLink": "/en/contact",
+    "ctaSecondary": "See our work",
+    "ctaSecondaryLink": "/en/work"
+  },
+  "contact": {
+    "label": "Contact",
+    "heading": "Want a work?",
+    "sub": "Talk to us. No pressure — just a conversation.",
+    "cta": "Start a conversation",
+    "ctaLink": "/en/contact"
+  },
+  "footer": {
+    "tagline": "Art that makes brands.",
+    "location": "Lisbon, Portugal",
+    "copyright": "© 2026 LONA. All rights reserved.",
+    "links": {
+      "sobre": "About",
+      "trabalho": "Work",
+      "artistas": "Artists",
+      "contacto": "Contact"
+    }
+  },
+  "about": {
+    "label": "About",
+    "heading": "The conviction that defines us",
+    "manifesto": { "label": "Manifesto" },
+    "vision": { "label": "The Vision", "heading": "A different market" },
+    "values": { "label": "What defines us" }
+  },
+  "aboutPage": {
+    "hero": {
+      "label": "— About",
+      "heading": "We are not\nan agency."
+    },
+    "manifesto": {
+      "label": "Manifesto",
+      "p0": "There is a lie that marketing has repeated for decades.",
+      "p1": "The lie that attention can be bought. That visibility can be rented. That a brand is built with impressions, reach, and engagement metrics that everyone pretends matter.",
+      "p2": "We don't believe that.",
+      "p3": "We believe people remember what moves them. What makes them stop in the middle of the street and look. What gives them that feeling of witnessing something that won't happen again.",
+      "p4": "We believe art has that power. And that a brand that finances a work of art — that makes it possible, that installs it in the world — becomes inevitably linked to that moment.",
+      "em0": "Art and marketing are not opposites. They are natural allies that no one has ever had the courage to unite seriously.",
+      "em1": "We don't make campaigns. We make works.\nWe don't sell impressions. We create moments.\nWe don't leave damaged walls. We leave legacy."
+    },
+    "values": {
+      "label": "What defines us",
+      "v0Title": "Curation, not catalogue",
+      "v0Desc": "We have a small, intentional roster — artists we respect, whose work we stand behind, and with whom we build long-term relationships. Every recommendation is personal, not algorithmic.",
+      "v1Title": "The process is the product",
+      "v1Desc": "What happens before — the artist working, the city reacting, time passing — is as valuable as the finished piece. That's why we document everything. That's why we make the process public.",
+      "v2Title": "Art that lasts",
+      "v2Desc": "Every work exists in the world after the campaign ends. It doesn't disappear when the budget runs out. It doesn't expire. It doesn't need to be renewed. That fundamentally changes how a brand relates to its investment.",
+      "v3Title": "Justice for artists",
+      "v3Desc": "We pay above market. We guarantee royalties by contract. We give public credit. We build the careers of the artists we work with — because that's what gives us access to the best.",
+      "v4Title": "Selectivity as principle",
+      "v4Desc": "We don't make campaigns for everyone. We know how to say no. That protects the artists, protects our reputation, and ensures that every project we take on is one we're proud of."
+    },
+    "cta": {
+      "heading": "Ready to start?",
+      "link": "Start a project",
+      "href": "/contact"
+    }
+  },
+  "workPage": {
+    "label": "Work",
+    "heading": "Works that last",
+    "all": "All",
+    "street": "LONA Street",
+    "install": "LONA Install",
+    "noProjects": "Coming soon — projects on the way."
+  },
+  "projectPage": {
+    "client": "Client",
+    "artist": "Artist",
+    "location": "Location",
+    "year": "Year",
+    "prev": "← Previous project",
+    "next": "Next project →"
+  },
+  "artistsPage": {
+    "label": "— Artists",
+    "heading": "A small roster.\nIntentional.",
+    "editorial": "We don't work with everyone. We work with those we respect — and we build that relationship over the long term."
+  },
+  "contactPage": {
+    "sectionLabel": "006 — Contact",
+    "heading": "Starts here.",
+    "sub": "Tell us about the project. We reply within 48 hours.",
+    "email": "geral@lona.pt",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "your@email.com",
+      "company": "Company",
+      "companyPlaceholder": "Company (optional)",
+      "typeLabel": "Type",
+      "typeBrand": "Brand",
+      "typeArtist": "Artist",
+      "typeOther": "Other",
+      "message": "Message",
+      "messagePlaceholder": "Tell us what you have in mind...",
+      "submit": "Send",
+      "sending": "Sending...",
+      "successHeading": "Received.",
+      "successSub": "We'll reply within 48 hours. Thank you for reaching out.",
+      "error": "Something went wrong. Please try again.",
+      "errors": {
+        "nameRequired": "Name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email",
+        "typeRequired": "Choose a type",
+        "messageRequired": "Message is required",
+        "messageMin": "At least 10 characters"
+      }
+    }
+  },
+  "notFound": {
+    "label": "404",
+    "heading": "Blank wall",
+    "sub": "This page hasn't been painted yet.",
+    "cta": "Back to home",
+    "ctaLink": "/en"
+  }
+}

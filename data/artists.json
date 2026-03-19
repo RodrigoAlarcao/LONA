@@ -1,0 +1,72 @@
+[
+  {
+    "id": "artist-001",
+    "slug": "artista-placeholder",
+    "name": "Artista — Em Breve",
+    "nameEn": "Artist — Coming Soon",
+    "bio": "Biografia do artista em breve. O roster da LONA é pequeno e intencional.",
+    "bioEn": "Artist biography coming soon. The LONA roster is small and intentional.",
+    "medium": "Spray, acrílico",
+    "mediumEn": "Spray, acrylic",
+    "location": "Lisboa",
+    "images": ["/images/artists/placeholder-01.jpg"],
+    "cover": "/images/artists/placeholder-01.jpg",
+    "projects": ["proj-001", "proj-003"]
+  },
+  {
+    "id": "artist-002",
+    "slug": "artista-placeholder-02",
+    "name": "Artista II — Em Breve",
+    "nameEn": "Artist II — Coming Soon",
+    "bio": "Biografia do artista em breve.",
+    "bioEn": "Artist biography coming soon.",
+    "medium": "Instalação, escultura",
+    "mediumEn": "Installation, sculpture",
+    "location": "Porto",
+    "images": ["/images/artists/placeholder-02.jpg"],
+    "cover": "/images/artists/placeholder-02.jpg",
+    "projects": ["proj-002"]
+  },
+  {
+    "id": "artist-003",
+    "slug": "artista-placeholder-03",
+    "name": "Artista III — Em Breve",
+    "nameEn": "Artist III — Coming Soon",
+    "bio": "Biografia do artista em breve.",
+    "bioEn": "Artist biography coming soon.",
+    "medium": "Mural, acrílico",
+    "mediumEn": "Mural, acrylic",
+    "location": "Lisboa",
+    "images": ["/images/artists/placeholder-03.jpg"],
+    "cover": "/images/artists/placeholder-03.jpg",
+    "projects": []
+  },
+  {
+    "id": "artist-004",
+    "slug": "marta-sousa",
+    "name": "Marta Sousa",
+    "nameEn": "Marta Sousa",
+    "bio": "Biografia em breve.",
+    "bioEn": "Biography coming soon.",
+    "medium": "Escultura",
+    "mediumEn": "Sculpture",
+    "location": "Lisboa",
+    "images": ["/images/artists/placeholder-04.jpg"],
+    "cover": "/images/artists/placeholder-04.jpg",
+    "projects": []
+  },
+  {
+    "id": "artist-005",
+    "slug": "joao-ferreira",
+    "name": "João Ferreira",
+    "nameEn": "João Ferreira",
+    "bio": "Biografia em breve.",
+    "bioEn": "Biography coming soon.",
+    "medium": "Grafismo",
+    "mediumEn": "Graphic art",
+    "location": "Braga",
+    "images": ["/images/artists/placeholder-05.jpg"],
+    "cover": "/images/artists/placeholder-05.jpg",
+    "projects": []
+  }
+]

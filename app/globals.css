@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design Tokens ─────────────────────────────────────────────── */
+:root {
+  /* Cores */
+  --color-bg:       #080806;
+  --color-surface:  #0F0F0C;
+  --color-accent:   #C9A96E;
+  --color-text:     #EDEAE3;
+  --color-dim:      #6B6960;
+  --color-border:   rgba(255, 255, 255, 0.06);
+
+  /* Tipografia — fontes self-hosted via @fontsource */
+  --font-display: 'Cormorant Garamond', serif;
+  --font-body:    'DM Sans', sans-serif;
+  --font-mono:    'IBM Plex Mono', monospace;
+
+  /* Escalas tipográficas */
+  --text-hero:    clamp(4rem, 9vw, 8rem);
+  --text-h2:      clamp(2.5rem, 5vw, 4.5rem);
+  --text-project: clamp(1.5rem, 3vw, 2.5rem);
+  --text-body:    1rem;
+  --text-label:   0.6875rem;
+
+  /* Line heights */
+  --lh-hero:  0.95;
+  --lh-h2:    1.05;
+  --lh-body:  1.7;
+
+  /* Tracking */
+  --tracking-label: 0.14em;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────── */
+html {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: 300;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  overflow-x: hidden;
+}
+
+/* ─── Noise Overlay ──────────────────────────────────────────────── */
+/* Profundidade analógica subtil — opacity 0.035 */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ─── Tipografia Base ────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--color-text);
+}
+
+/* ─── Seleção de texto ───────────────────────────────────────────── */
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 2px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-dim);
+}
+
+/* ─── Utilitários de tipografia ──────────────────────────────────── */
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .font-mono-lona {
+    font-family: var(--font-mono);
+  }
+
+  /* Label style — IBM Plex Mono, uppercase, tracking wide */
+  .text-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    color: var(--color-dim);
+  }
+
+  /* Acento de separação — linha fina 1px em --color-accent */
+  .accent-line {
+    border-top: 1px solid var(--color-accent);
+  }
+
+  /* Separador subtil */
+  .border-subtle {
+    border-color: var(--color-border);
+  }
+
+  .text-dim {
+    color: var(--color-dim);
+  }
+
+  .text-accent {
+    color: var(--color-accent);
+  }
+
+  /* Container padrão do projeto — max 1200px, px 6 → 10 */
+  .container-lona {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-lona {
+      padding-left: 2.5rem;
+      padding-right: 2.5rem;
+    }
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Link hover: dim → text, via CSS only (safe in Server Components) */
+  .link-hover-text {
+    transition: color 0.25s ease;
+  }
+  .link-hover-text:hover {
+    color: var(--color-text) !important;
+  }
+}
+
+/* ─── prefers-reduced-motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
