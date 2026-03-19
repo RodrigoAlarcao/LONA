@@ -8,11 +8,19 @@ import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
 
 gsap.registerPlugin(ScrollTrigger)
 
-type Block = { type: 'p' | 'em'; text: string }
-
 export default function AboutManifesto() {
   const t = useTranslations('aboutPage.manifesto')
-  const blocks = t.raw('blocks') as Block[]
+
+  // Block order and type are structural — hardcoded here, text comes from translations
+  const blocks: Array<{ key: string; type: 'p' | 'em' }> = [
+    { key: 'p0', type: 'p' },
+    { key: 'p1', type: 'p' },
+    { key: 'p2', type: 'p' },
+    { key: 'p3', type: 'p' },
+    { key: 'p4', type: 'p' },
+    { key: 'em0', type: 'em' },
+    { key: 'em1', type: 'em' },
+  ]
 
   const sectionRef = useRef<HTMLElement>(null)
   const blockRefs  = useRef<(HTMLElement | null)[]>([])
@@ -80,13 +88,15 @@ export default function AboutManifesto() {
         {t('label')}
       </div>
 
-      {/* Blocos do manifesto */}
+      {/* Blocos */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-        {blocks.map((block, i) => {
-          if (block.type === 'em') {
+        {blocks.map(({ key, type }, i) => {
+          const text = t(key as Parameters<typeof t>[0])
+
+          if (type === 'em') {
             return (
               <p
-                key={i}
+                key={key}
                 ref={el => { blockRefs.current[i] = el }}
                 className="font-display"
                 style={{
@@ -96,18 +106,18 @@ export default function AboutManifesto() {
                   lineHeight: 1.35,
                   color: 'var(--color-text)',
                   whiteSpace: 'pre-line',
-                  marginTop: '1rem',
-                  marginBottom: '1rem',
+                  marginTop: '0.75rem',
+                  marginBottom: '0.75rem',
                 }}
               >
-                {block.text}
+                {text}
               </p>
             )
           }
 
           return (
             <p
-              key={i}
+              key={key}
               ref={el => { blockRefs.current[i] = el }}
               className="font-body font-light"
               style={{
@@ -116,7 +126,7 @@ export default function AboutManifesto() {
                 color: 'var(--color-dim)',
               }}
             >
-              {block.text}
+              {text}
             </p>
           )
         })}

@@ -111,40 +111,26 @@
     },
     "manifesto": {
       "label": "Manifesto",
-      "blocks": [
-        { "type": "p", "text": "Há uma mentira que o marketing repete há décadas." },
-        { "type": "p", "text": "A mentira de que atenção se compra. De que visibilidade se aluga. De que uma marca se constrói com impressões, alcance, e métricas de engagement que toda a gente finge que importam." },
-        { "type": "p", "text": "Nós não acreditamos nisso." },
-        { "type": "p", "text": "Acreditamos que as pessoas se lembram do que as move. Do que as faz parar no meio da rua e olhar. Do que lhes causa aquela sensação de que estão a testemunhar algo que não volta a acontecer." },
-        { "type": "p", "text": "Acreditamos que uma obra de arte tem esse poder. E que uma marca que financia uma obra de arte — que a torna possível, que a instala no mundo — fica inevitavelmente ligada a esse momento." },
-        { "type": "em", "text": "Arte e marketing não são opostos. São aliados naturais que nunca ninguém teve a coragem de unir a sério." },
-        { "type": "em", "text": "Não fazemos campanhas. Fazemos obras.\nNão vendemos impressões. Criamos momentos.\nNão deixamos paredes danificadas. Deixamos legado." }
-      ]
+      "p0": "Há uma mentira que o marketing repete há décadas.",
+      "p1": "A mentira de que atenção se compra. De que visibilidade se aluga. De que uma marca se constrói com impressões, alcance, e métricas de engagement que toda a gente finge que importam.",
+      "p2": "Nós não acreditamos nisso.",
+      "p3": "Acreditamos que as pessoas se lembram do que as move. Do que as faz parar no meio da rua e olhar. Do que lhes causa aquela sensação de que estão a testemunhar algo que não volta a acontecer.",
+      "p4": "Acreditamos que uma obra de arte tem esse poder. E que uma marca que financia uma obra de arte — que a torna possível, que a instala no mundo — fica inevitavelmente ligada a esse momento.",
+      "em0": "Arte e marketing não são opostos. São aliados naturais que nunca ninguém teve a coragem de unir a sério.",
+      "em1": "Não fazemos campanhas. Fazemos obras.\nNão vendemos impressões. Criamos momentos.\nNão deixamos paredes danificadas. Deixamos legado."
     },
     "values": {
       "label": "O que nos define",
-      "items": [
-        {
-          "title": "Curadoria, não catálogo",
-          "description": "Temos um roster pequeno e intencional — artistas que respeitamos, cujo trabalho defendemos, e com quem construímos uma relação a longo prazo. Cada recomendação é pessoal, não algorítmica."
-        },
-        {
-          "title": "O processo é o produto",
-          "description": "O que acontece antes — o artista a trabalhar, a cidade a reagir, o tempo a passar — é tão valioso quanto a peça em si. Por isso documentamos tudo. Por isso tornamos o processo público."
-        },
-        {
-          "title": "Arte que dura",
-          "description": "Cada obra existe no mundo depois da campanha acabar. Não desaparece quando o budget acaba. Não expira. Não precisa de ser renovada. Isso muda fundamentalmente a relação entre uma marca e o que investe."
-        },
-        {
-          "title": "Justiça para os artistas",
-          "description": "Pagamos acima do mercado. Garantimos royalties por contrato. Damos crédito público. Construímos a carreira dos artistas com quem trabalhamos — porque é isso que nos dá acesso aos melhores."
-        },
-        {
-          "title": "Seletividade como princípio",
-          "description": "Não fazemos campanhas para toda a gente. Sabemos dizer que não. Isso protege os artistas, protege a nossa reputação, e garante que cada projeto que fazemos é um que nos orgulha."
-        }
-      ]
+      "v0Title": "Curadoria, não catálogo",
+      "v0Desc": "Temos um roster pequeno e intencional — artistas que respeitamos, cujo trabalho defendemos, e com quem construímos uma relação a longo prazo. Cada recomendação é pessoal, não algorítmica.",
+      "v1Title": "O processo é o produto",
+      "v1Desc": "O que acontece antes — o artista a trabalhar, a cidade a reagir, o tempo a passar — é tão valioso quanto a peça em si. Por isso documentamos tudo. Por isso tornamos o processo público.",
+      "v2Title": "Arte que dura",
+      "v2Desc": "Cada obra existe no mundo depois da campanha acabar. Não desaparece quando o budget acaba. Não expira. Não precisa de ser renovada. Isso muda fundamentalmente a relação entre uma marca e o que investe.",
+      "v3Title": "Justiça para os artistas",
+      "v3Desc": "Pagamos acima do mercado. Garantimos royalties por contrato. Damos crédito público. Construímos a carreira dos artistas com quem trabalhamos — porque é isso que nos dá acesso aos melhores.",
+      "v4Title": "Seletividade como princípio",
+      "v4Desc": "Não fazemos campanhas para toda a gente. Sabemos dizer que não. Isso protege os artistas, protege a nossa reputação, e garante que cada projeto que fazemos é um que nos orgulha."
     },
     "cta": {
       "heading": "Pronto para começar?",

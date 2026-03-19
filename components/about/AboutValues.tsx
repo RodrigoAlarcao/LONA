@@ -8,11 +8,11 @@ import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
 
 gsap.registerPlugin(ScrollTrigger)
 
-type ValueItem = { title: string; description: string }
-
 export default function AboutValues() {
   const t = useTranslations('aboutPage.values')
-  const items = t.raw('items') as ValueItem[]
+
+  // Structure is hardcoded, text comes from translations
+  const valueKeys = ['v0', 'v1', 'v2', 'v3', 'v4'] as const
 
   const sectionRef = useRef<HTMLElement>(null)
   const labelRef   = useRef<HTMLDivElement>(null)
@@ -23,7 +23,6 @@ export default function AboutValues() {
     if (prefersReducedMotion) return
 
     const ctx = gsap.context(() => {
-      // Label
       gsap.from(labelRef.current, {
         y: 32,
         opacity: 0,
@@ -32,7 +31,6 @@ export default function AboutValues() {
         scrollTrigger: { trigger: labelRef.current, start: 'top 80%', once: true },
       })
 
-      // Items com stagger suave
       itemRefs.current.forEach((el, i) => {
         if (!el) return
         gsap.from(el, {
@@ -41,11 +39,7 @@ export default function AboutValues() {
           duration: 0.8,
           ease: 'power3.out',
           delay: (i % 2) * 0.12,
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 82%',
-            once: true,
-          },
+          scrollTrigger: { trigger: el, start: 'top 82%', once: true },
         })
       })
     }, sectionRef)
@@ -63,7 +57,7 @@ export default function AboutValues() {
         width: '100%',
       }}
     >
-      {/* Label de secção */}
+      {/* Label */}
       <div
         ref={labelRef}
         style={{
@@ -96,18 +90,17 @@ export default function AboutValues() {
         />
       </div>
 
-      {/* Grid editorial — 2 cols em desktop, 1 em mobile */}
+      {/* Grid 2 colunas */}
       <div
         className="grid grid-cols-1 md:grid-cols-2"
         style={{ gap: 'clamp(3rem, 5vw, 4.5rem) clamp(3rem, 6vw, 6rem)' }}
       >
-        {items.map((item, i) => (
+        {valueKeys.map((vk, i) => (
           <div
-            key={i}
+            key={vk}
             ref={el => { itemRefs.current[i] = el }}
             style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}
           >
-            {/* Título — Cormorant, sem negrito pesado */}
             <h3
               className="font-display"
               style={{
@@ -118,10 +111,8 @@ export default function AboutValues() {
                 letterSpacing: '-0.01em',
               }}
             >
-              {item.title}
+              {t(`${vk}Title` as Parameters<typeof t>[0])}
             </h3>
-
-            {/* Descrição */}
             <p
               className="font-body font-light"
               style={{
@@ -131,7 +122,7 @@ export default function AboutValues() {
                 maxWidth: '420px',
               }}
             >
-              {item.description}
+              {t(`${vk}Desc` as Parameters<typeof t>[0])}
             </p>
           </div>
         ))}
