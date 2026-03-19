@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from 'next-intl'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
+import { useParams } from 'next/navigation'
 
 export default function Footer() {
   const t      = useTranslations('footer')
@@ -9,10 +10,11 @@ export default function Footer() {
   const locale = useLocale()
   const pathname = usePathname()
   const router = useRouter()
+  const params = useParams()
 
   const toggleLocale = () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    router.replace(pathname as any, { locale: locale === 'pt' ? 'en' : 'pt' })
+    // @ts-expect-error — next-intl typing não suporta params aqui
+    router.replace(pathname, { locale: locale === 'pt' ? 'en' : 'pt', params })
   }
 
   const monoBase: React.CSSProperties = {
