@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { Link } from '@/i18n/navigation'
+import Link from 'next/link'
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
 import gsap from 'gsap'
 
