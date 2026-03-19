@@ -12,6 +12,7 @@ interface Project {
   titleEn: string
   client: string
   artist: string
+  artistName: string
   type: string
   year: number
   city: string
@@ -191,7 +192,7 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
         >
           {[
             { label: labels.client,   value: project.client    },
-            { label: labels.artist,   value: project.artist    },
+            { label: labels.artist,   value: project.artistName },
             { label: labels.location, value: project.city      },
             { label: labels.year,     value: String(project.year) },
           ].map(({ label, value }) => (
