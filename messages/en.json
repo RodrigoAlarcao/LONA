@@ -146,6 +146,14 @@
     "install": "LONA Install",
     "noProjects": "Coming soon — projects on the way."
   },
+  "projectPage": {
+    "client": "Client",
+    "artist": "Artist",
+    "location": "Location",
+    "year": "Year",
+    "prev": "← Previous project",
+    "next": "Next project →"
+  },
   "artistsPage": {
     "label": "Roster",
     "heading": "The artists",
