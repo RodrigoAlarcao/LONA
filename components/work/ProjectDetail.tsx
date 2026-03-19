@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useEffect, useCallback } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Link } from '@/i18n/navigation'
 import { AnimatePresence, motion } from 'framer-motion'
 import gsap from 'gsap'
@@ -77,12 +77,11 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
         gsap.set(targets, { opacity: 1 })
         return
       }
-      gsap.from(targets, {
-        opacity: 0,
-        duration: 0.6,
-        ease: 'power2.out',
-        stagger: 0.12,
-      })
+      gsap.fromTo(
+        targets,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.6, ease: 'power2.out', stagger: 0.12 }
+      )
     }, mainRef)
 
     return () => ctx.revert()
