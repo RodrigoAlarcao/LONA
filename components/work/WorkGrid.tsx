@@ -147,71 +147,41 @@ export default function WorkGrid({ projects, locale, labels }: Props) {
               >
                 <Link
                   href={{ pathname: '/work/[slug]', params: { slug: project.slug } }}
-                  style={{ textDecoration: 'none', display: 'block' }}
+                  className="project-card"
+                  style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem', cursor: 'pointer' }}
                 >
                   {/* Imagem placeholder */}
-                  <div
-                    style={{
-                      aspectRatio: '4 / 3',
-                      width: '100%',
-                      backgroundColor: '#161613',
-                      overflow: 'hidden',
-                      marginBottom: '1.25rem',
-                    }}
-                  >
+                  <div style={{ aspectRatio: '4 / 3', width: '100%', backgroundColor: '#161613', overflow: 'hidden', marginBottom: '0.5rem' }}>
                     <div
+                      className="project-image-inner"
                       style={{
                         width: '100%',
                         height: '100%',
                         backgroundColor: i % 2 === 0 ? '#1e1e1a' : '#181815',
                         transition: 'transform 0.6s ease',
                       }}
-                      onMouseEnter={e => ((e.currentTarget as HTMLDivElement).style.transform = 'scale(1.03)')}
-                      onMouseLeave={e => ((e.currentTarget as HTMLDivElement).style.transform = 'scale(1)')}
                     />
                   </div>
 
                   {/* Meta */}
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.625rem',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.14em',
-                      color: 'var(--color-dim)',
-                      opacity: 0.5,
-                      marginBottom: '0.5rem',
-                    }}
-                  >
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--color-dim)', opacity: 0.5, margin: 0 }}>
                     {project.type.toUpperCase()} · {project.year}
                   </p>
 
-                  <h2
-                    className="font-display font-light"
-                    style={{
-                      fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
-                      lineHeight: 1.05,
-                      color: 'var(--color-text)',
-                      marginBottom: '0.5rem',
-                      letterSpacing: '-0.01em',
-                      transition: 'opacity 0.25s ease',
-                    }}
-                    onMouseEnter={e => ((e.currentTarget as HTMLHeadingElement).style.opacity = '0.7')}
-                    onMouseLeave={e => ((e.currentTarget as HTMLHeadingElement).style.opacity = '1')}
-                  >
+                  <h2 className="font-display font-light" style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', lineHeight: 1.05, color: 'var(--color-text)', margin: 0, letterSpacing: '-0.01em' }}>
                     {title}
                   </h2>
 
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.6875rem',
-                      color: 'var(--color-dim)',
-                      opacity: 0.45,
-                      letterSpacing: '0.06em',
-                    }}
-                  >
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', color: 'var(--color-dim)', opacity: 0.45, letterSpacing: '0.06em', margin: 0 }}>
                     {project.client} · {project.city}
+                  </p>
+
+                  {/* Hover label */}
+                  <p
+                    className="project-hover-label"
+                    style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--color-dim)', opacity: 0, transition: 'opacity 0.3s ease', margin: 0 }}
+                  >
+                    {locale === 'en' ? 'See project' : 'Ver projecto'} →
                   </p>
                 </Link>
               </div>
@@ -219,6 +189,12 @@ export default function WorkGrid({ projects, locale, labels }: Props) {
           })}
         </div>
       )}
+
+      {/* CSS: hover activa imagem scale + label */}
+      <style>{`
+        .project-card:hover .project-image-inner { transform: scale(1.03) !important; }
+        .project-card:hover .project-hover-label { opacity: 1 !important; }
+      `}</style>
     </section>
   )
 }
