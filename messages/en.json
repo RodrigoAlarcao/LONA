@@ -155,10 +155,9 @@
     "next": "Next project →"
   },
   "artistsPage": {
-    "label": "Roster",
-    "heading": "The artists",
-    "sub": "A small, intentional group.",
-    "noArtists": "Coming soon."
+    "label": "— Artists",
+    "heading": "A small roster.\nIntentional.",
+    "editorial": "We don't work with everyone. We work with those we respect — and we build that relationship over the long term."
   },
   "contactPage": {
     "sectionLabel": "006 — Contact",

@@ -155,10 +155,9 @@
     "next": "Próximo projecto →"
   },
   "artistsPage": {
-    "label": "Roster",
-    "heading": "Os artistas",
-    "sub": "Um grupo pequeno e intencional.",
-    "noArtists": "Em breve."
+    "label": "— Artistas",
+    "heading": "Um roster pequeno.\nIntencional.",
+    "editorial": "Não trabalhamos com toda a gente. Trabalhamos com quem respeitamos — e construímos essa relação a longo prazo."
   },
   "contactPage": {
     "sectionLabel": "006 — Contacto",
