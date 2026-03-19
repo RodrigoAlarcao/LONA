@@ -146,6 +146,14 @@ h1, h2, h3, h4, h5, h6 {
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Link hover: dim → text, via CSS only (safe in Server Components) */
+  .link-hover-text {
+    transition: color 0.25s ease;
+  }
+  .link-hover-text:hover {
+    color: var(--color-text) !important;
+  }
 }
 
 /* ─── prefers-reduced-motion ─────────────────────────────────────── */

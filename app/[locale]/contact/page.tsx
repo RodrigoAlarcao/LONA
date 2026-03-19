@@ -91,6 +91,7 @@ export default async function ContactPage() {
             {/* Email directo */}
             <a
               href={`mailto:${t('email')}`}
+              className="link-hover-text"
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.8125rem',
@@ -98,11 +99,8 @@ export default async function ContactPage() {
                 letterSpacing: '0.05em',
                 color: 'var(--color-dim)',
                 textDecoration: 'none',
-                transition: 'color 0.25s ease',
                 marginTop: '0.5rem',
               }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-dim)')}
             >
               {t('email')}
             </a>
