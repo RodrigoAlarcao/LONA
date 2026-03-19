@@ -100,15 +100,56 @@
   "about": {
     "label": "About",
     "heading": "The conviction that defines us",
-    "manifesto": {
-      "label": "Manifesto"
+    "manifesto": { "label": "Manifesto" },
+    "vision": { "label": "The Vision", "heading": "A different market" },
+    "values": { "label": "What defines us" }
+  },
+  "aboutPage": {
+    "hero": {
+      "label": "— About",
+      "heading": "We are not\nan agency."
     },
-    "vision": {
-      "label": "The Vision",
-      "heading": "A different market"
+    "manifesto": {
+      "label": "Manifesto",
+      "blocks": [
+        { "type": "p", "text": "There is a lie that marketing has repeated for decades." },
+        { "type": "p", "text": "The lie that attention can be bought. That visibility can be rented. That a brand is built with impressions, reach, and engagement metrics that everyone pretends matter." },
+        { "type": "p", "text": "We don't believe that." },
+        { "type": "p", "text": "We believe people remember what moves them. What makes them stop in the middle of the street and look. What gives them that feeling of witnessing something that won't happen again." },
+        { "type": "p", "text": "We believe art has that power. And that a brand that finances a work of art — that makes it possible, that installs it in the world — becomes inevitably linked to that moment." },
+        { "type": "em", "text": "Art and marketing are not opposites. They are natural allies that no one has ever had the courage to unite seriously." },
+        { "type": "em", "text": "We don't make campaigns. We make works.\nWe don't sell impressions. We create moments.\nWe don't leave damaged walls. We leave legacy." }
+      ]
     },
     "values": {
-      "label": "What defines us"
+      "label": "What defines us",
+      "items": [
+        {
+          "title": "Curation, not catalogue",
+          "description": "We have a small, intentional roster — artists we respect, whose work we stand behind, and with whom we build long-term relationships. Every recommendation is personal, not algorithmic."
+        },
+        {
+          "title": "The process is the product",
+          "description": "What happens before — the artist working, the city reacting, time passing — is as valuable as the finished piece. That's why we document everything. That's why we make the process public."
+        },
+        {
+          "title": "Art that lasts",
+          "description": "Every work exists in the world after the campaign ends. It doesn't disappear when the budget runs out. It doesn't expire. It doesn't need to be renewed. That fundamentally changes how a brand relates to its investment."
+        },
+        {
+          "title": "Justice for artists",
+          "description": "We pay above market. We guarantee royalties by contract. We give public credit. We build the careers of the artists we work with — because that's what gives us access to the best."
+        },
+        {
+          "title": "Selectivity as principle",
+          "description": "We don't make campaigns for everyone. We know how to say no. That protects the artists, protects our reputation, and ensures that every project we take on is one we're proud of."
+        }
+      ]
+    },
+    "cta": {
+      "heading": "Ready to start?",
+      "link": "Start a project",
+      "href": "/contact"
     }
   },
   "workPage": {
