@@ -176,10 +176,7 @@ export default function ContactForm() {
         <span style={labelStyle}>{t('typeLabel')}</span>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '0.25rem' }}>
           {(['marca', 'artista', 'outro'] as const).map((val) => {
-            const labelKey = `type${val.charAt(0).toUpperCase() + val.slice(1)}` as
-              | 'typeBrand'
-              | 'typeArtist'
-              | 'typeOther'
+            const labelKey = ({ marca: 'typeBrand', artista: 'typeArtist', outro: 'typeOther' } as const)[val]
             const isSelected = selectedType === val
             return (
               <button
