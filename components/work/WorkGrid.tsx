@@ -17,6 +17,7 @@ interface Project {
   type: string
   year: number
   city: string
+  cover: string
 }
 
 interface Labels {
@@ -150,14 +151,17 @@ export default function WorkGrid({ projects, locale, labels }: Props) {
                   className="project-card"
                   style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem', cursor: 'pointer' }}
                 >
-                  {/* Imagem placeholder */}
-                  <div style={{ aspectRatio: '4 / 3', width: '100%', backgroundColor: '#161613', overflow: 'hidden', marginBottom: '0.5rem' }}>
+                  {/* Imagem */}
+                  <div style={{ aspectRatio: '4 / 3', width: '100%', backgroundColor: '#161613', overflow: 'hidden', marginBottom: '0.5rem', position: 'relative' }}>
                     <div
                       className="project-image-inner"
                       style={{
-                        width: '100%',
-                        height: '100%',
+                        position: 'absolute',
+                        inset: 0,
                         backgroundColor: i % 2 === 0 ? '#1e1e1a' : '#181815',
+                        backgroundImage: project.cover.includes('placeholder') ? undefined : `url(${project.cover})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
                         transition: 'transform 0.6s ease',
                       }}
                     />

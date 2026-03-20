@@ -51,6 +51,7 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
 
   const mainRef       = useRef<HTMLDivElement>(null)
   const heroRef       = useRef<HTMLDivElement>(null)
+  const heroImageRef  = useRef<HTMLDivElement>(null)
   const overlayRef    = useRef<HTMLDivElement>(null)
   const techRef       = useRef<HTMLDivElement>(null)
   const descRef       = useRef<HTMLParagraphElement>(null)
@@ -68,7 +69,7 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
-  // --- Fade-in animations ---
+  // --- Fade-in + parallax ---
   useIsomorphicLayoutEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -83,6 +84,20 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
         { opacity: 0 },
         { opacity: 1, duration: 0.6, ease: 'power2.out', stagger: 0.12 }
       )
+
+      // Parallax no hero
+      if (heroImageRef.current && heroRef.current) {
+        gsap.to(heroImageRef.current, {
+          yPercent: -20,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        })
+      }
     }, mainRef)
 
     return () => ctx.revert()
@@ -110,17 +125,22 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
           opacity: 0,
         }}
       >
-        {/* Placeholder image */}
+        {/* Hero image com parallax */}
         <div
+          ref={heroImageRef}
           style={{
             position: 'absolute',
-            inset: 0,
+            top: '-10%',
+            bottom: '-10%',
+            left: 0,
+            right: 0,
             backgroundColor: '#1a1a17',
             backgroundImage: project.cover.startsWith('/images/projects/placeholder')
               ? undefined
               : `url(${project.cover})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            willChange: 'transform',
           }}
         />
 

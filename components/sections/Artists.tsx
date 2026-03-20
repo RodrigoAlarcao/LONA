@@ -6,6 +6,7 @@ import { Link } from '@/i18n/navigation'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
+import artistsData from '@/data/artists.json'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -96,14 +97,27 @@ export default function Artists() {
                 gap: '1.5rem',
               }}
             >
-              {/* Imagem placeholder quadrada */}
+              {/* Imagem quadrada */}
               <div
                 style={{
                   aspectRatio: '1 / 1',
                   width: '100%',
                   backgroundColor: '#161613',
+                  overflow: 'hidden',
+                  position: 'relative',
                 }}
-              />
+              >
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    backgroundColor: '#1e1e1a',
+                    backgroundImage: artistsData[i]?.cover ? `url(${artistsData[i].cover})` : undefined,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center top',
+                  }}
+                />
+              </div>
 
               {/* Nome */}
               <h3

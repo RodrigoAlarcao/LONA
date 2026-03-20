@@ -23,8 +23,10 @@ const projects = projectsData.slice(0, 3)
 export default function Work() {
   const t      = useTranslations('work')
   const locale = useLocale()
-  const sectionRef = useRef<HTMLElement>(null)
-  const cardsRef   = useRef<HTMLDivElement[]>([])
+  const sectionRef    = useRef<HTMLElement>(null)
+  const cardsRef      = useRef<HTMLDivElement[]>([])
+  const imageRefs     = useRef<(HTMLDivElement | null)[]>([])
+  const containerRefs = useRef<(HTMLDivElement | null)[]>([])
 
   useIsomorphicLayoutEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -45,6 +47,22 @@ export default function Work() {
             scrollTrigger: { trigger: card, start: 'top 88%', once: true },
           }
         )
+      })
+
+      // Parallax nas imagens
+      imageRefs.current.forEach((img, i) => {
+        const container = containerRefs.current[i]
+        if (!img || !container) return
+        gsap.to(img, {
+          yPercent: -20,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: container,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        })
       })
     }, sectionRef)
 
@@ -78,19 +96,27 @@ export default function Work() {
                 className="project-card"
                 style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', textDecoration: 'none', cursor: 'pointer' }}
               >
-                {/* Imagem 4:3 com grayscale */}
-                <div style={{ aspectRatio: '4 / 3', width: '100%', backgroundColor: '#161613', overflow: 'hidden', position: 'relative' }}>
+                {/* Imagem 4:3 com grayscale + parallax */}
+                <div
+                  ref={el => { containerRefs.current[i] = el }}
+                  style={{ aspectRatio: '4 / 3', width: '100%', backgroundColor: '#161613', overflow: 'hidden', position: 'relative' }}
+                >
                   <div
+                    ref={el => { imageRefs.current[i] = el }}
                     className="project-image-inner"
                     style={{
                       position: 'absolute',
-                      inset: 0,
+                      top: '-10%',
+                      bottom: '-10%',
+                      left: 0,
+                      right: 0,
                       backgroundColor: '#1e1e1a',
                       backgroundImage: project.cover.includes('placeholder') ? undefined : `url(${project.cover})`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                       filter: 'grayscale(1)',
                       transition: 'filter 0.6s ease',
+                      willChange: 'transform',
                     }}
                   />
                 </div>
