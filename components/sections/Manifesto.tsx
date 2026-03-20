@@ -90,19 +90,21 @@ export default function Manifesto() {
       </div>
 
       {/* ── Frases — cada uma é uma linha de manifesto ──────────────── */}
-      <div className="flex flex-col gap-8 md:gap-10">
+      <div className="flex flex-col">
         {lines.map((phrase, i) => {
           const isThesis = i === lines.length - 1
           return (
             <p
               key={i}
               ref={el => { phrasesRef.current[i] = el }}
-              className="font-display leading-[1.1]"
+              className="font-display mb-2"
               style={{
-                fontSize: 'clamp(1.6rem, 3.5vw, 3rem)',
-                fontWeight: isThesis ? 600 : 300,
+                fontSize: 'clamp(2.2rem, 4.5vw, 4rem)',
+                fontWeight: 300,
+                lineHeight: 1.15,
+                letterSpacing: '-0.02em',
                 color: isThesis ? 'var(--color-accent)' : 'var(--color-text)',
-                maxWidth: '820px',
+                maxWidth: '900px',
               }}
             >
               {phrase}
