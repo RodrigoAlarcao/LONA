@@ -69,7 +69,8 @@ export default function Formats() {
   return (
     <section
       ref={sectionRef}
-      className="relative px-6 py-32 md:px-10 md:py-44"
+      className="relative px-6 md:px-10"
+      style={{ display: 'flex', flexDirection: 'column', minHeight: '90vh', paddingTop: '8rem', paddingBottom: '6rem' }}
     >
       {/* ── Imagem decorativa de processo ────────────────────────────── */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -99,11 +100,11 @@ export default function Formats() {
           inset: 0,
           zIndex: 1,
           pointerEvents: 'none',
-          background: 'linear-gradient(to right, #080806 0%, #080806 30%, rgba(8,8,6,0.4) 65%, rgba(8,8,6,0.0) 100%)',
+          background: 'linear-gradient(to top, #080806 0%, #080806 25%, rgba(8,8,6,0.75) 50%, rgba(8,8,6,0.2) 80%, rgba(8,8,6,0.0) 100%)',
         }}
       />
       {/* ── Conteúdo (z-index: 2 — por cima da imagem e overlay) ──────── */}
-      <div className="relative" style={{ zIndex: 2 }}>
+      <div className="relative" style={{ zIndex: 2, display: 'flex', flexDirection: 'column', flex: 1 }}>
       {/* ── Label de secção ─────────────────────────────────────────── */}
       <div className="flex items-center gap-3 mb-16 md:mb-20">
         <span className="text-label" style={{ color: 'var(--color-dim)', opacity: 0.5 }}>
@@ -129,6 +130,9 @@ export default function Formats() {
       >
         {t('heading')}
       </h2>
+
+      {/* ── Spacer — empurra os blocos para o fundo ─────────────────── */}
+      <div style={{ flex: 1 }} />
 
       {/* ── Dois blocos — centrados com max-width ────────────────────── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', maxWidth: '900px', margin: '0 auto', gap: '80px' }}>
