@@ -17,8 +17,9 @@ export default function Hero() {
   const ctaRef       = useRef<HTMLDivElement>(null)
   const bottomRef    = useRef<HTMLDivElement>(null)
   const rightRef     = useRef<HTMLDivElement>(null)
-  const bgImageRef   = useRef<HTMLImageElement>(null)
+  const bgImageRef     = useRef<HTMLImageElement>(null)
   const revealLayerRef = useRef<HTMLImageElement>(null)
+  const canvasRef      = useRef<HTMLCanvasElement>(null)
 
   useIsomorphicLayoutEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -116,39 +117,86 @@ export default function Hero() {
       )
     }, containerRef)
 
-    // Spotlight reveal — desactivado em touch devices
-    const container  = containerRef.current
-    const isTouch    = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+    // Paint-brush trail — desactivado em touch devices
+    const container = containerRef.current
+    const isTouch   = 'ontouchstart' in window || navigator.maxTouchPoints > 0
     const cleanupFns: (() => void)[] = []
 
-    if (!isTouch && container && revealLayerRef.current) {
-      // Estado inicial: círculo colapsado ao centro
-      gsap.set(revealLayerRef.current, { clipPath: 'circle(0px at 50% 50%)' })
+    if (!isTouch && container) {
+      const canvas   = canvasRef.current
+      const drawCtx  = canvas?.getContext('2d')
+      if (canvas && drawCtx) {
+        // Ajustar canvas ao container
+        const resize = () => {
+          const r = container.getBoundingClientRect()
+          canvas.width  = r.width
+          canvas.height = r.height
+        }
+        resize()
+        const ro = new ResizeObserver(resize)
+        ro.observe(container)
 
-      const handleMouseMove = (e: MouseEvent) => {
-        if (!revealLayerRef.current) return
-        gsap.to(revealLayerRef.current, {
-          clipPath: `circle(200px at ${e.clientX}px ${e.clientY}px)`,
-          duration: 0.15,
-          ease: 'none',
-        })
+        // Trail de pontos — cada um tem posição e timestamp
+        const TRAIL_MS = 1800
+        const MAX_PTS  = 30
+        const points: { x: number; y: number; t: number }[] = []
+
+        const handleMouseMove = (e: MouseEvent) => {
+          const r = canvas.getBoundingClientRect()
+          points.push({ x: e.clientX - r.left, y: e.clientY - r.top, t: Date.now() })
+          if (points.length > MAX_PTS) points.shift()
+        }
+
+        // rAF loop — desenha trail e compõe imagem pintada
+        let rafId = 0
+        const paintedImg = revealLayerRef.current
+
+        const draw = () => {
+          rafId = requestAnimationFrame(draw)
+          const now = Date.now()
+
+          // Remover pontos expirados
+          while (points.length && now - points[0].t > TRAIL_MS) points.shift()
+
+          drawCtx.clearRect(0, 0, canvas.width, canvas.height)
+
+          if (!points.length || !paintedImg?.complete) return
+
+          // ── Fase 1: desenhar manchas de tinta (máscara de alpha) ──────
+          drawCtx.globalCompositeOperation = 'source-over'
+          const n = points.length
+          points.forEach((pt, i) => {
+            const ageFrac = (now - pt.t) / TRAIL_MS      // 0=fresco 1=velho
+            const idxFrac = i / (n > 1 ? n - 1 : 1)     // 0=mais antigo 1=mais recente
+            const alpha   = (1 - ageFrac) * 0.88
+            if (alpha <= 0) return
+            const radius  = 35 + idxFrac * 85            // 35px → 120px
+
+            const grad = drawCtx.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, radius)
+            grad.addColorStop(0,   `rgba(0,0,0,${alpha})`)
+            grad.addColorStop(0.45, `rgba(0,0,0,${(alpha * 0.65).toFixed(3)})`)
+            grad.addColorStop(1,   'rgba(0,0,0,0)')
+            drawCtx.fillStyle = grad
+            drawCtx.beginPath()
+            drawCtx.arc(pt.x, pt.y, radius, 0, Math.PI * 2)
+            drawCtx.fill()
+          })
+
+          // ── Fase 2: imagem pintada apenas onde existe alpha do trail ──
+          drawCtx.globalCompositeOperation = 'source-in'
+          drawCtx.drawImage(paintedImg, 0, 0, canvas.width, canvas.height)
+          drawCtx.globalCompositeOperation = 'source-over'
+        }
+
+        container.addEventListener('mousemove', handleMouseMove)
+        rafId = requestAnimationFrame(draw)
+
+        cleanupFns.push(
+          () => container.removeEventListener('mousemove', handleMouseMove),
+          () => cancelAnimationFrame(rafId),
+          () => ro.disconnect(),
+        )
       }
-
-      const handleMouseLeave = () => {
-        if (!revealLayerRef.current) return
-        gsap.to(revealLayerRef.current, {
-          clipPath: 'circle(0px at 50% 50%)',
-          duration: 0.8,
-          ease: 'power2.out',
-        })
-      }
-
-      container.addEventListener('mousemove', handleMouseMove)
-      container.addEventListener('mouseleave', handleMouseLeave)
-      cleanupFns.push(
-        () => container.removeEventListener('mousemove', handleMouseMove),
-        () => container.removeEventListener('mouseleave', handleMouseLeave),
-      )
     }
 
     return () => {
@@ -181,24 +229,26 @@ export default function Hero() {
         }}
       />
 
-      {/* ── Layer 2: lona pintada — spotlight reveal ──────────────────── */}
+      {/* ── Layer 2: lona pintada — hidden, usada pelo canvas drawImage ── */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         ref={revealLayerRef}
         src="/images/hero-lona-painted.jpg"
         alt=""
         aria-hidden
+        style={{ position: 'absolute', width: 0, height: 0, opacity: 0, pointerEvents: 'none' }}
+      />
+
+      {/* ── Layer 3: canvas — trail de pincel + compositing ───────────── */}
+      <canvas
+        ref={canvasRef}
         style={{
           position: 'absolute',
           inset: 0,
           width: '100%',
           height: '100%',
-          objectFit: 'cover',
-          opacity: 0.25,
-          zIndex: 1,
+          zIndex: 2,
           pointerEvents: 'none',
-          clipPath: 'circle(0px at 50% 50%)',
-          willChange: 'clip-path',
         }}
       />
 
