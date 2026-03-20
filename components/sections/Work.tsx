@@ -82,7 +82,16 @@ export default function Work() {
                 <div style={{ aspectRatio: '4 / 3', width: '100%', backgroundColor: '#161613', overflow: 'hidden', position: 'relative' }}>
                   <div
                     className="project-image-inner"
-                    style={{ position: 'absolute', inset: 0, backgroundColor: '#1e1e1a', filter: 'grayscale(1)', transition: 'filter 0.6s ease' }}
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      backgroundColor: '#1e1e1a',
+                      backgroundImage: project.cover.includes('placeholder') ? undefined : `url(${project.cover})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      filter: 'grayscale(1)',
+                      transition: 'filter 0.6s ease',
+                    }}
                   />
                 </div>
 

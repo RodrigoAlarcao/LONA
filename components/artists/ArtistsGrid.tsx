@@ -154,6 +154,9 @@ export default function ArtistsGrid({ artists, locale, label, heading, editorial
                     width: '100%',
                     height: '100%',
                     backgroundColor: i % 2 === 0 ? '#1e1e1a' : '#181815',
+                    backgroundImage: artist.cover.includes('placeholder') ? undefined : `url(${artist.cover})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center top',
                     transition: 'transform 0.5s ease',
                   }}
                   onMouseEnter={e => ((e.currentTarget as HTMLDivElement).style.transform = 'scale(1.02)')}
