@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { useParams } from 'next/navigation'
@@ -14,6 +14,13 @@ export default function Nav() {
   const router = useRouter()
   const params = useParams()
   const navRef = useRef<HTMLElement>(null)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   // Lang toggle — mantém o mesmo path e params, muda o locale
   const toggleLocale = () => {
@@ -45,7 +52,14 @@ export default function Nav() {
     <nav
       ref={navRef}
       className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-6 py-6 md:px-10"
-      style={{ opacity: 0 }}
+      style={{
+        opacity: 0,
+        transition: 'background 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease',
+        background: scrolled ? 'rgba(8, 8, 6, 0.85)' : 'transparent',
+        backdropFilter: scrolled ? 'blur(12px)' : 'none',
+        WebkitBackdropFilter: scrolled ? 'blur(12px)' : 'none',
+        borderBottom: scrolled ? '1px solid var(--color-border)' : '1px solid transparent',
+      }}
     >
       {/* Logo — Cormorant, peso visual de galeria */}
       <Link
