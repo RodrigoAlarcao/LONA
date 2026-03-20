@@ -129,8 +129,8 @@ export default function Formats() {
         {t('heading')}
       </h2>
 
-      {/* ── Dois blocos — grid editorial sem borders ─────────────────── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-20 md:gap-16 lg:gap-24">
+      {/* ── Dois blocos — centrados com max-width ────────────────────── */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', maxWidth: '900px', margin: '0 auto', gap: '80px' }}>
 
         {/* LONA Street */}
         <div ref={streetRef} className="flex flex-col gap-7">
