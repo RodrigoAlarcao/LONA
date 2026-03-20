@@ -136,24 +136,54 @@ export default function Hero() {
         const ro = new ResizeObserver(resize)
         ro.observe(container)
 
-        // Trail de pontos — cada um tem posição e timestamp
+        // ── Física de primavera — o ponto suavizado persegue o cursor ──
+        const SPRING  = 0.12
+        const DAMPING = 0.75
+        let targetX = 0, targetY = 0
+        let smoothX = 0, smoothY = 0
+        let velX = 0, velY = 0
+        let hasTarget = false
+
+        // Trail: posição suavizada + timestamp + jitter fixo de cerda
         const TRAIL_MS = 1800
         const MAX_PTS  = 30
-        const points: { x: number; y: number; t: number }[] = []
+        const points: { x: number; y: number; t: number; jitter: number }[] = []
 
         const handleMouseMove = (e: MouseEvent) => {
           const r = canvas.getBoundingClientRect()
-          points.push({ x: e.clientX - r.left, y: e.clientY - r.top, t: Date.now() })
-          if (points.length > MAX_PTS) points.shift()
+          targetX = e.clientX - r.left
+          targetY = e.clientY - r.top
+          if (!hasTarget) {
+            smoothX = targetX
+            smoothY = targetY
+            hasTarget = true
+          }
         }
 
-        // rAF loop — desenha trail e compõe imagem pintada
+        // rAF loop — física + desenho de pincel + compositing
         let rafId = 0
         const paintedImg = revealLayerRef.current
 
         const draw = () => {
           rafId = requestAnimationFrame(draw)
           const now = Date.now()
+
+          // ── Passo 1: actualizar posição suavizada com inércia ─────────
+          if (hasTarget) {
+            velX += (targetX - smoothX) * SPRING
+            velY += (targetY - smoothY) * SPRING
+            velX *= DAMPING
+            velY *= DAMPING
+            smoothX += velX
+            smoothY += velY
+
+            // Só adicionar se o ponto suavizado se moveu (evita duplicados)
+            const last = points[points.length - 1]
+            if (!last || Math.hypot(smoothX - last.x, smoothY - last.y) > 1.5) {
+              points.push({ x: smoothX, y: smoothY, t: now, jitter: (Math.random() - 0.5) * 10 })
+              if (points.length > MAX_PTS) points.shift()
+            }
+          }
 
           // Remover pontos expirados
           while (points.length && now - points[0].t > TRAIL_MS) points.shift()
@@ -162,7 +192,7 @@ export default function Hero() {
 
           if (!points.length || !paintedImg?.complete) return
 
-          // ── Fase 1: desenhar manchas de tinta (máscara de alpha) ──────
+          // ── Fase 1: pinceladas elípticas rotacionadas ─────────────────
           drawCtx.globalCompositeOperation = 'source-over'
           const n = points.length
           points.forEach((pt, i) => {
@@ -170,16 +200,35 @@ export default function Hero() {
             const idxFrac = i / (n > 1 ? n - 1 : 1)     // 0=mais antigo 1=mais recente
             const alpha   = (1 - ageFrac) * 0.88
             if (alpha <= 0) return
-            const radius  = 35 + idxFrac * 85            // 35px → 120px
 
-            const grad = drawCtx.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, radius)
-            grad.addColorStop(0,   `rgba(0,0,0,${alpha})`)
-            grad.addColorStop(0.45, `rgba(0,0,0,${(alpha * 0.65).toFixed(3)})`)
-            grad.addColorStop(1,   'rgba(0,0,0,0)')
+            // Pincel mais largo/alto na ponta (ponto mais recente)
+            const isLatest = i === n - 1
+            const rX = isLatest ? 140 : 35 + idxFrac * 70          // 35→105px, ponta=140
+            const rY = isLatest ? 45  : Math.max(5, (15 + idxFrac * 20) + pt.jitter)
+
+            // Ângulo de movimento em relação ao ponto anterior
+            let angle = 0
+            if (i > 0) {
+              const prev = points[i - 1]
+              const dx = pt.x - prev.x
+              const dy = pt.y - prev.y
+              if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) angle = Math.atan2(dy, dx)
+            }
+
+            // Gradiente suave ao longo do eixo principal
+            const grad = drawCtx.createRadialGradient(0, 0, 0, 0, 0, rX)
+            grad.addColorStop(0,   `rgba(255,255,255,${alpha.toFixed(3)})`)
+            grad.addColorStop(0.6, `rgba(255,255,255,${(alpha * 0.4).toFixed(3)})`)
+            grad.addColorStop(1,   'rgba(255,255,255,0)')
+
+            drawCtx.save()
+            drawCtx.translate(pt.x, pt.y)
+            drawCtx.rotate(angle)
             drawCtx.fillStyle = grad
             drawCtx.beginPath()
-            drawCtx.arc(pt.x, pt.y, radius, 0, Math.PI * 2)
+            drawCtx.ellipse(0, 0, Math.max(rX, 1), Math.max(rY, 1), 0, 0, Math.PI * 2)
             drawCtx.fill()
+            drawCtx.restore()
           })
 
           // ── Fase 2: imagem pintada apenas onde existe alpha do trail ──
