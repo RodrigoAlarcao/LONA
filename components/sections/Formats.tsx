@@ -80,27 +80,29 @@ export default function Formats() {
         aria-hidden
         style={{
           position: 'absolute',
-          right: 0,
-          top: 0,
-          bottom: 0,
-          width: '45%',
+          inset: 0,
+          width: '100%',
           height: '100%',
           objectFit: 'cover',
-          opacity: 0.10,
+          objectPosition: 'center',
+          opacity: 0.5,
           zIndex: 0,
           pointerEvents: 'none',
-          WebkitMaskImage: [
-            'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.6) 25%, rgba(0,0,0,0.8) 55%, transparent 100%)',
-            'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
-          ].join(', '),
-          WebkitMaskComposite: 'source-in',
-          maskImage: [
-            'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.6) 25%, rgba(0,0,0,0.8) 55%, transparent 100%)',
-            'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
-          ].join(', '),
-          maskComposite: 'intersect',
         }}
       />
+      {/* ── Overlay gradiente — tapa a esquerda, revela a direita ──────── */}
+      <div
+        aria-hidden
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 1,
+          pointerEvents: 'none',
+          background: 'linear-gradient(to right, #080806 0%, #080806 30%, rgba(8,8,6,0.4) 65%, rgba(8,8,6,0.0) 100%)',
+        }}
+      />
+      {/* ── Conteúdo (z-index: 2 — por cima da imagem e overlay) ──────── */}
+      <div className="relative" style={{ zIndex: 2 }}>
       {/* ── Label de secção ─────────────────────────────────────────── */}
       <div className="flex items-center gap-3 mb-16 md:mb-20">
         <span className="text-label" style={{ color: 'var(--color-dim)', opacity: 0.5 }}>
@@ -229,6 +231,7 @@ export default function Formats() {
         </div>
 
       </div>
+      </div>{/* fim wrapper conteúdo z-2 */}
     </section>
   )
 }
