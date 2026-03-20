@@ -75,7 +75,7 @@ export default function Formats() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         ref={decorRef}
-        src="/images/process/process-spray-detail.jpg"
+        src="/images/o-que-fazemos.jpg"
         alt=""
         aria-hidden
         style={{
@@ -86,6 +86,7 @@ export default function Formats() {
           objectFit: 'cover',
           objectPosition: 'center',
           opacity: 0.5,
+          filter: 'grayscale(0.7) contrast(1.1) brightness(0.8)',
           zIndex: 0,
           pointerEvents: 'none',
         }}
