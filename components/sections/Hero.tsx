@@ -192,7 +192,9 @@ export default function Hero() {
         brushImg.src = '/images/brush-stroke.png'
 
         // rAF loop — física + stamp do pincel + compositing
-        let rafId = 0
+        let rafId   = 0
+        let isIdle  = false
+        let wasIdle = false
         const paintedImg = revealLayerRef.current
 
         const draw = () => {
@@ -208,12 +210,26 @@ export default function Hero() {
             smoothX += velX
             smoothY += velY
 
+            // Detectar paragem: velocidade próxima de zero
+            const speed = Math.sqrt(velX * velX + velY * velY)
+            isIdle = speed < 0.5
+
+            // Na transição moving → idle: comprimir expiresAt para 600ms
+            if (isIdle && !wasIdle) {
+              const deadline = now + 600
+              points.forEach(pt => { if (pt.expiresAt > deadline) pt.expiresAt = deadline })
+            }
+            wasIdle = isIdle
+
             // Só adicionar se o ponto suavizado se moveu (evita duplicados)
             const last = points[points.length - 1]
             if (!last || Math.hypot(smoothX - last.x, smoothY - last.y) > 1.5) {
               points.push({ x: smoothX, y: smoothY, t: now, expiresAt: now + TRAIL_MS })
               if (points.length > MAX_PTS) points.shift()
             }
+          } else {
+            isIdle  = false
+            wasIdle = false
           }
 
           // Remover pontos expirados
@@ -232,8 +248,8 @@ export default function Hero() {
             const lifespan = pt.expiresAt - pt.t
             const ageFrac  = Math.min(1, (now - pt.t) / lifespan)  // 0=fresco 1=velho
             const idxFrac  = i / (n > 1 ? n - 1 : 1)              // 0=mais antigo 1=mais recente
-            // Curva exponencial: mantém-se opaco no início, acelera no final
-            const alpha    = Math.pow(1 - ageFrac, 2.5) * 0.95
+            // Curva exponencial — mais agressiva quando parado (1.5), suave em movimento (2.5)
+            const alpha    = Math.pow(1 - ageFrac, isIdle ? 1.5 : 2.5) * 0.95
             if (alpha <= 0) return
 
             // Ponta do pincel maior (800px); trail encolhe proporcionalmente
