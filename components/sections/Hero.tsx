@@ -160,7 +160,44 @@ export default function Hero() {
           }
         }
 
-        // rAF loop — física + desenho de pincel + compositing
+        // ── Textura de pincel — gerada num canvas offscreen ──────────
+        const STAMP_W = 400, STAMP_H = 140
+        const stamp   = document.createElement('canvas')
+        stamp.width   = STAMP_W
+        stamp.height  = STAMP_H
+        const sc  = stamp.getContext('2d')!
+        const scx = STAMP_W / 2, scy = STAMP_H / 2
+
+        // Corpo: lente cônica apontada nas extremidades
+        sc.beginPath()
+        sc.moveTo(0, scy)
+        sc.bezierCurveTo(STAMP_W * 0.12, scy - 58, STAMP_W * 0.38, scy - 68, scx, scy - 64)
+        sc.bezierCurveTo(STAMP_W * 0.62, scy - 68, STAMP_W * 0.88, scy - 58, STAMP_W, scy)
+        sc.bezierCurveTo(STAMP_W * 0.88, scy + 58, STAMP_W * 0.62, scy + 68, scx, scy + 64)
+        sc.bezierCurveTo(STAMP_W * 0.38, scy + 68, STAMP_W * 0.12, scy + 58, 0, scy)
+        sc.closePath()
+        const bodyGrad = sc.createRadialGradient(scx, scy, 0, scx, scy, STAMP_W * 0.5)
+        bodyGrad.addColorStop(0,    'rgba(255,255,255,1)')
+        bodyGrad.addColorStop(0.55, 'rgba(255,255,255,0.92)')
+        bodyGrad.addColorStop(0.80, 'rgba(255,255,255,0.5)')
+        bodyGrad.addColorStop(1,    'rgba(255,255,255,0)')
+        sc.fillStyle = bodyGrad
+        sc.fill()
+
+        // Estrias de cerda ao longo do eixo horizontal
+        for (let k = 0; k < 18; k++) {
+          const t  = k / 17
+          const y  = (scy - 62) + t * 124
+          const hw = STAMP_W * 0.44 * Math.sin(Math.PI * t)
+          sc.beginPath()
+          sc.moveTo(scx - hw, y + Math.sin(k * 1.9) * 4)
+          sc.lineTo(scx + hw, y + Math.cos(k * 2.7) * 4)
+          sc.strokeStyle = k % 3 === 0 ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.13)'
+          sc.lineWidth = 0.3 + (k % 5) * 0.25
+          sc.stroke()
+        }
+
+        // rAF loop — física + stamp do pincel + compositing
         let rafId = 0
         const paintedImg = revealLayerRef.current
 
@@ -180,7 +217,7 @@ export default function Hero() {
             // Só adicionar se o ponto suavizado se moveu (evita duplicados)
             const last = points[points.length - 1]
             if (!last || Math.hypot(smoothX - last.x, smoothY - last.y) > 1.5) {
-              points.push({ x: smoothX, y: smoothY, t: now, jitter: (Math.random() - 0.5) * 10 })
+              points.push({ x: smoothX, y: smoothY, t: now, jitter: 0 })
               if (points.length > MAX_PTS) points.shift()
             }
           }
@@ -192,19 +229,20 @@ export default function Hero() {
 
           if (!points.length || !paintedImg?.complete) return
 
-          // ── Fase 1: pinceladas elípticas rotacionadas ─────────────────
+          // ── Fase 1: stamps de pincel rotacionados ────────────────────
           drawCtx.globalCompositeOperation = 'source-over'
           const n = points.length
           points.forEach((pt, i) => {
-            const ageFrac = (now - pt.t) / TRAIL_MS      // 0=fresco 1=velho
-            const idxFrac = i / (n > 1 ? n - 1 : 1)     // 0=mais antigo 1=mais recente
-            const alpha   = (1 - ageFrac) * 0.88
+            const ageFrac  = (now - pt.t) / TRAIL_MS      // 0=fresco 1=velho
+            const idxFrac  = i / (n > 1 ? n - 1 : 1)     // 0=mais antigo 1=mais recente
+            const isLatest = i === n - 1
+            const alpha    = isLatest ? 0.95 : (1 - ageFrac) * 0.88
             if (alpha <= 0) return
 
-            // Pincel mais largo/alto na ponta (ponto mais recente)
-            const isLatest = i === n - 1
-            const rX = isLatest ? 140 : 35 + idxFrac * 70          // 35→105px, ponta=140
-            const rY = isLatest ? 45  : Math.max(5, (15 + idxFrac * 20) + pt.jitter)
+            // Ponta maior; trail encolhe progressivamente para trás
+            const scale = isLatest ? 3.0 : 0.4 + idxFrac * 1.6
+            const w = STAMP_W * scale
+            const h = STAMP_H * scale
 
             // Ângulo de movimento em relação ao ponto anterior
             let angle = 0
@@ -215,21 +253,14 @@ export default function Hero() {
               if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) angle = Math.atan2(dy, dx)
             }
 
-            // Gradiente suave ao longo do eixo principal
-            const grad = drawCtx.createRadialGradient(0, 0, 0, 0, 0, rX)
-            grad.addColorStop(0,   `rgba(255,255,255,${alpha.toFixed(3)})`)
-            grad.addColorStop(0.6, `rgba(255,255,255,${(alpha * 0.4).toFixed(3)})`)
-            grad.addColorStop(1,   'rgba(255,255,255,0)')
-
             drawCtx.save()
             drawCtx.translate(pt.x, pt.y)
             drawCtx.rotate(angle)
-            drawCtx.fillStyle = grad
-            drawCtx.beginPath()
-            drawCtx.ellipse(0, 0, Math.max(rX, 1), Math.max(rY, 1), 0, 0, Math.PI * 2)
-            drawCtx.fill()
+            drawCtx.globalAlpha = alpha
+            drawCtx.drawImage(stamp, -w / 2, -h / 2, w, h)
             drawCtx.restore()
           })
+          drawCtx.globalAlpha = 1
 
           // ── Fase 2: imagem pintada apenas onde existe alpha do trail ──
           drawCtx.globalCompositeOperation = 'source-in'
