@@ -91,7 +91,7 @@ export default function Artists() {
           {artists.map((artist, i) => (
             <div
               key={i}
-              className="flex-shrink-0 flex flex-col"
+              className="artist-card flex-shrink-0 flex flex-col"
               style={{
                 width: 'clamp(260px, 26vw, 400px)',
                 gap: '1.5rem',
@@ -107,7 +107,9 @@ export default function Artists() {
                   position: 'relative',
                 }}
               >
+                {/* Imagem principal — grayscale por defeito */}
                 <div
+                  className="artist-img-primary"
                   style={{
                     position: 'absolute',
                     inset: 0,
@@ -117,11 +119,20 @@ export default function Artists() {
                     backgroundPosition: 'center top',
                   }}
                 />
+                {/* Segunda imagem — fade in no hover */}
+                {artistsData[i]?.images?.[1] && (
+                  <div
+                    className="artist-img-secondary"
+                    style={{
+                      backgroundImage: `url(${artistsData[i].images[1]})`,
+                    }}
+                  />
+                )}
               </div>
 
               {/* Nome */}
               <h3
-                className="font-display font-light"
+                className="artist-name font-display font-light"
                 style={{
                   fontSize: 'clamp(1.75rem, 2.8vw, 2.6rem)',
                   lineHeight: 1.05,
@@ -173,6 +184,31 @@ export default function Artists() {
           </span>
         </Link>
       </div>
+
+      <style>{`
+        .artist-card { cursor: default; }
+        .artist-img-primary {
+          filter: grayscale(1);
+          transform: scale(1);
+          transition: filter 0.6s ease, transform 0.6s ease;
+        }
+        .artist-card:hover .artist-img-primary {
+          filter: grayscale(0);
+          transform: scale(1.03);
+        }
+        .artist-img-secondary {
+          position: absolute;
+          inset: 0;
+          background-size: cover;
+          background-position: center top;
+          opacity: 0;
+          transition: opacity 0.5s ease;
+          pointer-events: none;
+        }
+        .artist-card:hover .artist-img-secondary { opacity: 1; }
+        .artist-name { transition: color 0.3s ease; }
+        .artist-card:hover .artist-name { color: var(--color-accent) !important; }
+      `}</style>
     </article>
   )
 }
