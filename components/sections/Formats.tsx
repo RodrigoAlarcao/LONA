@@ -86,17 +86,17 @@ export default function Formats() {
           width: '45%',
           height: '100%',
           objectFit: 'cover',
-          opacity: 0.04,
+          opacity: 0.10,
           zIndex: 0,
           pointerEvents: 'none',
           WebkitMaskImage: [
-            'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.5) 60%, transparent 100%)',
-            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+            'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.6) 25%, rgba(0,0,0,0.8) 55%, transparent 100%)',
+            'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
           ].join(', '),
           WebkitMaskComposite: 'source-in',
           maskImage: [
-            'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.5) 60%, transparent 100%)',
-            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+            'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.6) 25%, rgba(0,0,0,0.8) 55%, transparent 100%)',
+            'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
           ].join(', '),
           maskComposite: 'intersect',
         }}
