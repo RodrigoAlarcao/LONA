@@ -145,8 +145,9 @@ export default function Hero() {
         let hasTarget = false
 
         // Trail: posição suavizada + timestamp
-        const TRAIL_MS = 1800
-        const MAX_PTS  = 30
+        const TRAIL_MS    = 3500
+        const MAX_PTS     = 35
+        const LEAVE_FADEMS = 2000   // tempo de dissolução após mouseleave
         const points: { x: number; y: number; t: number }[] = []
 
         const handleMouseMove = (e: MouseEvent) => {
@@ -158,6 +159,14 @@ export default function Hero() {
             smoothY = targetY
             hasTarget = true
           }
+        }
+
+        const handleMouseLeave = () => {
+          hasTarget = false   // para de adicionar pontos
+          // Comprimir timestamps para todos expirarem em ≤ LEAVE_FADEMS
+          const now      = Date.now()
+          const earlyT   = now - (TRAIL_MS - LEAVE_FADEMS)  // expirar em ~2s
+          points.forEach(pt => { if (pt.t > earlyT) pt.t = earlyT })
         }
 
         // ── Carregar e processar brush-stroke.png ─────────────────────
@@ -222,12 +231,13 @@ export default function Hero() {
           const n           = points.length
           const aspectRatio = stampReady.height / stampReady.width
           points.forEach((pt, i) => {
-            const ageFrac = (now - pt.t) / TRAIL_MS  // 0=fresco 1=velho
-            const alpha   = (1 - ageFrac) * 0.88
+            const ageFrac = (now - pt.t) / TRAIL_MS       // 0=fresco 1=velho
+            const idxFrac = i / (n > 1 ? n - 1 : 1)      // 0=mais antigo 1=mais recente
+            const alpha   = (1 - ageFrac) * 0.9
             if (alpha <= 0) return
 
-            // Stamp cresce à medida que o ponto envelhece (blob que se expande)
-            const w = 500 * ageFrac + 200
+            // Ponta do pincel maior (800px); trail encolhe proporcionalmente
+            const w = 150 + idxFrac * 650
             const h = w * aspectRatio
 
             // Ângulo de movimento em relação ao ponto anterior
@@ -242,7 +252,7 @@ export default function Hero() {
             drawCtx.save()
             drawCtx.translate(pt.x, pt.y)
             drawCtx.rotate(angle)
-            drawCtx.globalAlpha = alpha * ageFrac
+            drawCtx.globalAlpha = alpha
             drawCtx.drawImage(stampReady, -w / 2, -h / 2, w, h)
             drawCtx.restore()
           })
@@ -255,10 +265,12 @@ export default function Hero() {
         }
 
         container.addEventListener('mousemove', handleMouseMove)
+        container.addEventListener('mouseleave', handleMouseLeave)
         rafId = requestAnimationFrame(draw)
 
         cleanupFns.push(
           () => container.removeEventListener('mousemove', handleMouseMove),
+          () => container.removeEventListener('mouseleave', handleMouseLeave),
           () => cancelAnimationFrame(rafId),
           () => ro.disconnect(),
         )
