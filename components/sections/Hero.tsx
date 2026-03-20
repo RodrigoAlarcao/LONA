@@ -144,11 +144,10 @@ export default function Hero() {
         let velX = 0, velY = 0
         let hasTarget = false
 
-        // Trail: posição suavizada + timestamp
-        const TRAIL_MS    = 3500
-        const MAX_PTS     = 35
-        const LEAVE_FADEMS = 2000   // tempo de dissolução após mouseleave
-        const points: { x: number; y: number; t: number }[] = []
+        // Trail: posição suavizada + timestamp + tempo de expiração por ponto
+        const TRAIL_MS = 5000
+        const MAX_PTS  = 35
+        const points: { x: number; y: number; t: number; expiresAt: number }[] = []
 
         const handleMouseMove = (e: MouseEvent) => {
           const r = canvas.getBoundingClientRect()
@@ -163,10 +162,9 @@ export default function Hero() {
 
         const handleMouseLeave = () => {
           hasTarget = false   // para de adicionar pontos
-          // Comprimir timestamps para todos expirarem em ≤ LEAVE_FADEMS
-          const now      = Date.now()
-          const earlyT   = now - (TRAIL_MS - LEAVE_FADEMS)  // expirar em ~2s
-          points.forEach(pt => { if (pt.t > earlyT) pt.t = earlyT })
+          // Cada ponto existente expira 3000ms a partir de agora
+          const deadline = Date.now() + 3000
+          points.forEach(pt => { if (pt.expiresAt > deadline) pt.expiresAt = deadline })
         }
 
         // ── Carregar e processar brush-stroke.png ─────────────────────
@@ -213,13 +211,13 @@ export default function Hero() {
             // Só adicionar se o ponto suavizado se moveu (evita duplicados)
             const last = points[points.length - 1]
             if (!last || Math.hypot(smoothX - last.x, smoothY - last.y) > 1.5) {
-              points.push({ x: smoothX, y: smoothY, t: now })
+              points.push({ x: smoothX, y: smoothY, t: now, expiresAt: now + TRAIL_MS })
               if (points.length > MAX_PTS) points.shift()
             }
           }
 
           // Remover pontos expirados
-          while (points.length && now - points[0].t > TRAIL_MS) points.shift()
+          while (points.length && now >= points[0].expiresAt) points.shift()
 
           drawCtx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -231,27 +229,19 @@ export default function Hero() {
           const n           = points.length
           const aspectRatio = stampReady.height / stampReady.width
           points.forEach((pt, i) => {
-            const ageFrac = (now - pt.t) / TRAIL_MS       // 0=fresco 1=velho
-            const idxFrac = i / (n > 1 ? n - 1 : 1)      // 0=mais antigo 1=mais recente
-            const alpha   = (1 - ageFrac) * 0.9
+            const lifespan = pt.expiresAt - pt.t
+            const ageFrac  = Math.min(1, (now - pt.t) / lifespan)  // 0=fresco 1=velho
+            const idxFrac  = i / (n > 1 ? n - 1 : 1)              // 0=mais antigo 1=mais recente
+            // Curva exponencial: mantém-se opaco no início, acelera no final
+            const alpha    = Math.pow(1 - ageFrac, 2.5) * 0.95
             if (alpha <= 0) return
 
             // Ponta do pincel maior (800px); trail encolhe proporcionalmente
             const w = 150 + idxFrac * 650
             const h = w * aspectRatio
 
-            // Ângulo de movimento em relação ao ponto anterior
-            let angle = 0
-            if (i > 0) {
-              const prev = points[i - 1]
-              const dx = pt.x - prev.x
-              const dy = pt.y - prev.y
-              if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) angle = Math.atan2(dy, dx)
-            }
-
             drawCtx.save()
             drawCtx.translate(pt.x, pt.y)
-            drawCtx.rotate(angle)
             drawCtx.globalAlpha = alpha
             drawCtx.drawImage(stampReady, -w / 2, -h / 2, w, h)
             drawCtx.restore()
