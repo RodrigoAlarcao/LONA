@@ -49,20 +49,24 @@ export default function Work() {
         )
       })
 
-      // Parallax nas imagens
+      // Parallax nas imagens — centrado: começa ligeiramente abaixo, acaba ligeiramente acima
       imageRefs.current.forEach((img, i) => {
         const container = containerRefs.current[i]
         if (!img || !container) return
-        gsap.to(img, {
-          yPercent: -20,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: container,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true,
-          },
-        })
+        gsap.fromTo(
+          img,
+          { yPercent: 10 },
+          {
+            yPercent: -10,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: container,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true,
+            },
+          }
+        )
       })
     }, sectionRef)
 
@@ -106,8 +110,8 @@ export default function Work() {
                     className="project-image-inner"
                     style={{
                       position: 'absolute',
-                      top: '-10%',
-                      bottom: '-10%',
+                      top: '-15%',
+                      bottom: '-15%',
                       left: 0,
                       right: 0,
                       backgroundColor: '#1e1e1a',

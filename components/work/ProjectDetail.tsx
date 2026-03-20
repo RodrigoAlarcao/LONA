@@ -85,18 +85,22 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
         { opacity: 1, duration: 0.6, ease: 'power2.out', stagger: 0.12 }
       )
 
-      // Parallax no hero
+      // Parallax no hero — centrado: começa ligeiramente abaixo, acaba ligeiramente acima
       if (heroImageRef.current && heroRef.current) {
-        gsap.to(heroImageRef.current, {
-          yPercent: -20,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: heroRef.current,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true,
-          },
-        })
+        gsap.fromTo(
+          heroImageRef.current,
+          { yPercent: 10 },
+          {
+            yPercent: -10,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: heroRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true,
+            },
+          }
+        )
       }
     }, mainRef)
 
@@ -130,8 +134,8 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
           ref={heroImageRef}
           style={{
             position: 'absolute',
-            top: '-10%',
-            bottom: '-10%',
+            top: '-15%',
+            bottom: '-15%',
             left: 0,
             right: 0,
             backgroundColor: '#1a1a17',
