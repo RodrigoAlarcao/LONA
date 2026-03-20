@@ -18,6 +18,7 @@ export default function Hero() {
   const bottomRef    = useRef<HTMLDivElement>(null)
   const rightRef     = useRef<HTMLDivElement>(null)
   const bgImageRef   = useRef<HTMLImageElement>(null)
+  const revealLayerRef = useRef<HTMLImageElement>(null)
 
   useIsomorphicLayoutEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -115,19 +116,44 @@ export default function Hero() {
       )
     }, containerRef)
 
-    // Mousemove parallax na imagem de fundo
-    const container = containerRef.current
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!bgImageRef.current) return
-      const xPos = (e.clientX / window.innerWidth  - 0.5) * 30
-      const yPos = (e.clientY / window.innerHeight - 0.5) * 30
-      gsap.to(bgImageRef.current, { x: xPos, y: yPos, duration: 1.2, ease: 'power2.out' })
+    // Spotlight reveal — desactivado em touch devices
+    const container  = containerRef.current
+    const isTouch    = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+    const cleanupFns: (() => void)[] = []
+
+    if (!isTouch && container && revealLayerRef.current) {
+      // Estado inicial: círculo colapsado ao centro
+      gsap.set(revealLayerRef.current, { clipPath: 'circle(0px at 50% 50%)' })
+
+      const handleMouseMove = (e: MouseEvent) => {
+        if (!revealLayerRef.current) return
+        gsap.to(revealLayerRef.current, {
+          clipPath: `circle(200px at ${e.clientX}px ${e.clientY}px)`,
+          duration: 0.15,
+          ease: 'none',
+        })
+      }
+
+      const handleMouseLeave = () => {
+        if (!revealLayerRef.current) return
+        gsap.to(revealLayerRef.current, {
+          clipPath: 'circle(0px at 50% 50%)',
+          duration: 0.8,
+          ease: 'power2.out',
+        })
+      }
+
+      container.addEventListener('mousemove', handleMouseMove)
+      container.addEventListener('mouseleave', handleMouseLeave)
+      cleanupFns.push(
+        () => container.removeEventListener('mousemove', handleMouseMove),
+        () => container.removeEventListener('mouseleave', handleMouseLeave),
+      )
     }
-    container?.addEventListener('mousemove', handleMouseMove)
 
     return () => {
       ctx.revert()
-      container?.removeEventListener('mousemove', handleMouseMove)
+      cleanupFns.forEach(fn => fn())
     }
   }, [])
 
@@ -136,24 +162,43 @@ export default function Hero() {
       ref={containerRef}
       className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden px-6 pb-8 pt-24 md:px-10 md:pt-28"
     >
-      {/* ── Imagem de fundo — parallax com mousemove ─────────────────── */}
+      {/* ── Layer 1: lona vazia (base) ───────────────────────────────── */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         ref={bgImageRef}
-        src="/images/projects/project-memoria-viva/project-memoria-viva-hero.jpg"
+        src="/images/hero-lona-empty.jpg"
         alt=""
         aria-hidden
         style={{
           position: 'absolute',
-          top: '-5%',
-          left: '-5%',
-          width: '110%',
-          height: '110%',
+          inset: 0,
+          width: '100%',
+          height: '100%',
           objectFit: 'cover',
-          opacity: 0.10,
+          opacity: 0.18,
           zIndex: 0,
           pointerEvents: 'none',
-          willChange: 'transform',
+        }}
+      />
+
+      {/* ── Layer 2: lona pintada — spotlight reveal ──────────────────── */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        ref={revealLayerRef}
+        src="/images/hero-lona-painted.jpg"
+        alt=""
+        aria-hidden
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          opacity: 0.25,
+          zIndex: 1,
+          pointerEvents: 'none',
+          clipPath: 'circle(0px at 50% 50%)',
+          willChange: 'clip-path',
         }}
       />
 
@@ -161,7 +206,7 @@ export default function Hero() {
       <div
         ref={labelRef}
         className="flex items-center gap-3"
-        style={{ opacity: 0, position: 'relative', zIndex: 1 }}
+        style={{ opacity: 0, position: 'relative', zIndex: 10 }}
       >
         <span className="text-label" style={{ color: 'var(--color-dim)', opacity: 0.5 }}>
           001
@@ -176,7 +221,7 @@ export default function Hero() {
       </div>
 
       {/* ── Centro: conteúdo principal ──────────────────────────────── */}
-      <div className="flex flex-col gap-6 md:gap-7" style={{ position: 'relative', zIndex: 1 }}>
+      <div className="flex flex-col gap-6 md:gap-7" style={{ position: 'relative', zIndex: 10 }}>
 
         {/* LONA — o elemento que define a página inteira */}
         {/*
@@ -296,7 +341,7 @@ export default function Hero() {
       <div
         ref={rightRef}
         className="hidden md:flex flex-col items-center absolute right-10 top-1/2 -translate-y-1/2"
-        style={{ opacity: 0, zIndex: 2 }}
+        style={{ opacity: 0, zIndex: 10 }}
         aria-hidden
       >
         <span
@@ -323,7 +368,7 @@ export default function Hero() {
       <div
         ref={bottomRef}
         className="flex items-center justify-between"
-        style={{ position: 'relative', zIndex: 1 }}
+        style={{ position: 'relative', zIndex: 10 }}
         aria-hidden
       >
         <span
