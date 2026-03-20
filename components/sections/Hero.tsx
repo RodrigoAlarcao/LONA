@@ -17,6 +17,7 @@ export default function Hero() {
   const ctaRef       = useRef<HTMLDivElement>(null)
   const bottomRef    = useRef<HTMLDivElement>(null)
   const rightRef     = useRef<HTMLDivElement>(null)
+  const bgImageRef   = useRef<HTMLImageElement>(null)
 
   useIsomorphicLayoutEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -114,19 +115,53 @@ export default function Hero() {
       )
     }, containerRef)
 
-    return () => ctx.revert()
+    // Mousemove parallax na imagem de fundo
+    const container = containerRef.current
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!bgImageRef.current) return
+      const xPos = (e.clientX / window.innerWidth  - 0.5) * 30
+      const yPos = (e.clientY / window.innerHeight - 0.5) * 30
+      gsap.to(bgImageRef.current, { x: xPos, y: yPos, duration: 1.2, ease: 'power2.out' })
+    }
+    container?.addEventListener('mousemove', handleMouseMove)
+
+    return () => {
+      ctx.revert()
+      container?.removeEventListener('mousemove', handleMouseMove)
+    }
   }, [])
 
   return (
     <section
       ref={containerRef}
-      className="relative flex min-h-[100svh] flex-col justify-between px-6 pb-8 pt-24 md:px-10 md:pt-28"
+      className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden px-6 pb-8 pt-24 md:px-10 md:pt-28"
     >
+      {/* ── Imagem de fundo — parallax com mousemove ─────────────────── */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        ref={bgImageRef}
+        src="/images/projects/project-memoria-viva/project-memoria-viva-hero.jpg"
+        alt=""
+        aria-hidden
+        style={{
+          position: 'absolute',
+          top: '-5%',
+          left: '-5%',
+          width: '110%',
+          height: '110%',
+          objectFit: 'cover',
+          opacity: 0.10,
+          zIndex: 0,
+          pointerEvents: 'none',
+          willChange: 'transform',
+        }}
+      />
+
       {/* ── Top: label de contexto ──────────────────────────────────── */}
       <div
         ref={labelRef}
         className="flex items-center gap-3"
-        style={{ opacity: 0 }}
+        style={{ opacity: 0, position: 'relative', zIndex: 1 }}
       >
         <span className="text-label" style={{ color: 'var(--color-dim)', opacity: 0.5 }}>
           001
@@ -141,7 +176,7 @@ export default function Hero() {
       </div>
 
       {/* ── Centro: conteúdo principal ──────────────────────────────── */}
-      <div className="flex flex-col gap-6 md:gap-7">
+      <div className="flex flex-col gap-6 md:gap-7" style={{ position: 'relative', zIndex: 1 }}>
 
         {/* LONA — o elemento que define a página inteira */}
         {/*
@@ -261,7 +296,7 @@ export default function Hero() {
       <div
         ref={rightRef}
         className="hidden md:flex flex-col items-center absolute right-10 top-1/2 -translate-y-1/2"
-        style={{ opacity: 0 }}
+        style={{ opacity: 0, zIndex: 2 }}
         aria-hidden
       >
         <span
@@ -288,6 +323,7 @@ export default function Hero() {
       <div
         ref={bottomRef}
         className="flex items-center justify-between"
+        style={{ position: 'relative', zIndex: 1 }}
         aria-hidden
       >
         <span

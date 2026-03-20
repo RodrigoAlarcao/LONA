@@ -15,6 +15,7 @@ export default function Formats() {
   const headingRef  = useRef<HTMLHeadingElement>(null)
   const streetRef   = useRef<HTMLDivElement>(null)
   const installRef  = useRef<HTMLDivElement>(null)
+  const decorRef    = useRef<HTMLImageElement>(null)
 
   useIsomorphicLayoutEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -31,6 +32,18 @@ export default function Formats() {
         scrollTrigger: {
           trigger: headingRef.current,
           start: 'top 80%',
+          once: true,
+        },
+      })
+
+      // Imagem decorativa — fade in ao entrar no viewport
+      gsap.from(decorRef.current, {
+        opacity: 0,
+        duration: 1.2,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 70%',
           once: true,
         },
       })
@@ -56,8 +69,28 @@ export default function Formats() {
   return (
     <section
       ref={sectionRef}
-      className="px-6 py-32 md:px-10 md:py-44"
+      className="relative px-6 py-32 md:px-10 md:py-44"
     >
+      {/* ── Imagem decorativa de processo ────────────────────────────── */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        ref={decorRef}
+        src="/images/process/process-spray-detail.jpg"
+        alt=""
+        aria-hidden
+        style={{
+          position: 'absolute',
+          right: 0,
+          top: 0,
+          bottom: 0,
+          width: '45%',
+          height: '100%',
+          objectFit: 'cover',
+          opacity: 0.05,
+          zIndex: 0,
+          pointerEvents: 'none',
+        }}
+      />
       {/* ── Label de secção ─────────────────────────────────────────── */}
       <div className="flex items-center gap-3 mb-16 md:mb-20">
         <span className="text-label" style={{ color: 'var(--color-dim)', opacity: 0.5 }}>
