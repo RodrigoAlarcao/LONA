@@ -144,10 +144,10 @@ export default function Hero() {
         let velX = 0, velY = 0
         let hasTarget = false
 
-        // Trail: posição suavizada + timestamp + jitter fixo de cerda
+        // Trail: posição suavizada + timestamp
         const TRAIL_MS = 1800
         const MAX_PTS  = 30
-        const points: { x: number; y: number; t: number; jitter: number }[] = []
+        const points: { x: number; y: number; t: number }[] = []
 
         const handleMouseMove = (e: MouseEvent) => {
           const r = canvas.getBoundingClientRect()
@@ -160,42 +160,29 @@ export default function Hero() {
           }
         }
 
-        // ── Textura de pincel — gerada num canvas offscreen ──────────
-        const STAMP_W = 400, STAMP_H = 140
-        const stamp   = document.createElement('canvas')
-        stamp.width   = STAMP_W
-        stamp.height  = STAMP_H
-        const sc  = stamp.getContext('2d')!
-        const scx = STAMP_W / 2, scy = STAMP_H / 2
-
-        // Corpo: lente cônica apontada nas extremidades
-        sc.beginPath()
-        sc.moveTo(0, scy)
-        sc.bezierCurveTo(STAMP_W * 0.12, scy - 58, STAMP_W * 0.38, scy - 68, scx, scy - 64)
-        sc.bezierCurveTo(STAMP_W * 0.62, scy - 68, STAMP_W * 0.88, scy - 58, STAMP_W, scy)
-        sc.bezierCurveTo(STAMP_W * 0.88, scy + 58, STAMP_W * 0.62, scy + 68, scx, scy + 64)
-        sc.bezierCurveTo(STAMP_W * 0.38, scy + 68, STAMP_W * 0.12, scy + 58, 0, scy)
-        sc.closePath()
-        const bodyGrad = sc.createRadialGradient(scx, scy, 0, scx, scy, STAMP_W * 0.5)
-        bodyGrad.addColorStop(0,    'rgba(255,255,255,1)')
-        bodyGrad.addColorStop(0.55, 'rgba(255,255,255,0.92)')
-        bodyGrad.addColorStop(0.80, 'rgba(255,255,255,0.5)')
-        bodyGrad.addColorStop(1,    'rgba(255,255,255,0)')
-        sc.fillStyle = bodyGrad
-        sc.fill()
-
-        // Estrias de cerda ao longo do eixo horizontal
-        for (let k = 0; k < 18; k++) {
-          const t  = k / 17
-          const y  = (scy - 62) + t * 124
-          const hw = STAMP_W * 0.44 * Math.sin(Math.PI * t)
-          sc.beginPath()
-          sc.moveTo(scx - hw, y + Math.sin(k * 1.9) * 4)
-          sc.lineTo(scx + hw, y + Math.cos(k * 2.7) * 4)
-          sc.strokeStyle = k % 3 === 0 ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.13)'
-          sc.lineWidth = 0.3 + (k % 5) * 0.25
-          sc.stroke()
+        // ── Carregar e processar brush-stroke.png ─────────────────────
+        // Converte: fundo preto → transparente, cinzento → alpha mask branca
+        let stamp: HTMLCanvasElement | null = null
+        const brushImg = new Image()
+        brushImg.onload = () => {
+          const offscreen    = document.createElement('canvas')
+          offscreen.width    = brushImg.naturalWidth
+          offscreen.height   = brushImg.naturalHeight
+          const offCtx = offscreen.getContext('2d')!
+          offCtx.drawImage(brushImg, 0, 0)
+          const imageData = offCtx.getImageData(0, 0, offscreen.width, offscreen.height)
+          const data = imageData.data
+          for (let i = 0; i < data.length; i += 4) {
+            const brightness = (data[i] + data[i + 1] + data[i + 2]) / 3
+            data[i]     = 255         // R → branco
+            data[i + 1] = 255         // G → branco
+            data[i + 2] = 255         // B → branco
+            data[i + 3] = brightness  // alpha = brilho original
+          }
+          offCtx.putImageData(imageData, 0, 0)
+          stamp = offscreen
         }
+        brushImg.src = '/images/brush-stroke.png'
 
         // rAF loop — física + stamp do pincel + compositing
         let rafId = 0
@@ -217,7 +204,7 @@ export default function Hero() {
             // Só adicionar se o ponto suavizado se moveu (evita duplicados)
             const last = points[points.length - 1]
             if (!last || Math.hypot(smoothX - last.x, smoothY - last.y) > 1.5) {
-              points.push({ x: smoothX, y: smoothY, t: now, jitter: 0 })
+              points.push({ x: smoothX, y: smoothY, t: now })
               if (points.length > MAX_PTS) points.shift()
             }
           }
@@ -227,22 +214,21 @@ export default function Hero() {
 
           drawCtx.clearRect(0, 0, canvas.width, canvas.height)
 
-          if (!points.length || !paintedImg?.complete) return
+          if (!points.length || !paintedImg?.complete || !stamp) return
+          const stampReady = stamp  // narrowed: HTMLCanvasElement (not null)
 
           // ── Fase 1: stamps de pincel rotacionados ────────────────────
           drawCtx.globalCompositeOperation = 'source-over'
-          const n = points.length
+          const n           = points.length
+          const aspectRatio = stampReady.height / stampReady.width
           points.forEach((pt, i) => {
-            const ageFrac  = (now - pt.t) / TRAIL_MS      // 0=fresco 1=velho
-            const idxFrac  = i / (n > 1 ? n - 1 : 1)     // 0=mais antigo 1=mais recente
-            const isLatest = i === n - 1
-            const alpha    = isLatest ? 0.95 : (1 - ageFrac) * 0.88
+            const ageFrac = (now - pt.t) / TRAIL_MS  // 0=fresco 1=velho
+            const alpha   = (1 - ageFrac) * 0.88
             if (alpha <= 0) return
 
-            // Ponta maior; trail encolhe progressivamente para trás
-            const scale = isLatest ? 3.0 : 0.4 + idxFrac * 1.6
-            const w = STAMP_W * scale
-            const h = STAMP_H * scale
+            // Stamp cresce à medida que o ponto envelhece (blob que se expande)
+            const w = 500 * ageFrac + 200
+            const h = w * aspectRatio
 
             // Ângulo de movimento em relação ao ponto anterior
             let angle = 0
@@ -256,8 +242,8 @@ export default function Hero() {
             drawCtx.save()
             drawCtx.translate(pt.x, pt.y)
             drawCtx.rotate(angle)
-            drawCtx.globalAlpha = alpha
-            drawCtx.drawImage(stamp, -w / 2, -h / 2, w, h)
+            drawCtx.globalAlpha = alpha * ageFrac
+            drawCtx.drawImage(stampReady, -w / 2, -h / 2, w, h)
             drawCtx.restore()
           })
           drawCtx.globalAlpha = 1
