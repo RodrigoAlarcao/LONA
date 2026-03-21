@@ -422,16 +422,24 @@ export default function Hero() {
             {/* CTA Marcas — destaque em accent */}
             <Link
               href="/contact"
-              className="group flex items-center gap-2.5 transition-opacity duration-300 hover:opacity-70"
+              className="group flex items-center gap-2.5"
               style={{
                 color: 'var(--color-accent)',
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.8125rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.12em',
+                textDecoration: 'none',
               }}
             >
-              <span>{t('ctaBrands')}</span>
+              <span className="relative">
+                {t('ctaBrands')}
+                <span
+                  className="absolute bottom-0 left-0 w-full scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"
+                  style={{ height: '1px', backgroundColor: 'currentColor' }}
+                  aria-hidden
+                />
+              </span>
               <span
                 className="inline-block transition-transform duration-300 group-hover:translate-x-1"
                 aria-hidden
@@ -450,16 +458,27 @@ export default function Hero() {
             {/* CTA Artistas — mais discreto */}
             <Link
               href="/artists"
-              className="group flex items-center gap-2.5 transition-opacity duration-300 hover:opacity-70"
+              className="group flex items-center gap-2.5"
               style={{
                 color: 'var(--color-dim)',
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.8125rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.12em',
+                textDecoration: 'none',
+                transition: 'color 0.3s ease',
               }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-dim)')}
             >
-              <span>{t('ctaArtists')}</span>
+              <span className="relative">
+                {t('ctaArtists')}
+                <span
+                  className="absolute bottom-0 left-0 w-full scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"
+                  style={{ height: '1px', backgroundColor: 'currentColor' }}
+                  aria-hidden
+                />
+              </span>
               <span
                 className="inline-block transition-transform duration-300 group-hover:translate-x-1"
                 aria-hidden

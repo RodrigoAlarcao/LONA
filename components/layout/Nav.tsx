@@ -76,7 +76,8 @@ export default function Nav() {
           href="/about"
           className="text-label transition-colors duration-300"
           style={{ color: 'var(--color-dim)' }}
-          // @ts-ignore — next-intl Link aceita style hover via CSS
+          onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-accent)')}
+          onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-dim)')}
         >
           {t('sobre')}
         </Link>
@@ -84,6 +85,8 @@ export default function Nav() {
           href="/work"
           className="text-label transition-colors duration-300"
           style={{ color: 'var(--color-dim)' }}
+          onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-accent)')}
+          onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-dim)')}
         >
           {t('trabalho')}
         </Link>
@@ -91,6 +94,8 @@ export default function Nav() {
           href="/artists"
           className="text-label transition-colors duration-300"
           style={{ color: 'var(--color-dim)' }}
+          onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-accent)')}
+          onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-dim)')}
         >
           {t('artistas')}
         </Link>
@@ -100,10 +105,16 @@ export default function Nav() {
       <div className="flex items-center gap-6">
         <Link
           href="/contact"
-          className="hidden text-label transition-colors duration-300 md:block"
-          style={{ color: 'var(--color-accent)' }}
+          className="group hidden text-label md:inline-flex items-center gap-2"
+          style={{ color: 'var(--color-text)', transition: 'color 0.3s ease' }}
+          onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-accent)')}
+          onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-text)')}
         >
-          {t('cta')} →
+          <span>{t('cta')}</span>
+          <span
+            className="inline-block transition-transform duration-300 group-hover:translate-x-1"
+            aria-hidden
+          >→</span>
         </Link>
 
         {/* Separador */}
