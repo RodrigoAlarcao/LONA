@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "LONA — Art that makes brands",
-    "description": "We connect brands and artists to create permanent works. LONA Street and LONA Install — two ways to leave a legacy.",
+    "description": "We connect brands and artists to create permanent works. LONA Street and LONA Install, two ways to leave a legacy.",
     "ogImage": "/og-image.png"
   },
   "nav": {
@@ -35,14 +35,14 @@
       "label": "LONA Street",
       "index": "001",
       "title": "The city as canvas",
-      "description": "A large-format work, created live over days. The process is public. People stop, film, share. The brand ends up with a campaign no billboard can replicate — and a signed work with lasting value.",
+      "description": "A large-format work, created live over days. The process is public. People stop, film, share. The brand ends up with a campaign no billboard can replicate, and a signed work with lasting value.",
       "detail": "Public process · Days of execution · Permanent work"
     },
     "install": {
       "label": "LONA Install",
       "index": "002",
       "title": "The space as identity",
-      "description": "A work created specifically for a space — a headquarters, a hotel, a restaurant. The artist absorbs what the brand is and creates something that could only exist there. The making-of is documented. The work stays forever.",
+      "description": "A work created specifically for a space, a headquarters, a hotel, a restaurant. The artist absorbs what the brand is and creates something that could only exist there. The making-of is documented. The work stays forever.",
       "detail": "Dedicated space · Documented making-of · Site-specific work"
     }
   },
@@ -82,7 +82,7 @@
   "contact": {
     "label": "Contact",
     "heading": "Want a work?",
-    "sub": "Talk to us. No pressure — just a conversation.",
+    "sub": "Talk to us. No pressure, just a conversation.",
     "cta": "Start a conversation",
     "ctaLink": "/en/contact"
   },
@@ -115,20 +115,20 @@
       "p1": "The lie that attention can be bought. That visibility can be rented. That a brand is built with impressions, reach, and engagement metrics that everyone pretends matter.",
       "p2": "We don't believe that.",
       "p3": "We believe people remember what moves them. What makes them stop in the middle of the street and look. What gives them that feeling of witnessing something that won't happen again.",
-      "p4": "We believe art has that power. And that a brand that finances a work of art — that makes it possible, that installs it in the world — becomes inevitably linked to that moment.",
+      "p4": "We believe art has that power. And that a brand that finances a work of art, that makes it possible, that installs it in the world, becomes inevitably linked to that moment.",
       "em0": "Art and marketing are not opposites. They are natural allies that no one has ever had the courage to unite seriously.",
       "em1": "We don't make campaigns. We make works.\nWe don't sell impressions. We create moments.\nWe don't leave damaged walls. We leave legacy."
     },
     "values": {
       "label": "What defines us",
       "v0Title": "Curation, not catalogue",
-      "v0Desc": "We have a small, intentional roster — artists we respect, whose work we stand behind, and with whom we build long-term relationships. Every recommendation is personal, not algorithmic.",
+      "v0Desc": "We have a small, intentional roster, artists we respect, whose work we stand behind, and with whom we build long-term relationships. Every recommendation is personal, not algorithmic.",
       "v1Title": "The process is the product",
-      "v1Desc": "What happens before — the artist working, the city reacting, time passing — is as valuable as the finished piece. That's why we document everything. That's why we make the process public.",
+      "v1Desc": "What happens before, the artist working, the city reacting, time passing, is as valuable as the finished piece. That's why we document everything. That's why we make the process public.",
       "v2Title": "Art that lasts",
       "v2Desc": "Every work exists in the world after the campaign ends. It doesn't disappear when the budget runs out. It doesn't expire. It doesn't need to be renewed. That fundamentally changes how a brand relates to its investment.",
       "v3Title": "Justice for artists",
-      "v3Desc": "We pay above market. We guarantee royalties by contract. We give public credit. We build the careers of the artists we work with — because that's what gives us access to the best.",
+      "v3Desc": "We pay above market. We guarantee royalties by contract. We give public credit. We build the careers of the artists we work with, because that's what gives us access to the best.",
       "v4Title": "Selectivity as principle",
       "v4Desc": "We don't make campaigns for everyone. We know how to say no. That protects the artists, protects our reputation, and ensures that every project we take on is one we're proud of."
     },
@@ -144,7 +144,7 @@
     "all": "All",
     "street": "LONA Street",
     "install": "LONA Install",
-    "noProjects": "Coming soon — projects on the way."
+    "noProjects": "Coming soon, projects on the way."
   },
   "projectPage": {
     "client": "Client",
@@ -157,7 +157,7 @@
   "artistsPage": {
     "label": "— Artists",
     "heading": "A small roster.\nIntentional.",
-    "editorial": "We don't work with everyone. We work with those we respect — and we build that relationship over the long term."
+    "editorial": "We don't work with everyone. We work with those we respect, and we build that relationship over the long term."
   },
   "contactPage": {
     "sectionLabel": "006 — Contact",
