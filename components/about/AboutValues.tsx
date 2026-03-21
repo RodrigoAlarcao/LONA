@@ -62,7 +62,8 @@ export default function AboutValues() {
         })
       })
 
-      // Parallax nas imagens internas
+      // Parallax nas imagens internas — scrub suave em mobile
+      const isMobile = window.innerWidth < 768
       innerImageRefs.current.forEach((img, i) => {
         const container = imageRefs.current[i]
         if (!img || !container) return
@@ -76,7 +77,7 @@ export default function AboutValues() {
               trigger: container,
               start: 'top bottom',
               end: 'bottom top',
-              scrub: true,
+              scrub: isMobile ? 0.5 : true,
             },
           }
         )
@@ -140,7 +141,8 @@ export default function AboutValues() {
               style={{
                 display: 'flex',
                 alignItems: 'flex-start',
-                gap: 'clamp(2.5rem, 5vw, 5rem)',
+                flexWrap: 'wrap',
+                gap: 'clamp(2rem, 4vw, 4rem)',
                 borderTop: '1px solid var(--color-border)',
                 paddingTop: 'clamp(2rem, 3vw, 3rem)',
               }}
@@ -197,13 +199,13 @@ export default function AboutValues() {
                 </p>
               </div>
 
-              {/* Imagem — direita (só em valores 1 e 3) */}
+              {/* Imagem — direita em desktop, abaixo em mobile */}
               {hasImage && (
                 <div
                   ref={el => { imageRefs.current[i] = el }}
+                  className="w-full md:w-[45%]"
                   style={{
                     flexShrink: 0,
-                    width: '45%',
                     maxWidth: '480px',
                     aspectRatio: '4 / 3',
                     overflow: 'hidden',

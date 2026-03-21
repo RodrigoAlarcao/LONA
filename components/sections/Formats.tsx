@@ -134,8 +134,8 @@ export default function Formats() {
       {/* ── Spacer — empurra os blocos para o fundo ─────────────────── */}
       <div style={{ flex: 1 }} />
 
-      {/* ── Dois blocos — centrados com max-width ────────────────────── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }}>
+      {/* ── Dois blocos — 1 col em mobile, 2 col em desktop ─────────── */}
+      <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 'clamp(2.5rem, 5vw, 4rem)' }}>
 
         {/* LONA Street */}
         <div ref={streetRef} className="flex flex-col gap-7">

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import gsap from 'gsap'
@@ -20,6 +20,7 @@ export default function Hero() {
   const bgImageRef     = useRef<HTMLImageElement>(null)
   const revealLayerRef = useRef<HTMLImageElement>(null)
   const canvasRef      = useRef<HTMLCanvasElement>(null)
+  const [isTouch, setIsTouch] = useState(false)
 
   useIsomorphicLayoutEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -119,10 +120,11 @@ export default function Hero() {
 
     // Paint-brush trail — desactivado em touch devices
     const container = containerRef.current
-    const isTouch   = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+    setIsTouch(isTouchDevice)
     const cleanupFns: (() => void)[] = []
 
-    if (!isTouch && container) {
+    if (!isTouchDevice && container) {
       const canvas   = canvasRef.current
       const drawCtx  = canvas?.getContext('2d')
       if (canvas && drawCtx) {
@@ -313,14 +315,19 @@ export default function Hero() {
         }}
       />
 
-      {/* ── Layer 2: lona pintada — hidden, usada pelo canvas drawImage ── */}
+      {/* ── Layer 2: lona pintada ────────────────────────────────────────
+           · Desktop: width/height 0, usada apenas pelo canvas drawImage
+           · Mobile/touch: fundo estático visível com opacity 0.15         */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         ref={revealLayerRef}
         src="/images/hero-lona-painted.jpg"
         alt=""
         aria-hidden
-        style={{ position: 'absolute', width: 0, height: 0, opacity: 0, pointerEvents: 'none' }}
+        style={isTouch
+          ? { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.15, zIndex: 1, pointerEvents: 'none' }
+          : { position: 'absolute', width: 0, height: 0, opacity: 0, pointerEvents: 'none' }
+        }
       />
 
       {/* ── Layer 3: canvas — trail de pincel + compositing ───────────── */}
@@ -418,7 +425,7 @@ export default function Hero() {
           </p>
 
           {/* CTAs — IBM Plex Mono, maior presença */}
-          <div ref={ctaRef} className="flex items-center gap-6">
+          <div ref={ctaRef} className="flex flex-col gap-3 md:flex-row md:items-center md:gap-6">
             {/* CTA Marcas — destaque em accent */}
             <Link
               href="/contact"
@@ -448,9 +455,9 @@ export default function Hero() {
               </span>
             </Link>
 
-            {/* Separador */}
+            {/* Separador — apenas desktop */}
             <span
-              className="inline-block w-px h-4"
+              className="hidden md:inline-block w-px h-4"
               style={{ backgroundColor: 'var(--color-dim)', opacity: 0.25 }}
               aria-hidden
             />

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import gsap from 'gsap'
@@ -27,6 +27,12 @@ export default function Work() {
   const cardsRef      = useRef<HTMLDivElement[]>([])
   const imageRefs     = useRef<(HTMLDivElement | null)[]>([])
   const containerRefs = useRef<(HTMLDivElement | null)[]>([])
+  const [isMobile, setIsMobile] = useState(false)
+
+  useIsomorphicLayoutEffect(() => {
+    const mobile = window.innerWidth < 768
+    setIsMobile(mobile)
+  }, [])
 
   useIsomorphicLayoutEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -49,7 +55,7 @@ export default function Work() {
         )
       })
 
-      // Parallax nas imagens — centrado: começa ligeiramente abaixo, acaba ligeiramente acima
+      // Parallax: scrub suave em mobile, normal em desktop
       imageRefs.current.forEach((img, i) => {
         const container = containerRefs.current[i]
         if (!img || !container) return
@@ -63,7 +69,7 @@ export default function Work() {
               trigger: container,
               start: 'top bottom',
               end: 'bottom top',
-              scrub: true,
+              scrub: isMobile ? 0.5 : true,
             },
           }
         )
@@ -71,7 +77,7 @@ export default function Work() {
     }, sectionRef)
 
     return () => ctx.revert()
-  }, [])
+  }, [isMobile])
 
   const verLabel = locale === 'en' ? 'See project' : 'Ver projecto'
 
@@ -85,15 +91,18 @@ export default function Work() {
         <span className="text-label">{t('label')}</span>
       </div>
 
-      {/* ── Grid assimétrico ───────────────────────────────────────────── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'clamp(1rem, 2vw, 1.75rem)' }}>
+      {/* ── Grid assimétrico (desktop) / 1 coluna (mobile) ─────────────── */}
+      <div
+        className="grid grid-cols-1 md:grid-cols-3"
+        style={{ gap: 'clamp(1rem, 2vw, 1.75rem)' }}
+      >
         {projects.map((project, i) => {
           const title = locale === 'en' ? project.titleEn : project.title
           return (
             <div
               key={project.slug}
               ref={el => { if (el) cardsRef.current[i] = el }}
-              style={{ gridColumn: GRID_COLS[i].col, opacity: 0 }}
+              style={{ gridColumn: isMobile ? undefined : GRID_COLS[i].col, opacity: 0 }}
             >
               <Link
                 href={{ pathname: '/work/[slug]', params: { slug: project.slug } }}
