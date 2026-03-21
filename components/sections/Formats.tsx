@@ -135,7 +135,7 @@ export default function Formats() {
       <div style={{ flex: 1 }} />
 
       {/* ── Dois blocos — centrados com max-width ────────────────────── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', maxWidth: '900px', margin: '0 auto', gap: '80px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }}>
 
         {/* LONA Street */}
         <div ref={streetRef} className="flex flex-col gap-7">
