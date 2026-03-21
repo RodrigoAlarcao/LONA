@@ -172,6 +172,7 @@
       "company": "Empresa",
       "companyPlaceholder": "Empresa (opcional)",
       "typeLabel": "Tipo",
+      "typeSub": "Sou uma...",
       "typeBrand": "Marca",
       "typeArtist": "Artista",
       "typeOther": "Outro",
