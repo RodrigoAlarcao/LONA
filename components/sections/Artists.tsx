@@ -61,29 +61,85 @@ export default function Artists() {
         className="relative overflow-hidden"
         style={{ height: '100vh' }}
       >
-        {/* Label 004 — fica fixo durante o scroll horizontal */}
+        {/* ── Header fixo — label + título + CTA ───────────────────────── */}
         <div
-          className="absolute flex items-center gap-3 z-10"
-          style={{ top: '2.5rem', left: '2.5rem' }}
+          className="absolute flex flex-col gap-4"
+          style={{ top: '80px', left: '2.5rem', zIndex: 10 }}
         >
-          <span className="text-label" style={{ color: 'var(--color-dim)', opacity: 0.5 }}>
-            004
-          </span>
-          <span
-            className="inline-block h-px w-8"
-            style={{ backgroundColor: 'var(--color-dim)', opacity: 0.3 }}
-          />
-          <span className="text-label">{t('label')}</span>
+          {/* Label 004 */}
+          <div className="flex items-center gap-3">
+            <span className="text-label" style={{ color: 'var(--color-dim)', opacity: 0.5 }}>
+              004
+            </span>
+            <span
+              className="inline-block h-px w-8"
+              style={{ backgroundColor: 'var(--color-dim)', opacity: 0.3 }}
+            />
+            <span className="text-label">{t('label')}</span>
+          </div>
+
+          {/* Heading da secção */}
+          <h2
+            className="font-display font-light leading-[1.05]"
+            style={{
+              fontSize: 'clamp(1.6rem, 3vw, 2.8rem)',
+              color: 'var(--color-text)',
+              maxWidth: '420px',
+              whiteSpace: 'pre-line',
+            }}
+          >
+            {t('heading')}
+          </h2>
+
+          {/* CTA */}
+          <Link
+            href={t('ctaLink') as any}
+            className="group inline-flex items-center gap-3"
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.8125rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.14em',
+              color: 'var(--color-dim)',
+              textDecoration: 'none',
+              transition: 'color 0.25s ease',
+              marginTop: '0.5rem',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-dim)')}
+          >
+            <span>{t('cta')}</span>
+            <span
+              className="inline-block transition-transform duration-300 group-hover:translate-x-1.5"
+              aria-hidden
+            >
+              →
+            </span>
+          </Link>
         </div>
+
+        {/* Gradiente esquerdo — oculta cards que passam atrás do título */}
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: 'clamp(80px, 15vw, 200px)',
+            height: '100%',
+            background: 'linear-gradient(to right, var(--color-bg) 40%, transparent 100%)',
+            zIndex: 9,
+            pointerEvents: 'none',
+          }}
+        />
 
         {/* Track — este div translada em X com GSAP */}
         <div
           ref={trackRef}
-          className="flex h-full items-start"
+          className="flex h-full items-center"
           style={{
-            paddingTop: '7.5rem',
-            paddingLeft: '2.5rem',
-            paddingRight: '12vw',
+            paddingLeft: 'clamp(80px, 15vw, 200px)',
+            paddingRight: 'clamp(80px, 15vw, 200px)',
             gap: '5rem',
             willChange: 'transform',
           }}
@@ -153,36 +209,6 @@ export default function Artists() {
             </div>
           ))}
         </div>
-      </div>
-
-      {/* ── CTA — abaixo do scroll pinned ────────────────────────────── */}
-      <div
-        className="flex items-center"
-        style={{ padding: '4rem 2.5rem 5rem' }}
-      >
-        <Link
-          href={t('ctaLink') as any}
-          className="group inline-flex items-center gap-3"
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.8125rem',
-            textTransform: 'uppercase',
-            letterSpacing: '0.14em',
-            color: 'var(--color-dim)',
-            textDecoration: 'none',
-            transition: 'color 0.25s ease',
-          }}
-          onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text)')}
-          onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-dim)')}
-        >
-          <span>{t('cta')}</span>
-          <span
-            className="inline-block transition-transform duration-300 group-hover:translate-x-1.5"
-            aria-hidden
-          >
-            →
-          </span>
-        </Link>
       </div>
 
       <style>{`
