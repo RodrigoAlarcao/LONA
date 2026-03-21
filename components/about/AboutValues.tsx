@@ -19,10 +19,11 @@ export default function AboutValues() {
 
   const valueKeys = ['v0', 'v1', 'v2', 'v3', 'v4'] as const
 
-  const sectionRef = useRef<HTMLElement>(null)
-  const labelRef   = useRef<HTMLDivElement>(null)
-  const itemRefs   = useRef<(HTMLDivElement | null)[]>([])
-  const imageRefs  = useRef<(HTMLDivElement | null)[]>([])
+  const sectionRef      = useRef<HTMLElement>(null)
+  const labelRef        = useRef<HTMLDivElement>(null)
+  const itemRefs        = useRef<(HTMLDivElement | null)[]>([])
+  const imageRefs       = useRef<(HTMLDivElement | null)[]>([])
+  const innerImageRefs  = useRef<(HTMLImageElement | null)[]>([])
 
   useIsomorphicLayoutEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -48,7 +49,7 @@ export default function AboutValues() {
         })
       })
 
-      // Imagens entram com delay em relação ao texto
+      // Containers de imagem — fade-in com delay
       imageRefs.current.forEach((el) => {
         if (!el) return
         gsap.from(el, {
@@ -59,6 +60,26 @@ export default function AboutValues() {
           delay: 0.18,
           scrollTrigger: { trigger: el, start: 'top 82%', once: true },
         })
+      })
+
+      // Parallax nas imagens internas
+      innerImageRefs.current.forEach((img, i) => {
+        const container = imageRefs.current[i]
+        if (!img || !container) return
+        gsap.fromTo(
+          img,
+          { yPercent: -10 },
+          {
+            yPercent: 10,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: container,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true,
+            },
+          }
+        )
       })
     }, sectionRef)
 
@@ -187,20 +208,28 @@ export default function AboutValues() {
                     aspectRatio: '4 / 3',
                     overflow: 'hidden',
                     backgroundColor: '#161613',
+                    position: 'relative',
                   }}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
+                    ref={el => { innerImageRefs.current[i] = el }}
                     src={VALUE_IMAGES[i]}
                     alt=""
                     aria-hidden
                     style={{
+                      position: 'absolute',
+                      top: '-15%',
+                      bottom: '-15%',
+                      left: 0,
+                      right: 0,
                       width: '100%',
-                      height: '100%',
+                      height: '130%',
                       objectFit: 'cover',
                       objectPosition: 'center',
                       display: 'block',
                       filter: 'grayscale(0.3)',
+                      willChange: 'transform',
                     }}
                   />
                 </div>
