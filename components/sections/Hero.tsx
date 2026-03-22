@@ -301,6 +301,7 @@ export default function Hero() {
       <img
         ref={bgImageRef}
         src="/images/hero-lona-empty.jpg"
+        fetchPriority="high"
         alt=""
         aria-hidden
         style={{
@@ -322,6 +323,7 @@ export default function Hero() {
       <img
         ref={revealLayerRef}
         src="/images/hero-lona-painted.jpg"
+        loading="lazy"
         alt=""
         aria-hidden
         style={isTouch
