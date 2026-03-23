@@ -79,13 +79,17 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
   const labelRef           = useRef<HTMLParagraphElement>(null)
   const scrollLineRef      = useRef<HTMLDivElement>(null)
   const scrollLineWrapRef  = useRef<HTMLDivElement>(null)
+  const heroContainerRef   = useRef<HTMLDivElement>(null)
+  const heroImgRef         = useRef<HTMLDivElement>(null)
   const metaRowRef         = useRef<HTMLDivElement>(null)
   const descRef            = useRef<HTMLDivElement>(null)
   const processWrapRef     = useRef<HTMLDivElement>(null)
   const processImgRef      = useRef<HTMLDivElement>(null)
   const galleryRef         = useRef<HTMLDivElement>(null)
   const coverImgRef        = useRef<HTMLDivElement>(null)
+  const coverImgInnerRef   = useRef<HTMLDivElement>(null)
   const detailImgRef       = useRef<HTMLDivElement>(null)
+  const detailImgInnerRef  = useRef<HTMLDivElement>(null)
   const conceptRef         = useRef<HTMLDivElement>(null)
 
   useIsomorphicLayoutEffect(() => {
@@ -133,6 +137,20 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
         })
       }
 
+      // ── Cap 0: Hero parallax ─────────────────────────────────────────
+      if (heroImgRef.current && heroContainerRef.current) {
+        gsap.to(heroImgRef.current, {
+          yPercent: -20,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroContainerRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        })
+      }
+
       // ── Cap 3: Process image parallax ─────────────────────────────────
       if (processImgRef.current && processWrapRef.current) {
         gsap.to(processImgRef.current, {
@@ -140,6 +158,34 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
           ease: 'none',
           scrollTrigger: {
             trigger: processWrapRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        })
+      }
+
+      // ── Cap 4: Cover parallax ────────────────────────────────────────
+      if (coverImgInnerRef.current && coverImgRef.current) {
+        gsap.to(coverImgInnerRef.current, {
+          yPercent: -10,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: coverImgRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        })
+      }
+
+      // ── Cap 4: Detail parallax ───────────────────────────────────────
+      if (detailImgInnerRef.current && detailImgRef.current) {
+        gsap.to(detailImgInnerRef.current, {
+          yPercent: -10,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: detailImgRef.current,
             start: 'top bottom',
             end: 'bottom top',
             scrub: true,
@@ -183,6 +229,7 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
 
       {/* ── Cap. 0 — HERO (full viewport) ──────────────────────────────── */}
       <div
+        ref={heroContainerRef}
         style={{
           position: 'relative',
           width: '100%',
@@ -191,14 +238,26 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
           overflow: 'hidden',
         }}
       >
-        <Image
-          src={heroImage}
-          alt={title}
-          fill
-          priority
-          style={{ objectFit: 'cover' }}
-          sizes="100vw"
-        />
+        <div
+          ref={heroImgRef}
+          style={{
+            position: 'absolute',
+            top: '-10%',
+            bottom: '-10%',
+            left: 0,
+            right: 0,
+            willChange: 'transform',
+          }}
+        >
+          <Image
+            src={heroImage}
+            alt={title}
+            fill
+            priority
+            style={{ objectFit: 'cover' }}
+            sizes="100vw"
+          />
+        </div>
 
         {/* Gradient overlay — text legível sem escurecer a imagem */}
         <div
@@ -456,13 +515,25 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
               overflow: 'hidden',
             }}
           >
-            <Image
-              src={project.cover}
-              alt={`${title} — obra`}
-              fill
-              style={{ objectFit: 'cover' }}
-              sizes="(max-width: 768px) 100vw, 60vw"
-            />
+            <div
+              ref={coverImgInnerRef}
+              style={{
+                position: 'absolute',
+                top: '-10%',
+                bottom: '-10%',
+                left: 0,
+                right: 0,
+                willChange: 'transform',
+              }}
+            >
+              <Image
+                src={project.cover}
+                alt={`${title} — obra`}
+                fill
+                style={{ objectFit: 'cover' }}
+                sizes="(max-width: 768px) 100vw, 60vw"
+              />
+            </div>
           </div>
 
           {/* Detail — 40% */}
@@ -476,13 +547,25 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
               overflow: 'hidden',
             }}
           >
-            <Image
-              src={detailImage}
-              alt={`${title} — detalhe`}
-              fill
-              style={{ objectFit: 'cover' }}
-              sizes="(max-width: 768px) 100vw, 40vw"
-            />
+            <div
+              ref={detailImgInnerRef}
+              style={{
+                position: 'absolute',
+                top: '-10%',
+                bottom: '-10%',
+                left: 0,
+                right: 0,
+                willChange: 'transform',
+              }}
+            >
+              <Image
+                src={detailImage}
+                alt={`${title} — detalhe`}
+                fill
+                style={{ objectFit: 'cover' }}
+                sizes="(max-width: 768px) 100vw, 40vw"
+              />
+            </div>
           </div>
         </div>
       </div>
