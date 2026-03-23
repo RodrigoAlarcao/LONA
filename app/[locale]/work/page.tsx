@@ -18,11 +18,12 @@ export default async function WorkPage({ params: { locale } }: Props) {
   const t = await getTranslations({ locale, namespace: 'workPage' })
 
   const labels = {
-    heading:    t('heading'),
-    all:        t('all'),
-    street:     t('street'),
-    install:    t('install'),
-    noProjects: t('noProjects'),
+    heading:     t('heading'),
+    all:         t('all'),
+    street:      t('street'),
+    install:     t('install'),
+    noProjects:  t('noProjects'),
+    exploration: t('exploration'),
   }
 
   return (

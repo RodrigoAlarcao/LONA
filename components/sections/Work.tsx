@@ -22,6 +22,7 @@ const projects = projectsData.slice(0, 3)
 
 export default function Work() {
   const t      = useTranslations('work')
+  const tPage  = useTranslations('workPage')
   const locale = useLocale()
   const sectionRef    = useRef<HTMLElement>(null)
   const cardsRef      = useRef<HTMLDivElement[]>([])
@@ -132,6 +133,25 @@ export default function Work() {
                       willChange: 'transform',
                     }}
                   />
+                  {'status' in project && project.status === 'exploracao' && (
+                    <span style={{
+                      position: 'absolute',
+                      top: '0.75rem',
+                      left: '0.75rem',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.625rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.14em',
+                      color: 'var(--color-dim)',
+                      border: '1px solid var(--color-border)',
+                      padding: '0.125rem 0.5rem',
+                      borderRadius: '2px',
+                      zIndex: 10,
+                      lineHeight: 1.4,
+                    }}>
+                      {tPage('exploration')}
+                    </span>
+                  )}
                 </div>
 
                 {/* Tipo · Ano */}

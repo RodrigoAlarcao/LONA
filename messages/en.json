@@ -144,7 +144,8 @@
     "all": "All",
     "street": "LONA Street",
     "install": "LONA Install",
-    "noProjects": "Coming soon, projects on the way."
+    "noProjects": "Coming soon, projects on the way.",
+    "exploration": "Exploration"
   },
   "projectPage": {
     "client": "Client",

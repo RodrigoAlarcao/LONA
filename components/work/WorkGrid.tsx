@@ -18,6 +18,7 @@ interface Project {
   year: number
   city: string
   cover: string
+  status?: string
 }
 
 interface Labels {
@@ -26,6 +27,7 @@ interface Labels {
   street: string
   install: string
   noProjects: string
+  exploration: string
 }
 
 interface Props {
@@ -194,6 +196,25 @@ export default function WorkGrid({ projects, locale, labels }: Props) {
                         willChange: 'transform',
                       }}
                     />
+                    {project.status === 'exploracao' && (
+                      <span style={{
+                        position: 'absolute',
+                        top: '0.75rem',
+                        left: '0.75rem',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.625rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.14em',
+                        color: 'var(--color-dim)',
+                        border: '1px solid var(--color-border)',
+                        padding: '0.125rem 0.5rem',
+                        borderRadius: '2px',
+                        zIndex: 10,
+                        lineHeight: 1.4,
+                      }}>
+                        {labels.exploration}
+                      </span>
+                    )}
                   </div>
 
                   {/* Meta */}
