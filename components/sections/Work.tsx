@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import gsap from 'gsap'
@@ -23,8 +23,16 @@ const projects = projectsData.slice(0, 3)
 export default function Work() {
   const t      = useTranslations('work')
   const locale = useLocale()
-  const sectionRef = useRef<HTMLElement>(null)
-  const cardsRef   = useRef<HTMLDivElement[]>([])
+  const sectionRef    = useRef<HTMLElement>(null)
+  const cardsRef      = useRef<HTMLDivElement[]>([])
+  const imageRefs     = useRef<(HTMLDivElement | null)[]>([])
+  const containerRefs = useRef<(HTMLDivElement | null)[]>([])
+  const [isMobile, setIsMobile] = useState(false)
+
+  useIsomorphicLayoutEffect(() => {
+    const mobile = window.innerWidth < 768
+    setIsMobile(mobile)
+  }, [])
 
   useIsomorphicLayoutEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -46,10 +54,30 @@ export default function Work() {
           }
         )
       })
+
+      // Parallax: scrub suave em mobile, normal em desktop
+      imageRefs.current.forEach((img, i) => {
+        const container = containerRefs.current[i]
+        if (!img || !container) return
+        gsap.fromTo(
+          img,
+          { yPercent: 10 },
+          {
+            yPercent: -10,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: container,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: isMobile ? 0.5 : true,
+            },
+          }
+        )
+      })
     }, sectionRef)
 
     return () => ctx.revert()
-  }, [])
+  }, [isMobile])
 
   const verLabel = locale === 'en' ? 'See project' : 'Ver projecto'
 
@@ -63,26 +91,46 @@ export default function Work() {
         <span className="text-label">{t('label')}</span>
       </div>
 
-      {/* ── Grid assimétrico ───────────────────────────────────────────── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'clamp(1rem, 2vw, 1.75rem)' }}>
+      {/* ── Grid assimétrico (desktop) / 1 coluna (mobile) ─────────────── */}
+      <div
+        className="grid grid-cols-1 md:grid-cols-3"
+        style={{ gap: 'clamp(1rem, 2vw, 1.75rem)' }}
+      >
         {projects.map((project, i) => {
           const title = locale === 'en' ? project.titleEn : project.title
           return (
             <div
               key={project.slug}
               ref={el => { if (el) cardsRef.current[i] = el }}
-              style={{ gridColumn: GRID_COLS[i].col, opacity: 0 }}
+              style={{ gridColumn: isMobile ? undefined : GRID_COLS[i].col, opacity: 0 }}
             >
               <Link
                 href={{ pathname: '/work/[slug]', params: { slug: project.slug } }}
                 className="project-card"
                 style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', textDecoration: 'none', cursor: 'pointer' }}
               >
-                {/* Imagem 4:3 com grayscale */}
-                <div style={{ aspectRatio: '4 / 3', width: '100%', backgroundColor: '#161613', overflow: 'hidden', position: 'relative' }}>
+                {/* Imagem 4:3 com grayscale + parallax */}
+                <div
+                  ref={el => { containerRefs.current[i] = el }}
+                  style={{ aspectRatio: '4 / 3', width: '100%', backgroundColor: '#161613', overflow: 'hidden', position: 'relative' }}
+                >
                   <div
+                    ref={el => { imageRefs.current[i] = el }}
                     className="project-image-inner"
-                    style={{ position: 'absolute', inset: 0, backgroundColor: '#1e1e1a', filter: 'grayscale(1)', transition: 'filter 0.6s ease' }}
+                    style={{
+                      position: 'absolute',
+                      top: '-15%',
+                      bottom: '-15%',
+                      left: 0,
+                      right: 0,
+                      backgroundColor: '#1e1e1a',
+                      backgroundImage: project.cover.includes('placeholder') ? undefined : `url(${project.cover})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      filter: 'grayscale(1)',
+                      transition: 'filter 0.6s ease',
+                      willChange: 'transform',
+                    }}
                   />
                 </div>
 

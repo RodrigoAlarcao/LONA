@@ -17,6 +17,7 @@ interface Project {
   type: string
   year: number
   city: string
+  cover: string
 }
 
 interface Labels {
@@ -37,8 +38,10 @@ type Filter = 'all' | 'street' | 'install'
 
 export default function WorkGrid({ projects, locale, labels }: Props) {
   const [active, setActive] = useState<Filter>('all')
-  const sectionRef = useRef<HTMLElement>(null)
-  const cardRefs   = useRef<(HTMLDivElement | null)[]>([])
+  const sectionRef     = useRef<HTMLElement>(null)
+  const cardRefs       = useRef<(HTMLDivElement | null)[]>([])
+  const imageRefs      = useRef<(HTMLDivElement | null)[]>([])
+  const containerRefs  = useRef<(HTMLDivElement | null)[]>([])
 
   const filtered = active === 'all' ? projects : projects.filter((p) => p.type === active)
 
@@ -57,6 +60,26 @@ export default function WorkGrid({ projects, locale, labels }: Props) {
           delay: i * 0.1,
           scrollTrigger: { trigger: el, start: 'top 88%', once: true },
         })
+      })
+
+      // Parallax nas imagens
+      imageRefs.current.forEach((img, i) => {
+        const container = containerRefs.current[i]
+        if (!img || !container) return
+        gsap.fromTo(
+          img,
+          { yPercent: 10 },
+          {
+            yPercent: -10,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: container,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true,
+            },
+          }
+        )
       })
     }, sectionRef)
 
@@ -150,15 +173,25 @@ export default function WorkGrid({ projects, locale, labels }: Props) {
                   className="project-card"
                   style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem', cursor: 'pointer' }}
                 >
-                  {/* Imagem placeholder */}
-                  <div style={{ aspectRatio: '4 / 3', width: '100%', backgroundColor: '#161613', overflow: 'hidden', marginBottom: '0.5rem' }}>
+                  {/* Imagem */}
+                  <div
+                    ref={el => { containerRefs.current[i] = el }}
+                    style={{ aspectRatio: '4 / 3', width: '100%', backgroundColor: '#161613', overflow: 'hidden', marginBottom: '0.5rem', position: 'relative' }}
+                  >
                     <div
+                      ref={el => { imageRefs.current[i] = el }}
                       className="project-image-inner"
                       style={{
-                        width: '100%',
-                        height: '100%',
+                        position: 'absolute',
+                        top: '-15%',
+                        bottom: '-15%',
+                        left: 0,
+                        right: 0,
                         backgroundColor: i % 2 === 0 ? '#1e1e1a' : '#181815',
-                        transition: 'transform 0.6s ease',
+                        backgroundImage: project.cover.includes('placeholder') ? undefined : `url(${project.cover})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        willChange: 'transform',
                       }}
                     />
                   </div>

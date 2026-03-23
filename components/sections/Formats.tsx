@@ -15,6 +15,7 @@ export default function Formats() {
   const headingRef  = useRef<HTMLHeadingElement>(null)
   const streetRef   = useRef<HTMLDivElement>(null)
   const installRef  = useRef<HTMLDivElement>(null)
+  const decorRef    = useRef<HTMLImageElement>(null)
 
   useIsomorphicLayoutEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -31,6 +32,18 @@ export default function Formats() {
         scrollTrigger: {
           trigger: headingRef.current,
           start: 'top 80%',
+          once: true,
+        },
+      })
+
+      // Imagem decorativa — fade in ao entrar no viewport
+      gsap.from(decorRef.current, {
+        opacity: 0,
+        duration: 1.2,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 70%',
           once: true,
         },
       })
@@ -56,8 +69,42 @@ export default function Formats() {
   return (
     <section
       ref={sectionRef}
-      className="px-6 py-32 md:px-10 md:py-44"
+      className="relative px-6 md:px-10"
+      style={{ display: 'flex', flexDirection: 'column', minHeight: '90vh', paddingTop: '8rem', paddingBottom: '6rem' }}
     >
+      {/* ── Imagem decorativa de processo ────────────────────────────── */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        ref={decorRef}
+        src="/images/o-que-fazemos.jpg"
+        alt=""
+        aria-hidden
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: 'center',
+          opacity: 0.5,
+          filter: 'grayscale(0.7) contrast(1.1) brightness(0.8)',
+          zIndex: 0,
+          pointerEvents: 'none',
+        }}
+      />
+      {/* ── Overlay gradiente — tapa a esquerda, revela a direita ──────── */}
+      <div
+        aria-hidden
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 1,
+          pointerEvents: 'none',
+          background: 'linear-gradient(to top, #080806 0%, #080806 25%, rgba(8,8,6,0.75) 50%, rgba(8,8,6,0.2) 80%, rgba(8,8,6,0.0) 100%)',
+        }}
+      />
+      {/* ── Conteúdo (z-index: 2 — por cima da imagem e overlay) ──────── */}
+      <div className="relative" style={{ zIndex: 2, display: 'flex', flexDirection: 'column', flex: 1 }}>
       {/* ── Label de secção ─────────────────────────────────────────── */}
       <div className="flex items-center gap-3 mb-16 md:mb-20">
         <span className="text-label" style={{ color: 'var(--color-dim)', opacity: 0.5 }}>
@@ -84,8 +131,11 @@ export default function Formats() {
         {t('heading')}
       </h2>
 
-      {/* ── Dois blocos — grid editorial sem borders ─────────────────── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-20 md:gap-16 lg:gap-24">
+      {/* ── Spacer — empurra os blocos para o fundo ─────────────────── */}
+      <div style={{ flex: 1 }} />
+
+      {/* ── Dois blocos — 1 col em mobile, 2 col em desktop ─────────── */}
+      <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 'clamp(2.5rem, 5vw, 4rem)' }}>
 
         {/* LONA Street */}
         <div ref={streetRef} className="flex flex-col gap-7">
@@ -186,6 +236,7 @@ export default function Formats() {
         </div>
 
       </div>
+      </div>{/* fim wrapper conteúdo z-2 */}
     </section>
   )
 }

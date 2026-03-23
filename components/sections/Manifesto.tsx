@@ -26,6 +26,47 @@ export default function Manifesto() {
       const elements = phrasesRef.current.filter(Boolean) as HTMLParagraphElement[]
       if (!elements.length) return
 
+      const isMobile = window.innerWidth < 768
+
+      if (isMobile) {
+        // Mobile: fade-in simples por frase, sem SplitText nem scrub
+        gsap.set(elements, { y: 30, opacity: 0 })
+        if (ctaRef.current) gsap.set(ctaRef.current, { y: 18, opacity: 0 })
+
+        elements.forEach((el, i) => {
+          gsap.to(el, {
+            y: 0,
+            opacity: 1,
+            duration: 0.6,
+            ease: 'power2.out',
+            delay: i * 0.08,
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+              once: true,
+            },
+          })
+        })
+
+        if (ctaRef.current) {
+          gsap.to(ctaRef.current, {
+            y: 0,
+            opacity: 1,
+            duration: 0.5,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: ctaRef.current,
+              start: 'top 88%',
+              toggleActions: 'play none none none',
+              once: true,
+            },
+          })
+        }
+        return
+      }
+
+      // Desktop: SplitText por linhas + scrub
       // Dividir cada frase pelas suas linhas de renderização
       const splits = elements.map(el => new SplitText(el, { type: 'lines' }))
       const allLines = splits.flatMap(s => s.lines)
@@ -35,7 +76,6 @@ export default function Manifesto() {
       if (ctaRef.current) gsap.set(ctaRef.current, { y: 18, opacity: 0 })
 
       // Timeline única vinculada ao scroll (scrub:1 = suave, 1s de lag)
-      // end em px absolutos para garantir scroll suficiente para completar
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -45,7 +85,6 @@ export default function Manifesto() {
         },
       })
 
-      // Cada linha entra com um offset de 0.12 na timeline
       allLines.forEach((line, i) => {
         tl.to(
           line,
@@ -54,7 +93,6 @@ export default function Manifesto() {
         )
       })
 
-      // CTA entra depois de todas as linhas
       if (ctaRef.current) {
         tl.to(
           ctaRef.current,
@@ -90,19 +128,21 @@ export default function Manifesto() {
       </div>
 
       {/* ── Frases — cada uma é uma linha de manifesto ──────────────── */}
-      <div className="flex flex-col gap-8 md:gap-10">
+      <div className="flex flex-col">
         {lines.map((phrase, i) => {
           const isThesis = i === lines.length - 1
           return (
             <p
               key={i}
               ref={el => { phrasesRef.current[i] = el }}
-              className="font-display leading-[1.1]"
+              className="font-display mb-2"
               style={{
-                fontSize: 'clamp(1.6rem, 3.5vw, 3rem)',
-                fontWeight: isThesis ? 600 : 300,
+                fontSize: 'clamp(2.2rem, 4.5vw, 4rem)',
+                fontWeight: 300,
+                lineHeight: 1.15,
+                letterSpacing: '-0.02em',
                 color: isThesis ? 'var(--color-accent)' : 'var(--color-text)',
-                maxWidth: '820px',
+                maxWidth: '900px',
               }}
             >
               {phrase}

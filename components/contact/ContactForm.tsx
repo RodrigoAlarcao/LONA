@@ -120,6 +120,53 @@ export default function ContactForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '2.25rem' }}>
 
+      {/* Tipo — primeiro campo, com subtítulo */}
+      <div>
+        <span style={labelStyle}>{t('typeLabel')}</span>
+        <p
+          style={{
+            fontFamily: 'var(--font-body)',
+            fontWeight: 300,
+            fontSize: '0.9375rem',
+            color: 'var(--color-dim)',
+            marginBottom: '1rem',
+            lineHeight: 1.5,
+          }}
+        >
+          {t('typeSub')}
+        </p>
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          {(['marca', 'artista', 'outro'] as const).map((val) => {
+            const labelKey = ({ marca: 'typeBrand', artista: 'typeArtist', outro: 'typeOther' } as const)[val]
+            const isSelected = selectedType === val
+            return (
+              <button
+                key={val}
+                type="button"
+                onClick={() => setValue('type', val, { shouldValidate: true })}
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.75rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.14em',
+                  padding: '0.625rem 1.25rem',
+                  border: `1px solid ${isSelected ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                  background: 'transparent',
+                  color: isSelected ? 'var(--color-accent)' : 'var(--color-dim)',
+                  cursor: 'pointer',
+                  transition: 'border-color 0.2s ease, color 0.2s ease',
+                }}
+              >
+                {t(labelKey)}
+              </button>
+            )
+          })}
+        </div>
+        {errors.type && <span style={errorStyle}>{t('errors.typeRequired')}</span>}
+        {/* hidden input to register value */}
+        <input type="hidden" {...register('type')} />
+      </div>
+
       {/* Nome */}
       <div>
         <label style={labelStyle}>{t('name')}</label>
@@ -169,41 +216,6 @@ export default function ContactForm() {
           onFocus={e => (e.target.style.borderBottomColor = 'var(--color-text)')}
           onBlur={e => (e.target.style.borderBottomColor = 'var(--color-border)')}
         />
-      </div>
-
-      {/* Tipo — radio estilizados */}
-      <div>
-        <span style={labelStyle}>{t('typeLabel')}</span>
-        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '0.25rem' }}>
-          {(['marca', 'artista', 'outro'] as const).map((val) => {
-            const labelKey = ({ marca: 'typeBrand', artista: 'typeArtist', outro: 'typeOther' } as const)[val]
-            const isSelected = selectedType === val
-            return (
-              <button
-                key={val}
-                type="button"
-                onClick={() => setValue('type', val, { shouldValidate: true })}
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.6875rem',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.14em',
-                  padding: '0.4375rem 0.875rem',
-                  border: `1px solid ${isSelected ? 'var(--color-accent)' : 'var(--color-border)'}`,
-                  background: isSelected ? 'transparent' : 'transparent',
-                  color: isSelected ? 'var(--color-accent)' : 'var(--color-dim)',
-                  cursor: 'pointer',
-                  transition: 'border-color 0.2s ease, color 0.2s ease',
-                }}
-              >
-                {t(labelKey)}
-              </button>
-            )
-          })}
-        </div>
-        {errors.type && <span style={errorStyle}>{t('errors.typeRequired')}</span>}
-        {/* hidden input to register value */}
-        <input type="hidden" {...register('type')} />
       </div>
 
       {/* Mensagem */}

@@ -30,13 +30,23 @@ export default function AboutManifesto() {
     if (prefersReducedMotion) return
 
     const ctx = gsap.context(() => {
+      // Só atrasar se a página carregou no topo (hero visível)
+      const isAtTop = window.scrollY === 0
+
       blockRefs.current.forEach((el) => {
         if (!el) return
+
+        // Calcular se o elemento já está visível no viewport ao carregar
+        const rect = el.getBoundingClientRect()
+        const inViewOnLoad = rect.top < window.innerHeight * 0.82
+        const delay = isAtTop && inViewOnLoad ? 1.4 : 0
+
         gsap.from(el, {
           y: 40,
           opacity: 0,
           duration: 0.85,
           ease: 'power3.out',
+          delay,
           scrollTrigger: {
             trigger: el,
             start: 'top 82%',

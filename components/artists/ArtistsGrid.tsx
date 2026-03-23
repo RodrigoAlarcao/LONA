@@ -15,6 +15,7 @@ interface Artist {
   mediumEn: string
   location: string
   cover: string
+  images: string[]
 }
 
 interface Props {
@@ -137,6 +138,7 @@ export default function ArtistsGrid({ artists, locale, label, heading, editorial
             <div
               key={artist.slug}
               ref={el => { cardRefs.current[i] = el }}
+              className="artist-card"
               style={{ opacity: 0 }}
             >
               {/* Imagem — quadrada */}
@@ -147,23 +149,35 @@ export default function ArtistsGrid({ artists, locale, label, heading, editorial
                   overflow: 'hidden',
                   marginBottom: '1.25rem',
                   backgroundColor: '#161613',
+                  position: 'relative',
                 }}
               >
+                {/* Imagem principal — grayscale por defeito */}
                 <div
+                  className="artist-img-primary"
                   style={{
-                    width: '100%',
-                    height: '100%',
+                    position: 'absolute',
+                    inset: 0,
                     backgroundColor: i % 2 === 0 ? '#1e1e1a' : '#181815',
-                    transition: 'transform 0.5s ease',
+                    backgroundImage: artist.cover.includes('placeholder') ? undefined : `url(${artist.cover})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center top',
                   }}
-                  onMouseEnter={e => ((e.currentTarget as HTMLDivElement).style.transform = 'scale(1.02)')}
-                  onMouseLeave={e => ((e.currentTarget as HTMLDivElement).style.transform = 'scale(1)')}
                 />
+                {/* Segunda imagem — fade in no hover */}
+                {artist.images?.[1] && (
+                  <div
+                    className="artist-img-secondary"
+                    style={{
+                      backgroundImage: `url(${artist.images[1]})`,
+                    }}
+                  />
+                )}
               </div>
 
               {/* Info */}
               <h2
-                className="font-display font-light"
+                className="artist-name font-display font-light"
                 style={{
                   fontSize: 'clamp(1.375rem, 2.2vw, 1.875rem)',
                   lineHeight: 1.1,
@@ -215,7 +229,6 @@ export default function ArtistsGrid({ artists, locale, label, heading, editorial
         </p>
       </div>
 
-      {/* Responsive grid CSS */}
       <style>{`
         @media (max-width: 900px) {
           .artists-grid { grid-template-columns: repeat(2, 1fr) !important; }
@@ -223,6 +236,28 @@ export default function ArtistsGrid({ artists, locale, label, heading, editorial
         @media (max-width: 540px) {
           .artists-grid { grid-template-columns: 1fr !important; }
         }
+        .artist-card { cursor: default; }
+        .artist-img-primary {
+          filter: grayscale(1);
+          transform: scale(1);
+          transition: filter 0.6s ease, transform 0.6s ease;
+        }
+        .artist-card:hover .artist-img-primary {
+          filter: grayscale(0);
+          transform: scale(1.03);
+        }
+        .artist-img-secondary {
+          position: absolute;
+          inset: 0;
+          background-size: cover;
+          background-position: center top;
+          opacity: 0;
+          transition: opacity 0.5s ease;
+          pointer-events: none;
+        }
+        .artist-card:hover .artist-img-secondary { opacity: 1; }
+        .artist-name { transition: color 0.3s ease; }
+        .artist-card:hover .artist-name { color: var(--color-accent) !important; }
       `}</style>
     </section>
   )

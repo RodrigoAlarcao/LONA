@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import gsap from 'gsap'
@@ -17,6 +17,10 @@ export default function Hero() {
   const ctaRef       = useRef<HTMLDivElement>(null)
   const bottomRef    = useRef<HTMLDivElement>(null)
   const rightRef     = useRef<HTMLDivElement>(null)
+  const bgImageRef     = useRef<HTMLImageElement>(null)
+  const revealLayerRef = useRef<HTMLImageElement>(null)
+  const canvasRef      = useRef<HTMLCanvasElement>(null)
+  const [isTouch, setIsTouch] = useState(false)
 
   useIsomorphicLayoutEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -114,19 +118,238 @@ export default function Hero() {
       )
     }, containerRef)
 
-    return () => ctx.revert()
+    // Paint-brush trail — desactivado em touch devices
+    const container = containerRef.current
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+    setIsTouch(isTouchDevice)
+    const cleanupFns: (() => void)[] = []
+
+    if (!isTouchDevice && container) {
+      const canvas   = canvasRef.current
+      const drawCtx  = canvas?.getContext('2d')
+      if (canvas && drawCtx) {
+        // Ajustar canvas ao container
+        const resize = () => {
+          const r = container.getBoundingClientRect()
+          canvas.width  = r.width
+          canvas.height = r.height
+        }
+        resize()
+        const ro = new ResizeObserver(resize)
+        ro.observe(container)
+
+        // ── Física de primavera — o ponto suavizado persegue o cursor ──
+        const SPRING  = 0.12
+        const DAMPING = 0.75
+        let targetX = 0, targetY = 0
+        let smoothX = 0, smoothY = 0
+        let velX = 0, velY = 0
+        let hasTarget = false
+
+        // Trail: posição suavizada + timestamp + tempo de expiração por ponto
+        const TRAIL_MS = 5000
+        const MAX_PTS  = 35
+        const points: { x: number; y: number; t: number; expiresAt: number }[] = []
+
+        const handleMouseMove = (e: MouseEvent) => {
+          const r = canvas.getBoundingClientRect()
+          targetX = e.clientX - r.left
+          targetY = e.clientY - r.top
+          if (!hasTarget) {
+            smoothX = targetX
+            smoothY = targetY
+            hasTarget = true
+          }
+        }
+
+        const handleMouseLeave = () => {
+          hasTarget = false   // para de adicionar pontos
+          // Cada ponto existente expira 3000ms a partir de agora
+          const deadline = Date.now() + 3000
+          points.forEach(pt => { if (pt.expiresAt > deadline) pt.expiresAt = deadline })
+        }
+
+        // ── Carregar e processar brush-stroke.png ─────────────────────
+        // Converte: fundo preto → transparente, cinzento → alpha mask branca
+        let stamp: HTMLCanvasElement | null = null
+        const brushImg = new Image()
+        brushImg.onload = () => {
+          const offscreen    = document.createElement('canvas')
+          offscreen.width    = brushImg.naturalWidth
+          offscreen.height   = brushImg.naturalHeight
+          const offCtx = offscreen.getContext('2d')!
+          offCtx.drawImage(brushImg, 0, 0)
+          const imageData = offCtx.getImageData(0, 0, offscreen.width, offscreen.height)
+          const data = imageData.data
+          for (let i = 0; i < data.length; i += 4) {
+            const brightness = (data[i] + data[i + 1] + data[i + 2]) / 3
+            data[i]     = 255         // R → branco
+            data[i + 1] = 255         // G → branco
+            data[i + 2] = 255         // B → branco
+            data[i + 3] = brightness  // alpha = brilho original
+          }
+          offCtx.putImageData(imageData, 0, 0)
+          stamp = offscreen
+        }
+        brushImg.src = '/images/brush-stroke.png'
+
+        // rAF loop — física + stamp do pincel + compositing
+        let rafId   = 0
+        let isIdle  = false
+        let wasIdle = false
+        const paintedImg = revealLayerRef.current
+
+        const draw = () => {
+          rafId = requestAnimationFrame(draw)
+          const now = Date.now()
+
+          // ── Passo 1: actualizar posição suavizada com inércia ─────────
+          if (hasTarget) {
+            velX += (targetX - smoothX) * SPRING
+            velY += (targetY - smoothY) * SPRING
+            velX *= DAMPING
+            velY *= DAMPING
+            smoothX += velX
+            smoothY += velY
+
+            // Detectar paragem: velocidade próxima de zero
+            const speed = Math.sqrt(velX * velX + velY * velY)
+            isIdle = speed < 0.5
+
+            // Na transição moving → idle: comprimir expiresAt para 600ms
+            if (isIdle && !wasIdle) {
+              const deadline = now + 600
+              points.forEach(pt => { if (pt.expiresAt > deadline) pt.expiresAt = deadline })
+            }
+            wasIdle = isIdle
+
+            // Só adicionar se o ponto suavizado se moveu (evita duplicados)
+            const last = points[points.length - 1]
+            if (!last || Math.hypot(smoothX - last.x, smoothY - last.y) > 1.5) {
+              points.push({ x: smoothX, y: smoothY, t: now, expiresAt: now + TRAIL_MS })
+              if (points.length > MAX_PTS) points.shift()
+            }
+          } else {
+            isIdle  = false
+            wasIdle = false
+          }
+
+          // Remover pontos expirados
+          while (points.length && now >= points[0].expiresAt) points.shift()
+
+          drawCtx.clearRect(0, 0, canvas.width, canvas.height)
+
+          if (!points.length || !paintedImg?.complete || !stamp) return
+          const stampReady = stamp  // narrowed: HTMLCanvasElement (not null)
+
+          // ── Fase 1: stamps de pincel rotacionados ────────────────────
+          drawCtx.globalCompositeOperation = 'source-over'
+          const n           = points.length
+          const aspectRatio = stampReady.height / stampReady.width
+          points.forEach((pt, i) => {
+            const lifespan = pt.expiresAt - pt.t
+            const ageFrac  = Math.min(1, (now - pt.t) / lifespan)  // 0=fresco 1=velho
+            const idxFrac  = i / (n > 1 ? n - 1 : 1)              // 0=mais antigo 1=mais recente
+            // Curva exponencial — mais agressiva quando parado (1.5), suave em movimento (2.5)
+            const alpha    = Math.pow(1 - ageFrac, isIdle ? 1.5 : 2.5) * 0.95
+            if (alpha <= 0) return
+
+            // Ponta do pincel maior (800px); trail encolhe proporcionalmente
+            const w = 150 + idxFrac * 650
+            const h = w * aspectRatio
+
+            drawCtx.save()
+            drawCtx.translate(pt.x, pt.y)
+            drawCtx.globalAlpha = alpha
+            drawCtx.drawImage(stampReady, -w / 2, -h / 2, w, h)
+            drawCtx.restore()
+          })
+          drawCtx.globalAlpha = 1
+
+          // ── Fase 2: imagem pintada apenas onde existe alpha do trail ──
+          drawCtx.globalCompositeOperation = 'source-in'
+          drawCtx.drawImage(paintedImg, 0, 0, canvas.width, canvas.height)
+          drawCtx.globalCompositeOperation = 'source-over'
+        }
+
+        container.addEventListener('mousemove', handleMouseMove)
+        container.addEventListener('mouseleave', handleMouseLeave)
+        rafId = requestAnimationFrame(draw)
+
+        cleanupFns.push(
+          () => container.removeEventListener('mousemove', handleMouseMove),
+          () => container.removeEventListener('mouseleave', handleMouseLeave),
+          () => cancelAnimationFrame(rafId),
+          () => ro.disconnect(),
+        )
+      }
+    }
+
+    return () => {
+      ctx.revert()
+      cleanupFns.forEach(fn => fn())
+    }
   }, [])
 
   return (
     <section
       ref={containerRef}
-      className="relative flex min-h-[100svh] flex-col justify-between px-6 pb-8 pt-24 md:px-10 md:pt-28"
+      className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden px-6 pb-8 pt-24 md:px-10 md:pt-28"
     >
+      {/* ── Layer 1: lona vazia (base) ───────────────────────────────── */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        ref={bgImageRef}
+        src="/images/hero-lona-empty.jpg"
+        fetchPriority="high"
+        alt=""
+        aria-hidden
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          opacity: 0.18,
+          zIndex: 0,
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* ── Layer 2: lona pintada ────────────────────────────────────────
+           · Desktop: width/height 0, usada apenas pelo canvas drawImage
+           · Mobile/touch: fundo estático visível com opacity 0.15         */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        ref={revealLayerRef}
+        src="/images/hero-lona-painted.jpg"
+        loading="lazy"
+        alt=""
+        aria-hidden
+        style={isTouch
+          ? { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.15, zIndex: 1, pointerEvents: 'none' }
+          : { position: 'absolute', width: 0, height: 0, opacity: 0, pointerEvents: 'none' }
+        }
+      />
+
+      {/* ── Layer 3: canvas — trail de pincel + compositing ───────────── */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 2,
+          pointerEvents: 'none',
+        }}
+      />
+
       {/* ── Top: label de contexto ──────────────────────────────────── */}
       <div
         ref={labelRef}
         className="flex items-center gap-3"
-        style={{ opacity: 0 }}
+        style={{ opacity: 0, position: 'relative', zIndex: 10 }}
       >
         <span className="text-label" style={{ color: 'var(--color-dim)', opacity: 0.5 }}>
           001
@@ -141,7 +364,7 @@ export default function Hero() {
       </div>
 
       {/* ── Centro: conteúdo principal ──────────────────────────────── */}
-      <div className="flex flex-col gap-6 md:gap-7">
+      <div className="flex flex-col gap-6 md:gap-7" style={{ position: 'relative', zIndex: 10 }}>
 
         {/* LONA — o elemento que define a página inteira */}
         {/*
@@ -204,20 +427,28 @@ export default function Hero() {
           </p>
 
           {/* CTAs — IBM Plex Mono, maior presença */}
-          <div ref={ctaRef} className="flex items-center gap-6">
+          <div ref={ctaRef} className="flex flex-col gap-3 md:flex-row md:items-center md:gap-6">
             {/* CTA Marcas — destaque em accent */}
             <Link
               href="/contact"
-              className="group flex items-center gap-2.5 transition-opacity duration-300 hover:opacity-70"
+              className="group flex items-center gap-2.5"
               style={{
                 color: 'var(--color-accent)',
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.8125rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.12em',
+                textDecoration: 'none',
               }}
             >
-              <span>{t('ctaBrands')}</span>
+              <span className="relative">
+                {t('ctaBrands')}
+                <span
+                  className="absolute bottom-0 left-0 w-full scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"
+                  style={{ height: '1px', backgroundColor: 'currentColor' }}
+                  aria-hidden
+                />
+              </span>
               <span
                 className="inline-block transition-transform duration-300 group-hover:translate-x-1"
                 aria-hidden
@@ -226,9 +457,9 @@ export default function Hero() {
               </span>
             </Link>
 
-            {/* Separador */}
+            {/* Separador — apenas desktop */}
             <span
-              className="inline-block w-px h-4"
+              className="hidden md:inline-block w-px h-4"
               style={{ backgroundColor: 'var(--color-dim)', opacity: 0.25 }}
               aria-hidden
             />
@@ -236,16 +467,27 @@ export default function Hero() {
             {/* CTA Artistas — mais discreto */}
             <Link
               href="/artists"
-              className="group flex items-center gap-2.5 transition-opacity duration-300 hover:opacity-70"
+              className="group flex items-center gap-2.5"
               style={{
                 color: 'var(--color-dim)',
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.8125rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.12em',
+                textDecoration: 'none',
+                transition: 'color 0.3s ease',
               }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-dim)')}
             >
-              <span>{t('ctaArtists')}</span>
+              <span className="relative">
+                {t('ctaArtists')}
+                <span
+                  className="absolute bottom-0 left-0 w-full scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"
+                  style={{ height: '1px', backgroundColor: 'currentColor' }}
+                  aria-hidden
+                />
+              </span>
               <span
                 className="inline-block transition-transform duration-300 group-hover:translate-x-1"
                 aria-hidden
@@ -261,7 +503,7 @@ export default function Hero() {
       <div
         ref={rightRef}
         className="hidden md:flex flex-col items-center absolute right-10 top-1/2 -translate-y-1/2"
-        style={{ opacity: 0 }}
+        style={{ opacity: 0, zIndex: 10 }}
         aria-hidden
       >
         <span
@@ -288,6 +530,7 @@ export default function Hero() {
       <div
         ref={bottomRef}
         className="flex items-center justify-between"
+        style={{ position: 'relative', zIndex: 10 }}
         aria-hidden
       >
         <span

@@ -26,6 +26,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt">
+      <head>
+        {/* Preload do fundo do hero — crítico para LCP mobile */}
+        <link rel="preload" as="image" href="/images/hero-lona-empty.jpg" fetchPriority="high" />
+      </head>
       <body>{children}</body>
     </html>
   )

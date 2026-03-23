@@ -5,6 +5,7 @@ import Footer from '@/components/layout/Footer'
 import SmoothScroll from '@/components/SmoothScroll'
 import AboutHero from '@/components/about/AboutHero'
 import AboutManifesto from '@/components/about/AboutManifesto'
+import AboutProcessImage from '@/components/about/AboutProcessImage'
 import AboutValues from '@/components/about/AboutValues'
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
@@ -21,6 +22,7 @@ export default async function AboutPage() {
       <main>
         <AboutHero />
         <AboutManifesto />
+        <AboutProcessImage src="/images/process/process-crowd-watching.jpg" />
         <AboutValues />
 
         {/* CTA final — segue o mesmo padrão visual da homepage */}
