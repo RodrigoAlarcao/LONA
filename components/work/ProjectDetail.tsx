@@ -1,10 +1,13 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef } from 'react'
+import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
-import { AnimatePresence, motion } from 'framer-motion'
 import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
+
+gsap.registerPlugin(ScrollTrigger)
 
 interface Project {
   slug: string
@@ -16,6 +19,10 @@ interface Project {
   type: string
   year: number
   city: string
+  location?: string
+  duration?: string
+  dimensions?: string
+  status?: string
   description: string
   descriptionEn: string
   images: string[]
@@ -27,6 +34,11 @@ interface Labels {
   artist: string
   location: string
   year: string
+  duration: string
+  dimensions: string
+  processCaption: string
+  exploration: string
+  allWork: string
   prev: string
   next: string
 }
@@ -34,6 +46,7 @@ interface Labels {
 interface NavProject {
   slug: string
   title: string
+  cover: string
 }
 
 interface Props {
@@ -49,178 +62,263 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
   const description = locale === 'en' ? project.descriptionEn : project.description
   const typeLabel   = project.type.toUpperCase()
 
-  const mainRef       = useRef<HTMLDivElement>(null)
-  const heroRef       = useRef<HTMLDivElement>(null)
-  const heroImageRef  = useRef<HTMLDivElement>(null)
-  const overlayRef    = useRef<HTMLDivElement>(null)
-  const techRef       = useRef<HTMLDivElement>(null)
-  const descRef       = useRef<HTMLParagraphElement>(null)
-  const galleryRef    = useRef<HTMLDivElement>(null)
-  const navRef        = useRef<HTMLDivElement>(null)
+  // Extract first sentence (up to 80 chars)
+  const conceptText = (() => {
+    const match = description.match(/^.{0,80}[^.]*\./)
+    return match ? match[0] : description.slice(0, 100)
+  })()
 
-  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null)
+  // Image slots — fallback to cover if array is short
+  const heroImage    = project.images[0] || project.cover
+  const processImage = project.images[1] || project.cover
+  const detailImage  = project.images[2] || project.cover
 
-  // --- ESC to close lightbox ---
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setLightboxIdx(null)
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [])
+  // Refs
+  const mainRef            = useRef<HTMLDivElement>(null)
+  const titleRef           = useRef<HTMLHeadingElement>(null)
+  const labelRef           = useRef<HTMLParagraphElement>(null)
+  const scrollLineRef      = useRef<HTMLDivElement>(null)
+  const scrollLineWrapRef  = useRef<HTMLDivElement>(null)
+  const metaRowRef         = useRef<HTMLDivElement>(null)
+  const descRef            = useRef<HTMLDivElement>(null)
+  const processWrapRef     = useRef<HTMLDivElement>(null)
+  const processImgRef      = useRef<HTMLDivElement>(null)
+  const galleryRef         = useRef<HTMLDivElement>(null)
+  const coverImgRef        = useRef<HTMLDivElement>(null)
+  const detailImgRef       = useRef<HTMLDivElement>(null)
+  const conceptRef         = useRef<HTMLDivElement>(null)
 
-  // --- Fade-in + parallax ---
   useIsomorphicLayoutEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     const ctx = gsap.context(() => {
-      const targets = [heroRef.current, techRef.current, descRef.current, galleryRef.current, navRef.current].filter(Boolean)
       if (prefersReducedMotion) {
-        gsap.set(targets, { opacity: 1 })
+        gsap.set(
+          [titleRef.current, labelRef.current, scrollLineWrapRef.current,
+           metaRowRef.current, descRef.current, galleryRef.current, conceptRef.current],
+          { opacity: 1, y: 0 }
+        )
+        if (scrollLineRef.current) gsap.set(scrollLineRef.current, { height: '40px' })
         return
       }
-      gsap.fromTo(
-        targets,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.6, ease: 'power2.out', stagger: 0.12 }
-      )
 
-      // Parallax no hero — centrado: começa ligeiramente abaixo, acaba ligeiramente acima
-      if (heroImageRef.current && heroRef.current) {
+      // ── Cap 0: Hero entry animation ───────────────────────────────────
+      gsap.timeline()
+        .from(titleRef.current, { y: 40, opacity: 0, duration: 1, ease: 'power3.out' })
+        .from(labelRef.current, { y: 20, opacity: 0, duration: 0.6 }, '-=0.6')
+        .from(scrollLineWrapRef.current, { opacity: 0, duration: 0.4 }, '-=0.3')
+
+      // Scroll indicator: loop height 0 → 40px
+      if (scrollLineRef.current) {
         gsap.fromTo(
-          heroImageRef.current,
-          { yPercent: 10 },
-          {
-            yPercent: -10,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: heroRef.current,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: true,
-            },
-          }
+          scrollLineRef.current,
+          { height: 0 },
+          { height: '40px', duration: 1.2, ease: 'power1.inOut', repeat: -1, yoyo: true }
         )
+      }
+
+      // ── Cap 1: Metadata reveal ────────────────────────────────────────
+      if (metaRowRef.current) {
+        gsap.from(metaRowRef.current, {
+          y: 20, opacity: 0, duration: 0.8, ease: 'power2.out',
+          scrollTrigger: { trigger: metaRowRef.current, start: 'top 85%', once: true },
+        })
+      }
+
+      // ── Cap 2: Description reveal ─────────────────────────────────────
+      if (descRef.current) {
+        gsap.from(descRef.current, {
+          y: 20, opacity: 0, duration: 0.8, ease: 'power2.out',
+          scrollTrigger: { trigger: descRef.current, start: 'top 85%', once: true },
+        })
+      }
+
+      // ── Cap 3: Process image parallax ─────────────────────────────────
+      if (processImgRef.current && processWrapRef.current) {
+        gsap.to(processImgRef.current, {
+          yPercent: -15,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: processWrapRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        })
+      }
+
+      // ── Cap 4: Asymmetric gallery stagger ─────────────────────────────
+      if (galleryRef.current) {
+        const items = [coverImgRef.current, detailImgRef.current].filter(Boolean)
+        gsap.from(items, {
+          y: 60, opacity: 0, stagger: 0.2, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: galleryRef.current, start: 'top 75%', once: true },
+        })
+      }
+
+      // ── Cap 5: Concept reveal ─────────────────────────────────────────
+      if (conceptRef.current) {
+        gsap.from(conceptRef.current, {
+          y: 30, opacity: 0, duration: 0.8, ease: 'power2.out',
+          scrollTrigger: { trigger: conceptRef.current, start: 'top 80%', once: true },
+        })
       }
     }, mainRef)
 
     return () => ctx.revert()
   }, [])
 
-  // Gallery images: show cover + extra images, pad to at least 4 placeholders
-  const galleryImages: Array<string | null> = [
-    project.cover,
-    ...project.images.filter((img) => img !== project.cover),
+  // Dynamic metadata columns
+  const metaCols = [
+    { label: labels.client,   value: project.client },
+    { label: labels.artist,   value: project.artistName },
+    { label: labels.location, value: project.location || project.city },
+    { label: labels.year,     value: String(project.year) },
+    ...(project.duration   ? [{ label: labels.duration,   value: project.duration   }] : []),
+    ...(project.dimensions ? [{ label: labels.dimensions, value: project.dimensions }] : []),
   ]
-  while (galleryImages.length < 4) galleryImages.push(null)
 
   return (
     <div ref={mainRef}>
 
-      {/* ── 1. HERO ────────────────────────────────────────────────────── */}
+      {/* ── Cap. 0 — HERO (full viewport) ──────────────────────────────── */}
       <div
-        ref={heroRef}
         style={{
           position: 'relative',
           width: '100%',
-          height: '70vh',
-          minHeight: '420px',
+          height: '100svh',
+          minHeight: '560px',
           overflow: 'hidden',
-          opacity: 0,
         }}
       >
-        {/* Hero image com parallax */}
-        <div
-          ref={heroImageRef}
-          style={{
-            position: 'absolute',
-            top: '-15%',
-            bottom: '-15%',
-            left: 0,
-            right: 0,
-            backgroundColor: '#1a1a17',
-            backgroundImage: project.cover.startsWith('/images/projects/placeholder')
-              ? undefined
-              : `url(${project.cover})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            willChange: 'transform',
-          }}
+        <Image
+          src={heroImage}
+          alt={title}
+          fill
+          priority
+          style={{ objectFit: 'cover' }}
+          sizes="100vw"
         />
 
-        {/* Overlay escuro */}
+        {/* Gradient overlay — text legível sem escurecer a imagem */}
         <div
-          ref={overlayRef}
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundColor: 'rgba(0,0,0,0.42)',
+            background: 'linear-gradient(to top, rgba(8,8,6,0.85) 0%, transparent 60%)',
           }}
         />
 
-        {/* Conteúdo sobre a imagem */}
+        {/* Bottom-left: label + title */}
         <div
           style={{
             position: 'absolute',
             bottom: 'clamp(2rem, 5vw, 3.5rem)',
             left: 'clamp(1.5rem, 5vw, 4rem)',
-            right: 'clamp(1.5rem, 5vw, 4rem)',
+            right: 'clamp(6rem, 10vw, 8rem)',
           }}
         >
           <p
+            ref={labelRef}
             style={{
               fontFamily: 'var(--font-mono)',
               fontSize: '0.6875rem',
               textTransform: 'uppercase',
-              letterSpacing: '0.16em',
-              color: 'rgba(255,255,255,0.6)',
-              marginBottom: '0.875rem',
+              letterSpacing: '0.14em',
+              color: 'var(--color-dim)',
+              marginBottom: '1rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              flexWrap: 'wrap',
             }}
           >
             {typeLabel} · {project.year}
+            {project.status === 'exploracao' && (
+              <span
+                style={{
+                  border: '1px solid var(--color-border)',
+                  padding: '0.125rem 0.5rem',
+                  borderRadius: '2px',
+                  fontSize: '0.625rem',
+                  letterSpacing: '0.14em',
+                }}
+              >
+                {labels.exploration}
+              </span>
+            )}
           </p>
+
           <h1
+            ref={titleRef}
             className="font-display"
             style={{
-              fontSize: 'clamp(2.5rem, 6vw, 5.5rem)',
+              fontSize: 'clamp(3rem, 6vw, 5.5rem)',
               fontWeight: 300,
-              lineHeight: 1.0,
+              lineHeight: 0.95,
               letterSpacing: '-0.02em',
-              color: '#fff',
+              color: 'var(--color-text)',
               margin: 0,
             }}
           >
             {title}
           </h1>
         </div>
+
+        {/* Bottom-right: scroll indicator */}
+        <div
+          ref={scrollLineWrapRef}
+          style={{
+            position: 'absolute',
+            bottom: 'clamp(2rem, 5vw, 3.5rem)',
+            right: 'clamp(1.5rem, 5vw, 4rem)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <div
+            ref={scrollLineRef}
+            style={{
+              width: '1px',
+              height: 0,
+              backgroundColor: 'var(--color-dim)',
+              opacity: 0.5,
+            }}
+          />
+        </div>
       </div>
 
-      {/* ── 2. FICHA TÉCNICA ────────────────────────────────────────────── */}
+      {/* ── Cap. 1 — METADATA ──────────────────────────────────────────── */}
       <div
-        ref={techRef}
         style={{
           borderTop: '1px solid var(--color-border)',
           borderBottom: '1px solid var(--color-border)',
-          opacity: 0,
         }}
       >
         <div
+          ref={metaRowRef}
           style={{
             maxWidth: '1200px',
             margin: '0 auto',
-            padding: '1.75rem clamp(1.5rem, 5vw, 4rem)',
+            padding: '3rem clamp(1.5rem, 5vw, 4rem)',
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '2rem',
+            gridTemplateColumns: `repeat(${Math.min(metaCols.length, 4)}, 1fr)`,
+            gap: 0,
           }}
         >
-          {[
-            { label: labels.client,   value: project.client    },
-            { label: labels.artist,   value: project.artistName },
-            { label: labels.location, value: project.city      },
-            { label: labels.year,     value: String(project.year) },
-          ].map(({ label, value }) => (
-            <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
+          {metaCols.map(({ label, value }, i) => (
+            <div
+              key={label}
+              style={{
+                paddingLeft: i > 0 ? 'clamp(1rem, 2vw, 2rem)' : 0,
+                paddingRight: i < metaCols.length - 1 ? 'clamp(1rem, 2vw, 2rem)' : 0,
+                borderRight: i < metaCols.length - 1 ? '1px solid var(--color-border)' : 'none',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.5rem',
+              }}
+            >
               <span
                 style={{
                   fontFamily: 'var(--font-mono)',
@@ -234,11 +332,12 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
                 {label}
               </span>
               <span
+                className="font-display"
                 style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.8125rem',
+                  fontSize: '1.25rem',
+                  fontWeight: 300,
                   color: 'var(--color-text)',
-                  letterSpacing: '0.04em',
+                  lineHeight: 1.2,
                 }}
               >
                 {value}
@@ -248,7 +347,92 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
         </div>
       </div>
 
-      {/* ── 3. DESCRIÇÃO ────────────────────────────────────────────────── */}
+      {/* ── Cap. 2 — DESCRIÇÃO ─────────────────────────────────────────── */}
+      <div
+        style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '5rem clamp(1.5rem, 5vw, 4rem)',
+        }}
+      >
+        <div ref={descRef} style={{ maxWidth: '560px' }}>
+          {/* Linha decorativa de galeria */}
+          <div
+            style={{
+              width: '40px',
+              height: '1px',
+              backgroundColor: 'var(--color-accent)',
+              marginBottom: '2rem',
+            }}
+          />
+          <p
+            className="font-body"
+            style={{
+              fontSize: '1rem',
+              lineHeight: 1.8,
+              color: 'var(--color-dim)',
+              margin: 0,
+            }}
+          >
+            {description}
+          </p>
+        </div>
+      </div>
+
+      {/* ── Cap. 3 — PROCESSO (full bleed) ─────────────────────────────── */}
+      <div
+        ref={processWrapRef}
+        style={{
+          position: 'relative',
+          width: '100%',
+          height: '70vh',
+          minHeight: '380px',
+          overflow: 'hidden',
+        }}
+      >
+        <div
+          ref={processImgRef}
+          style={{
+            position: 'absolute',
+            top: '-15%',
+            bottom: '-15%',
+            left: 0,
+            right: 0,
+          }}
+        >
+          <Image
+            src={processImage}
+            alt={`${title} — processo`}
+            fill
+            style={{ objectFit: 'cover' }}
+            sizes="100vw"
+          />
+        </div>
+
+        {/* Caption */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '1.5rem',
+            right: 'clamp(1.5rem, 5vw, 4rem)',
+            zIndex: 1,
+          }}
+        >
+          <span
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.625rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.14em',
+              color: 'rgba(255,255,255,0.4)',
+            }}
+          >
+            {labels.processCaption}{project.duration ? ` · ${project.duration}` : ''}
+          </span>
+        </div>
+      </div>
+
+      {/* ── Cap. 4 — A OBRA (layout assimétrico) ───────────────────────── */}
       <div
         style={{
           maxWidth: '1200px',
@@ -256,230 +440,319 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
           padding: 'clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem)',
         }}
       >
-        <p
-          ref={descRef}
-          className="font-body font-light"
+        <div
+          ref={galleryRef}
+          className="obra-grid"
+          style={{ display: 'flex', gap: '24px', alignItems: 'stretch' }}
+        >
+          {/* Cover — 60% */}
+          <div
+            ref={coverImgRef}
+            className="obra-cover"
+            style={{
+              flex: '0 0 60%',
+              position: 'relative',
+              height: '600px',
+              overflow: 'hidden',
+            }}
+          >
+            <Image
+              src={project.cover}
+              alt={`${title} — obra`}
+              fill
+              style={{ objectFit: 'cover' }}
+              sizes="(max-width: 768px) 100vw, 60vw"
+            />
+          </div>
+
+          {/* Detail — 40% */}
+          <div
+            ref={detailImgRef}
+            className="obra-detail"
+            style={{
+              flex: '1 1 0',
+              position: 'relative',
+              height: '600px',
+              overflow: 'hidden',
+            }}
+          >
+            <Image
+              src={detailImage}
+              alt={`${title} — detalhe`}
+              fill
+              style={{ objectFit: 'cover' }}
+              sizes="(max-width: 768px) 100vw, 40vw"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* ── Cap. 5 — CONCEITO / CITAÇÃO ────────────────────────────────── */}
+      <div
+        ref={conceptRef}
+        style={{
+          padding: '7.5rem clamp(1.5rem, 5vw, 4rem)',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Título como textura de fundo */}
+        <div
+          aria-hidden
           style={{
-            maxWidth: '680px',
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+            pointerEvents: 'none',
+          }}
+        >
+          <span
+            className="font-display"
+            style={{
+              fontSize: 'clamp(4rem, 8vw, 8rem)',
+              fontWeight: 300,
+              color: 'var(--color-text)',
+              opacity: 0.07,
+              whiteSpace: 'nowrap',
+              lineHeight: 1,
+              userSelect: 'none',
+            }}
+          >
+            {title}
+          </span>
+        </div>
+
+        {/* Texto em primeiro plano */}
+        <p
+          className="font-body"
+          style={{
+            position: 'relative',
+            maxWidth: '640px',
+            margin: '0 auto',
             fontSize: '1.125rem',
             lineHeight: 1.8,
             color: 'var(--color-dim)',
-            opacity: 0,
           }}
         >
-          {description}
+          {conceptText}
         </p>
       </div>
 
-      {/* ── 4. GALERIA ──────────────────────────────────────────────────── */}
+      {/* ── Cap. 6 — NAVEGAÇÃO ENTRE PROJETOS ──────────────────────────── */}
       <div
         style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: '0 clamp(1.5rem, 5vw, 4rem) clamp(4rem, 8vw, 7rem)',
-        }}
-      >
-        <div
-          ref={galleryRef}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: 'clamp(0.75rem, 2vw, 1.25rem)',
-            opacity: 0,
-          }}
-        >
-          {galleryImages.map((src, i) => (
-            <button
-              key={i}
-              onClick={() => src && setLightboxIdx(i)}
-              style={{
-                display: 'block',
-                width: '100%',
-                aspectRatio: '4 / 3',
-                backgroundColor: '#161613',
-                overflow: 'hidden',
-                border: 'none',
-                padding: 0,
-                cursor: src ? 'zoom-in' : 'default',
-                position: 'relative',
-              }}
-              aria-label={src ? `Ver imagem ${i + 1}` : undefined}
-            >
-              {src && !src.includes('placeholder') ? (
-                <img
-                  src={src}
-                  alt={`${title} — ${i + 1}`}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
-              ) : (
-                <div
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: i % 2 === 0 ? '#1e1e1a' : '#181815',
-                  }}
-                />
-              )}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── 5. NAVEGAÇÃO ENTRE PROJECTOS ─────────────────────────────── */}
-      <div
-        ref={navRef}
-        style={{
+          display: 'flex',
+          width: '100%',
+          height: '40vh',
+          minHeight: '260px',
           borderTop: '1px solid var(--color-border)',
-          opacity: 0,
         }}
       >
-        <div
-          style={{
-            maxWidth: '1200px',
-            margin: '0 auto',
-            padding: '2rem clamp(1.5rem, 5vw, 4rem)',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          {prev ? (
-            <Link
-              href={{ pathname: '/work/[slug]', params: { slug: prev.slug } }}
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.12em',
-                color: 'var(--color-dim)',
-                textDecoration: 'none',
-                transition: 'color 0.25s ease',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.25rem',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-dim)')}
-            >
-              <span style={{ opacity: 0.45 }}>{labels.prev}</span>
-              <span>{prev.title}</span>
-            </Link>
-          ) : (
-            <div />
-          )}
-
-          {next ? (
-            <Link
-              href={{ pathname: '/work/[slug]', params: { slug: next.slug } }}
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.12em',
-                color: 'var(--color-dim)',
-                textDecoration: 'none',
-                transition: 'color 0.25s ease',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.25rem',
-                alignItems: 'flex-end',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-dim)')}
-            >
-              <span style={{ opacity: 0.45 }}>{labels.next}</span>
-              <span>{next.title}</span>
-            </Link>
-          ) : (
-            <div />
-          )}
-        </div>
-      </div>
-
-      {/* ── LIGHTBOX ────────────────────────────────────────────────────── */}
-      <AnimatePresence>
-        {lightboxIdx !== null && (
-          <motion.div
-            key="lightbox"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
-            onClick={() => setLightboxIdx(null)}
+        {/* Lado esquerdo — Prev */}
+        {prev ? (
+          <Link
+            href={{ pathname: '/work/[slug]', params: { slug: prev.slug } }}
+            className="nav-link"
             style={{
-              position: 'fixed',
-              inset: 0,
-              zIndex: 100,
-              backgroundColor: 'rgba(0,0,0,0.95)',
+              flex: 1,
+              position: 'relative',
+              overflow: 'hidden',
+              textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '2rem',
-              cursor: 'zoom-out',
             }}
           >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.97 }}
-              transition={{ duration: 0.3, ease: 'easeOut' }}
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                maxWidth: '90vw',
-                maxHeight: '85vh',
-                position: 'relative',
-              }}
-            >
-              {galleryImages[lightboxIdx] && !galleryImages[lightboxIdx]!.includes('placeholder') ? (
-                <img
-                  src={galleryImages[lightboxIdx]!}
-                  alt={`${title} — lightbox`}
-                  style={{
-                    maxWidth: '90vw',
-                    maxHeight: '85vh',
-                    objectFit: 'contain',
-                    display: 'block',
-                  }}
-                />
-              ) : (
-                /* Placeholder no lightbox */
-                <div
-                  style={{
-                    width: 'min(800px, 80vw)',
-                    aspectRatio: '4 / 3',
-                    backgroundColor: '#1e1e1a',
-                  }}
-                />
-              )}
-
-              {/* Botão fechar */}
-              <button
-                onClick={() => setLightboxIdx(null)}
+            <div className="nav-img-wrap" style={{ position: 'absolute', inset: 0 }}>
+              <Image
+                src={prev.cover}
+                alt={prev.title}
+                fill
+                style={{ objectFit: 'cover' }}
+                sizes="50vw"
+              />
+            </div>
+            <div className="nav-text-content" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '0 2rem' }}>
+              <p
                 style={{
-                  position: 'absolute',
-                  top: '-2.5rem',
-                  right: 0,
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '0.6875rem',
+                  fontSize: '0.625rem',
                   textTransform: 'uppercase',
                   letterSpacing: '0.14em',
-                  color: 'rgba(255,255,255,0.4)',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: 0,
-                  transition: 'color 0.2s ease',
+                  color: 'var(--color-dim)',
+                  marginBottom: '0.75rem',
                 }}
-                onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.color = '#fff')}
-                onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.4)')}
               >
-                ESC / Fechar
-              </button>
-            </motion.div>
-          </motion.div>
+                {labels.prev}
+              </p>
+              <p
+                className="font-display"
+                style={{
+                  fontSize: 'clamp(1.25rem, 2vw, 1.5rem)',
+                  fontWeight: 300,
+                  color: 'var(--color-text)',
+                  margin: 0,
+                }}
+              >
+                {prev.title}
+              </p>
+            </div>
+          </Link>
+        ) : (
+          <Link
+            href={{ pathname: '/work' } as any}
+            className="nav-link"
+            style={{
+              flex: 1,
+              position: 'relative',
+              overflow: 'hidden',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <p
+              style={{
+                position: 'relative',
+                zIndex: 1,
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.625rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.14em',
+                color: 'var(--color-dim)',
+                margin: 0,
+              }}
+            >
+              {labels.allWork}
+            </p>
+          </Link>
         )}
-      </AnimatePresence>
 
+        {/* Divisor */}
+        <div style={{ width: '1px', backgroundColor: 'var(--color-border)', flexShrink: 0 }} />
+
+        {/* Lado direito — Next */}
+        {next ? (
+          <Link
+            href={{ pathname: '/work/[slug]', params: { slug: next.slug } }}
+            className="nav-link"
+            style={{
+              flex: 1,
+              position: 'relative',
+              overflow: 'hidden',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <div className="nav-img-wrap" style={{ position: 'absolute', inset: 0 }}>
+              <Image
+                src={next.cover}
+                alt={next.title}
+                fill
+                style={{ objectFit: 'cover' }}
+                sizes="50vw"
+              />
+            </div>
+            <div className="nav-text-content" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '0 2rem' }}>
+              <p
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.625rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.14em',
+                  color: 'var(--color-dim)',
+                  marginBottom: '0.75rem',
+                }}
+              >
+                {labels.next}
+              </p>
+              <p
+                className="font-display"
+                style={{
+                  fontSize: 'clamp(1.25rem, 2vw, 1.5rem)',
+                  fontWeight: 300,
+                  color: 'var(--color-text)',
+                  margin: 0,
+                }}
+              >
+                {next.title}
+              </p>
+            </div>
+          </Link>
+        ) : (
+          <Link
+            href={{ pathname: '/work' } as any}
+            className="nav-link"
+            style={{
+              flex: 1,
+              position: 'relative',
+              overflow: 'hidden',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <p
+              style={{
+                position: 'relative',
+                zIndex: 1,
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.625rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.14em',
+                color: 'var(--color-dim)',
+                margin: 0,
+              }}
+            >
+              {labels.allWork}
+            </p>
+          </Link>
+        )}
+      </div>
+
+      {/* CSS global para efeitos de hover (CSS-only, sem GSAP) */}
+      <style>{`
+        .nav-img-wrap {
+          filter: brightness(0.3);
+          transition: filter 0.5s ease;
+        }
+        .nav-link:hover .nav-img-wrap {
+          filter: brightness(0.5);
+        }
+        .nav-text-content {
+          transition: transform 0.3s ease;
+        }
+        .nav-link:hover .nav-text-content {
+          transform: translateY(-4px);
+        }
+
+        /* Mobile: gallery assimétrico empilhado (detail primeiro) */
+        @media (max-width: 767px) {
+          .obra-grid {
+            flex-direction: column !important;
+          }
+          .obra-cover {
+            flex: none !important;
+            width: 100% !important;
+            height: 280px !important;
+            order: 2;
+          }
+          .obra-detail {
+            flex: none !important;
+            width: 100% !important;
+            height: 220px !important;
+            order: 1;
+          }
+        }
+      `}</style>
     </div>
   )
 }

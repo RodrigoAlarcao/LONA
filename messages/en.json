@@ -152,6 +152,11 @@
     "artist": "Artist",
     "location": "Location",
     "year": "Year",
+    "duration": "Duration",
+    "dimensions": "Dimensions",
+    "processCaption": "The process",
+    "exploration": "Exploration",
+    "allWork": "See all work",
     "prev": "← Previous project",
     "next": "Next project →"
   },

@@ -38,15 +38,20 @@ export default async function ProjectPage({ params: { locale, slug } }: Props) {
         <ProjectDetail
           project={project}
           locale={locale}
-          prev={prev ? { slug: prev.slug, title: locale === 'en' ? prev.titleEn : prev.title } : null}
-          next={next ? { slug: next.slug, title: locale === 'en' ? next.titleEn : next.title } : null}
+          prev={prev ? { slug: prev.slug, title: locale === 'en' ? prev.titleEn : prev.title, cover: prev.cover } : null}
+          next={next ? { slug: next.slug, title: locale === 'en' ? next.titleEn : next.title, cover: next.cover } : null}
           labels={{
-            client:   t('client'),
-            artist:   t('artist'),
-            location: t('location'),
-            year:     t('year'),
-            prev:     t('prev'),
-            next:     t('next'),
+            client:         t('client'),
+            artist:         t('artist'),
+            location:       t('location'),
+            year:           t('year'),
+            duration:       t('duration'),
+            dimensions:     t('dimensions'),
+            processCaption: t('processCaption'),
+            exploration:    t('exploration'),
+            allWork:        t('allWork'),
+            prev:           t('prev'),
+            next:           t('next'),
           }}
         />
       </main>

@@ -152,6 +152,11 @@
     "artist": "Artista",
     "location": "Localização",
     "year": "Ano",
+    "duration": "Duração",
+    "dimensions": "Dimensões",
+    "processCaption": "O processo",
+    "exploration": "Exploração",
+    "allWork": "Ver todo o trabalho",
     "prev": "← Projecto anterior",
     "next": "Próximo projecto →"
   },
