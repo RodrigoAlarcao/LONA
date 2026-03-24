@@ -164,7 +164,15 @@
   "artistsPage": {
     "label": "— Artists",
     "heading": "A small roster.\nIntentional.",
-    "editorial": "We don't work with everyone. We work with those we respect, and we build that relationship over the long term."
+    "editorial": "We don't work with everyone. We work with those we respect, and we build that relationship over the long term.",
+    "viewArtist": "See artist",
+    "associatedProject": "Associated project",
+    "viewProject": "See project",
+    "allArtists": "← Artists",
+    "exploration": "Exploration",
+    "forArtists": "Are you an artist?",
+    "forArtistsBody": "We work with a small, intentional group. If your work moves us, we want to meet you.",
+    "getInTouch": "Get in touch"
   },
   "contactPage": {
     "sectionLabel": "006 — Contact",

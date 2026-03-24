@@ -27,6 +27,10 @@ export default async function ArtistsPage({ params: { locale } }: Props) {
           label={t('label')}
           heading={t('heading')}
           editorial={t('editorial')}
+          viewArtist={t('viewArtist')}
+          forArtists={t('forArtists')}
+          forArtistsBody={t('forArtistsBody')}
+          getInTouch={t('getInTouch')}
         />
       </main>
       <Footer />

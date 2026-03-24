@@ -132,7 +132,7 @@ export default function Artists() {
                   position: 'absolute',
                   inset: 0,
                   backgroundColor: '#1e1e1a',
-                  backgroundImage: artistsData[i]?.cover ? `url(${artistsData[i].cover})` : undefined,
+                  backgroundImage: artistsData[i]?.portrait ? `url(${artistsData[i].portrait})` : undefined,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center top',
                   filter: 'grayscale(0.5)',
@@ -231,15 +231,15 @@ export default function Artists() {
                       position: 'absolute',
                       inset: 0,
                       backgroundColor: '#1e1e1a',
-                      backgroundImage: artistsData[i]?.cover ? `url(${artistsData[i].cover})` : undefined,
+                      backgroundImage: artistsData[i]?.portrait ? `url(${artistsData[i].portrait})` : undefined,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center top',
                     }}
                   />
-                  {artistsData[i]?.images?.[1] && (
+                  {artistsData[i]?.action && (
                     <div
                       className="artist-img-secondary"
-                      style={{ backgroundImage: `url(${artistsData[i].images[1]})` }}
+                      style={{ backgroundImage: `url(${artistsData[i].action})` }}
                     />
                   )}
                 </div>

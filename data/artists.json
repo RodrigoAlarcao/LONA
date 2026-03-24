@@ -1,87 +1,72 @@
 [
   {
-    "id": "artist-001",
-    "slug": "vasco-mourao",
-    "name": "Vasco Mourão",
-    "nameEn": "Vasco Mourão",
-    "bio": "Biografia do artista em breve. O roster da LONA é pequeno e intencional.",
-    "bioEn": "Artist biography coming soon. The LONA roster is small and intentional.",
-    "medium": "Spray, acrílico",
-    "mediumEn": "Spray, acrylic",
+    "id": "miguel-branco",
+    "slug": "miguel-branco",
+    "name": "Miguel Branco",
     "location": "Lisboa",
-    "cover": "/images/artists/artist-vasco-mourao.jpg",
-    "images": [
-      "/images/artists/artist-vasco-mourao.jpg",
-      "/images/artists/artist-vasco-mourao-hands.jpg"
-    ],
-    "projects": ["proj-001"]
+    "medium": "Muralismo geométrico",
+    "mediumEn": "Geometric muralism",
+    "bio": "Miguel Branco trabalha na interseção entre arquitetura e pintura. As suas obras desconstroem formas conhecidas em sistemas geométricos precisos — um exercício de rigor que esconde sempre uma tensão emocional. Formado em Arquitetura pela FA-UL, dedica-se ao mural como prática principal desde 2018.",
+    "bioEn": "Miguel Branco works at the intersection of architecture and painting. His works deconstruct familiar forms into precise geometric systems — an exercise in rigour that always conceals an emotional tension. Trained in Architecture at FA-UL, he has dedicated himself to mural as his primary practice since 2018.",
+    "project": "bmw-lx-factory",
+    "portrait": "/images/artists/miguel-branco-portrait.jpg",
+    "action": "/images/artists/miguel-branco-action.jpg",
+    "tags": ["geométrico", "arquitectura", "muralismo", "lisboa"]
   },
   {
-    "id": "artist-002",
+    "id": "ana-leitao",
+    "slug": "ana-leitao",
+    "name": "Ana Leitão",
+    "location": "Lisboa",
+    "medium": "Pintura expressiva",
+    "mediumEn": "Expressive painting",
+    "bio": "Ana Leitão pinta o que não se vê. As suas obras exploram o que existe abaixo da superfície — água, emoção, memória. Formada em Belas-Artes pela FBAUP, o seu trabalho tem sido apresentado em residências artísticas em Portugal, Espanha e Países Baixos.",
+    "bioEn": "Ana Leitão paints what cannot be seen. Her works explore what exists beneath the surface — water, emotion, memory. Trained in Fine Arts at FBAUP, her work has been shown in artist residencies in Portugal, Spain and the Netherlands.",
+    "project": "oceanario-campo-grande",
+    "portrait": "/images/artists/ana-leitao-portrait.jpg",
+    "action": "/images/artists/ana-leitao-action.jpg",
+    "tags": ["expressivo", "oceano", "memória", "lisboa"]
+  },
+  {
+    "id": "joao-saraiva",
+    "slug": "joao-saraiva",
+    "name": "João Saraiva",
+    "location": "Porto",
+    "medium": "Arte urbana",
+    "mediumEn": "Urban art",
+    "bio": "João Saraiva trabalha com energia pura. As suas obras capturam movimento, impacto e tensão através de traços gestuais e composições explosivas. Autodidacta, começou nas ruas do Porto e tem hoje obras em Lisboa, Madrid e Amesterdão.",
+    "bioEn": "João Saraiva works with pure energy. His works capture movement, impact and tension through gestural strokes and explosive compositions. Self-taught, he started on the streets of Porto and now has works in Lisbon, Madrid and Amsterdam.",
+    "project": "estoril-open",
+    "portrait": "/images/artists/joao-saraiva-portrait.jpg",
+    "action": "/images/artists/joao-saraiva-action.jpg",
+    "tags": ["gestual", "urbano", "movimento", "porto"]
+  },
+  {
+    "id": "sofia-andrade",
+    "slug": "sofia-andrade",
+    "name": "Sofia Andrade",
+    "location": "Lisboa",
+    "medium": "Instalação pictórica",
+    "mediumEn": "Pictorial installation",
+    "bio": "Sofia Andrade cria obras que habitam o espaço. A sua prática situa-se entre a pintura e a instalação — obras que respondem ao lugar onde existem, que mudam com a luz, que pedem para ser experienciadas em vez de apenas vistas. Vive e trabalha em Lisboa.",
+    "bioEn": "Sofia Andrade creates works that inhabit space. Her practice sits between painting and installation — works that respond to the place where they exist, that change with light, that ask to be experienced rather than merely seen. She lives and works in Lisbon.",
+    "project": "loreal-install",
+    "portrait": "/images/artists/sofia-andrade-portrait.jpg",
+    "action": "/images/artists/sofia-andrade-action.jpg",
+    "tags": ["instalação", "espaço", "luz", "lisboa"]
+  },
+  {
+    "id": "ana-be",
     "slug": "ana-be",
     "name": "Ana Bê",
-    "nameEn": "Ana Bê",
-    "bio": "Biografia em breve.",
-    "bioEn": "Biography coming soon.",
-    "medium": "Instalação, escultura",
-    "mediumEn": "Installation, sculpture",
-    "location": "Porto",
-    "cover": "/images/artists/artist-ana-be.jpg",
-    "images": [
-      "/images/artists/artist-ana-be.jpg",
-      "/images/artists/artist-ana-be-studio.jpg"
-    ],
-    "projects": []
-  },
-  {
-    "id": "artist-003",
-    "slug": "ruben-rodrigues",
-    "name": "Ruben Rodrigues",
-    "nameEn": "Ruben Rodrigues",
-    "bio": "Biografia em breve.",
-    "bioEn": "Biography coming soon.",
-    "medium": "Mural, acrílico",
-    "mediumEn": "Mural, acrylic",
     "location": "Lisboa",
-    "cover": "/images/artists/artist-ruben-rodrigues.jpg",
-    "images": [
-      "/images/artists/artist-ruben-rodrigues.jpg",
-      "/images/artists/artist-ruben-rodrigues-working.jpg"
-    ],
-    "projects": ["proj-003"]
-  },
-  {
-    "id": "artist-004",
-    "slug": "marta-sousa",
-    "name": "Marta Sousa",
-    "nameEn": "Marta Sousa",
-    "bio": "Biografia em breve.",
-    "bioEn": "Biography coming soon.",
-    "medium": "Escultura",
-    "mediumEn": "Sculpture",
-    "location": "Lisboa",
-    "cover": "/images/artists/artist-marta-sousa.jpg",
-    "images": [
-      "/images/artists/artist-marta-sousa.jpg",
-      "/images/artists/artist-marta-sousa-process.jpg"
-    ],
-    "projects": ["proj-002"]
-  },
-  {
-    "id": "artist-005",
-    "slug": "joao-ferreira",
-    "name": "João Ferreira",
-    "nameEn": "João Ferreira",
-    "bio": "Biografia em breve.",
-    "bioEn": "Biography coming soon.",
-    "medium": "Grafismo",
-    "mediumEn": "Graphic art",
-    "location": "Braga",
-    "cover": "/images/artists/artist-joao-ferreira.jpg",
-    "images": [
-      "/images/artists/artist-joao-ferreira.jpg",
-      "/images/artists/artist-joao-ferreira-sketch.jpg"
-    ],
-    "projects": []
+    "medium": "Instalação site-specific",
+    "mediumEn": "Site-specific installation",
+    "bio": "Ana Bê cria instalações que crescem a partir do espaço que habitam. O seu processo começa sempre pelo lugar — a sua história, a sua luz, os seus materiais. O resultado são obras que parecem ter existido sempre ali. Formada em Design de Interiores e Artes Plásticas, trabalha em Lisboa desde 2015.",
+    "bioEn": "Ana Bê creates installations that grow from the space they inhabit. Her process always begins with the place — its history, its light, its materials. The result are works that seem to have always existed there. Trained in Interior Design and Fine Arts, she has worked in Lisbon since 2015.",
+    "project": "bica-sede",
+    "portrait": "/images/artists/artist-ana-be.jpg",
+    "action": "/images/artists/artist-ana-be-studio.jpg",
+    "tags": ["site-specific", "espaço", "instalação", "lisboa"]
   }
 ]

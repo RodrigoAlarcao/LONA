@@ -26,15 +26,15 @@ export interface Artist {
   id: string
   slug: string
   name: string
-  nameEn: string
-  bio: string
-  bioEn: string
+  location: string
   medium: string
   mediumEn: string
-  location: string
-  images: string[]
-  cover: string
-  projects: string[]   // slugs de projetos
+  bio: string
+  bioEn: string
+  project: string      // slug do projeto associado
+  portrait: string
+  action: string
+  tags: string[]
 }
 
 export type Locale = 'pt' | 'en'
