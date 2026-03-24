@@ -129,12 +129,12 @@
     "status": "exploracao",
     "description": "Uma exploração de como seria um projeto LONA Install com a Bica. A identidade visual da casa — as cores, as texturas, a luz do espaço — traduzida numa obra site-specific para a entrada da sede. Ana Bê absorveu o espírito do lugar e criou algo que só ali poderia existir.",
     "descriptionEn": "An exploration of what a LONA Install project with Bica could look like. The visual identity of the house — colours, textures, the light of the space — translated into a site-specific work for the headquarters entrance. Ana Bê absorbed the spirit of the place and created something that could only exist there.",
-    "cover": "/images/projects/bica/bica-cover.jpg",
+    "cover": "/images/projects/bica-sede/bica-sede-cover.jpg",
     "images": [
-      "/images/projects/bica/bica-hero.jpg",
-      "/images/projects/bica/bica-process.jpg",
-      "/images/projects/bica/bica-detail.jpg",
-      "/images/projects/bica/bica-final.jpg"
+      "/images/projects/bica-sede/bica-sede-hero.jpg",
+      "/images/projects/bica-sede/bica-sede-process.jpg",
+      "/images/projects/bica-sede/bica-sede-detail.jpg",
+      "/images/projects/bica-sede/bica-sede-detail.jpg"
     ],
     "palette": ["#C4A882", "#2C1810", "#F5EFE6", "#8B7355"],
     "tags": ["restauração", "install", "site-specific", "lisboa", "bica"]
