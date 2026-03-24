@@ -45,6 +45,7 @@ export default async function ProjectPage({ params: { locale, slug } }: Props) {
             artist:         t('artist'),
             location:       t('location'),
             year:           t('year'),
+            format:         t('format'),
             duration:       t('duration'),
             dimensions:     t('dimensions'),
             processCaption: t('processCaption'),

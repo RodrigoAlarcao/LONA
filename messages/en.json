@@ -152,6 +152,7 @@
     "artist": "Artist",
     "location": "Location",
     "year": "Year",
+    "format": "Format",
     "duration": "Duration",
     "dimensions": "Dimensions",
     "processCaption": "The process",

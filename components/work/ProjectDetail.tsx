@@ -34,6 +34,7 @@ interface Labels {
   artist: string
   location: string
   year: string
+  format: string
   duration: string
   dimensions: string
   processCaption: string
@@ -214,12 +215,18 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
     return () => ctx.revert()
   }, [])
 
-  // Dynamic metadata columns
-  const metaCols = [
+  // Metadata — linha 1: quem/onde/quando
+  const mainCols = [
     { label: labels.client,   value: project.client },
     { label: labels.artist,   value: project.artistName },
     { label: labels.location, value: project.location || project.city },
     { label: labels.year,     value: String(project.year) },
+  ]
+
+  // Metadata — linha 2: especificações técnicas
+  const formatValue = project.type === 'street' ? 'LONA Street' : 'LONA Install'
+  const secondaryCols = [
+    { label: labels.format,     value: formatValue },
     ...(project.duration   ? [{ label: labels.duration,   value: project.duration   }] : []),
     ...(project.dimensions ? [{ label: labels.dimensions, value: project.dimensions }] : []),
   ]
@@ -349,60 +356,81 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
       </div>
 
       {/* ── Cap. 1 — METADATA ──────────────────────────────────────────── */}
-      <div
-        style={{
-          borderTop: '1px solid var(--color-border)',
-          borderBottom: '1px solid var(--color-border)',
-        }}
-      >
-        <div
-          ref={metaRowRef}
-          style={{
-            maxWidth: '1200px',
-            margin: '0 auto',
-            padding: '3rem clamp(1.5rem, 5vw, 4rem)',
-            display: 'grid',
-            gridTemplateColumns: `repeat(${Math.min(metaCols.length, 4)}, 1fr)`,
-            gap: 0,
-          }}
-        >
-          {metaCols.map(({ label, value }, i) => (
+      <div ref={metaRowRef}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(1.5rem, 5vw, 4rem)' }}>
+
+          {/* Linha 1 — principal: cliente, artista, localização, ano */}
+          <div style={{ borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)', padding: '2rem 0' }}>
             <div
-              key={label}
-              style={{
-                paddingLeft: i > 0 ? 'clamp(1rem, 2vw, 2rem)' : 0,
-                paddingRight: i < metaCols.length - 1 ? 'clamp(1rem, 2vw, 2rem)' : 0,
-                borderRight: i < metaCols.length - 1 ? '1px solid var(--color-border)' : 'none',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.5rem',
-              }}
+              className="meta-row-1"
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0 }}
             >
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.625rem',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.14em',
-                  color: 'var(--color-dim)',
-                  opacity: 0.45,
-                }}
-              >
-                {label}
-              </span>
-              <span
-                className="font-display"
-                style={{
-                  fontSize: '1.25rem',
-                  fontWeight: 300,
-                  color: 'var(--color-text)',
-                  lineHeight: 1.2,
-                }}
-              >
-                {value}
-              </span>
+              {mainCols.map(({ label, value }, i) => (
+                <div
+                  key={label}
+                  style={{
+                    paddingLeft:  i > 0 ? 'clamp(1rem, 2vw, 2rem)' : 0,
+                    paddingRight: i < mainCols.length - 1 ? 'clamp(1rem, 2vw, 2rem)' : 0,
+                    borderRight:  i < mainCols.length - 1 ? '1px solid var(--color-border)' : 'none',
+                    display: 'flex', flexDirection: 'column', gap: '0.5rem',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)', fontSize: '0.625rem',
+                      textTransform: 'uppercase', letterSpacing: '0.14em',
+                      color: 'var(--color-dim)', opacity: 0.45,
+                    }}
+                  >
+                    {label}
+                  </span>
+                  <span
+                    className="font-display"
+                    style={{ fontSize: '1.1rem', fontWeight: 300, color: 'var(--color-text)', lineHeight: 1.2 }}
+                  >
+                    {value}
+                  </span>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* Linha 2 — secundária: formato, duração, dimensões */}
+          {secondaryCols.length > 0 && (
+            <div
+              className="meta-row-2"
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0, paddingTop: '1.5rem', paddingBottom: '0.5rem' }}
+            >
+              {secondaryCols.map(({ label, value }, i) => (
+                <div
+                  key={label}
+                  style={{
+                    paddingRight: i < secondaryCols.length - 1 ? 'clamp(1rem, 2vw, 2rem)' : 0,
+                    display: 'flex', flexDirection: 'column', gap: '0.375rem',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)', fontSize: '0.625rem',
+                      textTransform: 'uppercase', letterSpacing: '0.14em',
+                      color: 'var(--color-dim)', opacity: 0.45,
+                    }}
+                  >
+                    {label}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)', fontSize: '0.8rem',
+                      color: 'var(--color-text)', opacity: 0.7, letterSpacing: '0.04em',
+                    }}
+                  >
+                    {value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+
         </div>
       </div>
 
@@ -815,6 +843,12 @@ export default function ProjectDetail({ project, locale, prev, next, labels }: P
         }
         .nav-link:hover .nav-text-content {
           transform: translateY(-4px);
+        }
+
+        /* Mobile: metadata em 2 colunas */
+        @media (max-width: 767px) {
+          .meta-row-1 { grid-template-columns: repeat(2, 1fr) !important; }
+          .meta-row-2 { grid-template-columns: repeat(2, 1fr) !important; }
         }
 
         /* Mobile: gallery assimétrico empilhado (detail primeiro) */
